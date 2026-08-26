@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 30" width="200" height="30">
+  <!-- Duct Body -->
+  <rect x="0" y="0" width="200" height="30" rx="2" fill="#F8F9FA" stroke="#2C3E50" stroke-width="4" />
+  <!-- Flanges -->
+  <rect x="0" y="-3" width="6" height="36" rx="2" fill="#E0E0E0" stroke="#2C3E50" stroke-width="2" />
+  <rect x="194" y="-3" width="6" height="36" rx="2" fill="#E0E0E0" stroke="#2C3E50" stroke-width="2" />
+</svg>

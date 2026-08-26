@@ -1,0 +1,182 @@
+[
+  {
+    "key": "ED2-1",
+    "title": "Conical Diffuser, Round to Plenum, Exhaust/Return Systems",
+    "category": "transition",
+    "inputs": [
+      "Do",
+      "H1",
+      "W1",
+      "L",
+      "Q"
+    ],
+    "hasFcn": true
+  },
+  {
+    "key": "ED4-1",
+    "title": "Transition, Round to Round, Exhaust/Return Systems",
+    "category": "transition",
+    "inputs": [
+      "Do",
+      "D1",
+      "Theta",
+      "Q"
+    ],
+    "hasFcn": true
+  },
+  {
+    "key": "CD3-1",
+    "title": "Elbow, Die Stamped, 90 Degree, r/D = 1.5",
+    "category": "elbow",
+    "inputs": [
+      "D",
+      "Q"
+    ],
+    "hasFcn": true
+  },
+  {
+    "key": "CD3-3",
+    "title": "Elbow, Die Stamped, 45 Degree, r/D = 1.5",
+    "category": "elbow",
+    "inputs": [
+      "D",
+      "Q"
+    ],
+    "hasFcn": true
+  },
+  {
+    "key": "CD3-17",
+    "title": "Elbow, Mitered, 45 Degree",
+    "category": "elbow",
+    "inputs": [
+      "D",
+      "Q"
+    ],
+    "hasFcn": true
+  },
+  {
+    "key": "SD5-1",
+    "title": "Wye, 45 Degree, Diverging",
+    "category": "tee",
+    "inputs": [
+      "Dc",
+      "Ds",
+      "Db",
+      "Qb",
+      "Qc"
+    ],
+    "hasFcn": true
+  },
+  {
+    "key": "SD5-3",
+    "title": "Wye, 45 Degree, Straight Body Branch with Reducing Transition, Diverging",
+    "category": "tee",
+    "inputs": [
+      "Dc",
+      "Ds",
+      "Db",
+      "Qb",
+      "Qc"
+    ],
+    "hasFcn": true
+  },
+  {
+    "key": "SD5-13",
+    "title": "Tee, Branch with 45 Degree Elbow, Branch 90 Degrees to Main, Diverging",
+    "category": "tee",
+    "inputs": [
+      "Dc",
+      "Ds",
+      "Db",
+      "Qb",
+      "Qc"
+    ],
+    "hasFcn": true
+  },
+  {
+    "key": "ER3-1",
+    "title": "Elbow, 90 Degree, Variable Inlet/Outlet Areas,",
+    "category": "rect-elbow",
+    "inputs": [
+      "H",
+      "Wo",
+      "W1",
+      "Q"
+    ],
+    "hasFcn": true
+  },
+  {
+    "key": "CR3-1",
+    "title": "Elbow, Smooth Radius without Vanes",
+    "category": "rect-elbow",
+    "inputs": [
+      "W",
+      "H",
+      "r",
+      "Theta",
+      "Q"
+    ],
+    "hasFcn": true
+  },
+  {
+    "key": "CR3-3",
+    "title": "Elbow, Smooth Radius, One Splitter Vane",
+    "category": "rect-elbow",
+    "inputs": [
+      "W",
+      "H",
+      "r",
+      "Theta",
+      "Q"
+    ],
+    "hasFcn": true
+  },
+  {
+    "key": "ED1-1",
+    "title": "Duct Mounted in Wall",
+    "category": "entry/reducer",
+    "inputs": [
+      "D",
+      "t",
+      "L",
+      "Q"
+    ],
+    "hasFcn": true
+  },
+  {
+    "key": "ED1-3",
+    "title": "Bellmouth, with Wall",
+    "category": "entry/reducer",
+    "inputs": [
+      "D",
+      "r",
+      "Q"
+    ],
+    "hasFcn": true
+  },
+  {
+    "key": "ED4-2",
+    "title": "Transition, Round to Rectangular, Exhaust/Return Systems",
+    "category": "transition",
+    "inputs": [
+      "Do",
+      "H1",
+      "W1",
+      "L",
+      "Q"
+    ],
+    "hasFcn": true
+  },
+  {
+    "key": "SR3-1",
+    "title": "Elbow, 90 Degree, Variable Inlet/Outlet Areas, Supply Air Systems",
+    "category": "entry/reducer",
+    "inputs": [
+      "H",
+      "Wo",
+      "W1",
+      "Q"
+    ],
+    "hasFcn": true
+  }
+]

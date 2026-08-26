@@ -1,0 +1,60 @@
+{
+  "key": "ED1-1",
+  "title": "Duct Mounted in Wall",
+  "reference": "(Idelchik 1986, Diagram 3-1)",
+  "geometry": {
+    "D": {
+      "label": "Diameter",
+      "min": 50,
+      "max": 2500,
+      "default": 300,
+      "unit": "mm"
+    },
+    "t": {
+      "label": "Wall Thickness",
+      "min": 1,
+      "max": 25,
+      "default": 5,
+      "unit": "mm"
+    },
+    "L": {
+      "label": "Extension",
+      "min": 0,
+      "max": 1500,
+      "default": 0,
+      "unit": "mm"
+    },
+    "Q": {
+      "label": "Flow Rate",
+      "min": 5,
+      "max": 9999999,
+      "default": 700,
+      "unit": "L/s"
+    }
+  },
+  "equations": [
+    {
+      "out": "A",
+      "expr": "(PI/4)*(D/ADC)^2"
+    },
+    {
+      "out": "Vo",
+      "expr": "Q/A*VELC"
+    },
+    {
+      "out": "Co",
+      "expr": "fcn((L/D),(t/D),1)"
+    },
+    {
+      "out": "Pv",
+      "expr": "(Vo/VPC)^2"
+    },
+    {
+      "out": "Po",
+      "expr": "Co*Pv"
+    }
+  ],
+  "outputs": {
+    "Po": "Pa"
+  }
+}

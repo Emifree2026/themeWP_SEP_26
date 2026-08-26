@@ -1,0 +1,91 @@
+{
+  "key": "CR3-3",
+  "title": "Elbow, Smooth Radius, One Splitter Vane",
+  "reference": "(Locklin 1950; Madison && Parker 1936)",
+  "geometry": {
+    "W": {
+      "label": "Width",
+      "min": 25,
+      "max": 2500,
+      "default": 300,
+      "unit": "mm"
+    },
+    "H": {
+      "label": "Height",
+      "min": 25,
+      "max": 2500,
+      "default": 300,
+      "unit": "mm"
+    },
+    "r": {
+      "label": "Centerline Radius",
+      "min": 25,
+      "max": 1500,
+      "default": 175,
+      "unit": "mm"
+    },
+    "Theta": {
+      "label": "Angle",
+      "min": 0,
+      "max": 90,
+      "default": 90,
+      "unit": "deg"
+    },
+    "Q": {
+      "label": "Flow Rate",
+      "min": 5,
+      "max": 9999999,
+      "default": 700,
+      "unit": "L/s"
+    }
+  },
+  "equations": [
+    {
+      "out": "A",
+      "expr": "H*W/ARC"
+    },
+    {
+      "out": "Vo",
+      "expr": "Q/A*VELC"
+    },
+    {
+      "out": "Cp",
+      "expr": "fcn((H/W),(r/W),1)"
+    },
+    {
+      "out": "K",
+      "expr": "fcn(Theta,2)"
+    },
+    {
+      "out": "RoW",
+      "expr": "fcn((r/W),4)"
+    },
+    {
+      "out": "CR",
+      "expr": "fcn((r/W),3)"
+    },
+    {
+      "out": "Co",
+      "expr": "Cp*K"
+    },
+    {
+      "out": "Pv",
+      "expr": "(Vo/VPC)^2"
+    },
+    {
+      "out": "Po",
+      "expr": "Co*Pv"
+    },
+    {
+      "out": "R",
+      "expr": "(RoW)*W"
+    },
+    {
+      "out": "R1",
+      "expr": "R/CR"
+    }
+  ],
+  "outputs": {
+    "Po": "Pa"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "key": "SD2-1",
+  "title": "Abrupt Exit",
+  "reference": "(Idelchik 1986, Diagram 11-1)",
+  "geometry": {
+    "D": {
+      "label": "Diameter",
+      "min": 50,
+      "max": 2500,
+      "default": 300,
+      "unit": "mm"
+    },
+    "Q": {
+      "label": "Flow Rate",
+      "min": 5,
+      "max": 9999999,
+      "default": 700,
+      "unit": "L/s"
+    }
+  },
+  "equations": [
+    {
+      "out": "A",
+      "expr": "(PI/4)*(D/ADC)^2"
+    },
+    {
+      "out": "Vo",
+      "expr": "Q/A*VELC"
+    },
+    {
+      "out": "Pv",
+      "expr": "(Vo/VPC)^2"
+    },
+    {
+      "out": "Re",
+      "expr": "RHO*Vo*D/(RC*MU)"
+    },
+    {
+      "out": "Co",
+      "expr": "IFLE0(Re-3000.,2.0,1.0)"
+    },
+    {
+      "out": "Po",
+      "expr": "Co*Pv"
+    },
+    {
+      "out": "X",
+      "expr": "RC"
+    },
+    {
+      "out": "X",
+      "expr": "MU"
+    },
+    {
+      "out": "X",
+      "expr": "RHO"
+    },
+    {
+      "out": "X",
+      "expr": "D"
+    },
+    {
+      "out": "X",
+      "expr": "Vo"
+    }
+  ],
+  "outputs": {
+    "Po": "Pa"
+  }
+}

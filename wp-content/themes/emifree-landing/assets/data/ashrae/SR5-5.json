@@ -1,0 +1,107 @@
+{
+  "key": "SR5-5",
+  "title": "Tee of the Type As + Ab > Ac,  As = Ac, Diverging",
+  "reference": "(Idelchik 1986, Diagrams 7-15 && 7-17)",
+  "geometry": {
+    "H": {
+      "label": "Height",
+      "min": 25,
+      "max": 2500,
+      "default": 300,
+      "unit": "mm"
+    },
+    "W": {
+      "label": "Width",
+      "min": 25,
+      "max": 2500,
+      "default": 300,
+      "unit": "mm"
+    },
+    "Wb": {
+      "label": "Width",
+      "min": 25,
+      "max": 2500,
+      "default": 150,
+      "unit": "mm"
+    },
+    "Qc": {
+      "label": "Flow Rate",
+      "min": 5,
+      "max": 9999999,
+      "default": 750,
+      "unit": "L/s"
+    },
+    "Qb": {
+      "label": "Flow Rate",
+      "min": 5,
+      "max": 9999999,
+      "default": 150,
+      "unit": "L/s"
+    }
+  },
+  "equations": [
+    {
+      "out": "Ac",
+      "expr": "H*W/ARC"
+    },
+    {
+      "out": "Ab",
+      "expr": "H*Wb/ARC"
+    },
+    {
+      "out": "Qs",
+      "expr": "Qc-Qb"
+    },
+    {
+      "out": "Vc",
+      "expr": "Qc/Ac*VELC"
+    },
+    {
+      "out": "Vs",
+      "expr": "Qs/Ac*VELC"
+    },
+    {
+      "out": "Vb",
+      "expr": "Qb/Ab*VELC"
+    },
+    {
+      "out": "Pvc",
+      "expr": "(Vc/VPC)^2"
+    },
+    {
+      "out": "Pvs",
+      "expr": "(Vs/VPC)^2"
+    },
+    {
+      "out": "Pvb",
+      "expr": "(Vb/VPC)^2"
+    },
+    {
+      "out": "Cb",
+      "expr": "fcn((Qb/Qc),(Ab/Ac),1)"
+    },
+    {
+      "out": "Pob",
+      "expr": "Cb*Pvb"
+    },
+    {
+      "out": "Cs",
+      "expr": "fcn((Qs/Qc),2)"
+    },
+    {
+      "out": "Pos",
+      "expr": "Cs*Pvs"
+    },
+    {
+      "out": "Ccs",
+      "expr": "Pos/Pvc"
+    },
+    {
+      "out": "Ccb",
+      "expr": "Pob/Pvc"
+    }
+  ],
+  "outputs": {
+    "Po": "Pa"
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "key": "SD5-13",
+  "title": "Tee, Branch with 45 Degree Elbow, Branch 90 Degrees to Main, Diverging",
+  "reference": "(Jones 1969, Fig. 18; UMC 1986, Report SRF386)",
+  "geometry": {
+    "Dc": {
+      "label": "Diameter",
+      "min": 50,
+      "max": 2500,
+      "default": 300,
+      "unit": "mm"
+    },
+    "Ds": {
+      "label": "Diameter",
+      "min": 50,
+      "max": 2500,
+      "default": 250,
+      "unit": "mm"
+    },
+    "Db": {
+      "label": "Diameter",
+      "min": 25,
+      "max": 2500,
+      "default": 150,
+      "unit": "mm"
+    },
+    "Qb": {
+      "label": "Flow Rate",
+      "min": 5,
+      "max": 9999999,
+      "default": 150,
+      "unit": "L/s"
+    },
+    "Qc": {
+      "label": "Flow Rate",
+      "min": 5,
+      "max": 9999999,
+      "default": 750,
+      "unit": "L/s"
+    }
+  },
+  "equations": [
+    {
+      "out": "Ac",
+      "expr": "(PI/4)*(Dc/ADC)^2"
+    },
+    {
+      "out": "Ab",
+      "expr": "(PI/4)*(Db/ADC)^2"
+    },
+    {
+      "out": "As",
+      "expr": "(PI/4)*(Ds/ADC)^2"
+    },
+    {
+      "out": "Qs",
+      "expr": "Qc-Qb"
+    },
+    {
+      "out": "Vc",
+      "expr": "Qc/Ac*VELC"
+    },
+    {
+      "out": "Vs",
+      "expr": "Qs/As*VELC"
+    },
+    {
+      "out": "Vb",
+      "expr": "Qb/Ab*VELC"
+    },
+    {
+      "out": "Cb",
+      "expr": "fcn[(Qb/Qc),(Ab/Ac),1]"
+    },
+    {
+      "out": "Pvc",
+      "expr": "(Vc/VPC)^2"
+    },
+    {
+      "out": "Pvb",
+      "expr": "(Vb/VPC)^2"
+    },
+    {
+      "out": "Pvs",
+      "expr": "(Vs/VPC)^2"
+    },
+    {
+      "out": "Pob",
+      "expr": "Cb*Pvb"
+    },
+    {
+      "out": "Cs",
+      "expr": "fcn[(Qs/Qc),(As/Ac),2]"
+    },
+    {
+      "out": "Pos",
+      "expr": "Cs*Pvs"
+    },
+    {
+      "out": "Ccs",
+      "expr": "Pos/Pvc"
+    },
+    {
+      "out": "Ccb",
+      "expr": "Pob/Pvc"
+    }
+  ],
+  "outputs": {
+    "Po": "Pa"
+  }
+}

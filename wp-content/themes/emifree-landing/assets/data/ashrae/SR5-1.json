@@ -1,0 +1,118 @@
+{
+  "key": "SR5-1",
+  "title": "Smooth Radius Wye of the Type As + Ab > or = Ac, Branch",
+  "reference": "90 Degrees to Main, Diverging (Idelchik 1986, Diagram 7-21)",
+  "geometry": {
+    "H": {
+      "label": "Height",
+      "min": 25,
+      "max": 2500,
+      "default": 300,
+      "unit": "mm"
+    },
+    "Wc": {
+      "label": "Width",
+      "min": 25,
+      "max": 2500,
+      "default": 300,
+      "unit": "mm"
+    },
+    "Ws": {
+      "label": "Width",
+      "min": 25,
+      "max": 2500,
+      "default": 250,
+      "unit": "mm"
+    },
+    "Wb": {
+      "label": "Width",
+      "min": 25,
+      "max": 2500,
+      "default": 150,
+      "unit": "mm"
+    },
+    "Qc": {
+      "label": "Flow Rate",
+      "min": 5,
+      "max": 9999999,
+      "default": 750,
+      "unit": "L/s"
+    },
+    "Qb": {
+      "label": "Flow Rate",
+      "min": 5,
+      "max": 9999999,
+      "default": 150,
+      "unit": "L/s"
+    }
+  },
+  "equations": [
+    {
+      "out": "Ac",
+      "expr": "H*Wc/ARC"
+    },
+    {
+      "out": "As",
+      "expr": "H*Ws/ARC"
+    },
+    {
+      "out": "Ab",
+      "expr": "H*Wb/ARC"
+    },
+    {
+      "out": "Qs",
+      "expr": "Qc-Qb"
+    },
+    {
+      "out": "Vc",
+      "expr": "Qc/Ac*VELC"
+    },
+    {
+      "out": "Vs",
+      "expr": "Qs/As*VELC"
+    },
+    {
+      "out": "Vb",
+      "expr": "Qb/Ab*VELC"
+    },
+    {
+      "out": "Pvc",
+      "expr": "(Vc/VPC)^2"
+    },
+    {
+      "out": "Pvs",
+      "expr": "(Vs/VPC)^2"
+    },
+    {
+      "out": "Pvb",
+      "expr": "(Vb/VPC)^2"
+    },
+    {
+      "out": "Cb",
+      "expr": "fcn((Qb/Qc),(Ab/Ac),(As/Ac),1)"
+    },
+    {
+      "out": "Pob",
+      "expr": "Cb*Pvb"
+    },
+    {
+      "out": "Cs",
+      "expr": "fcn((Qs/Qc),(Ab/Ac),(As/Ac),2)"
+    },
+    {
+      "out": "Pos",
+      "expr": "Cs*Pvs"
+    },
+    {
+      "out": "Ccs",
+      "expr": "Pos/Pvc"
+    },
+    {
+      "out": "Ccb",
+      "expr": "Pob/Pvc"
+    }
+  ],
+  "outputs": {
+    "Po": "Pa"
+  }
+}

@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Local tool state (impeccable design hook cache, etc.)
+.impeccable/
+
+# Local debug / test files (not part of the shipped theme)
+_test-*.html
+
+# Built theme zips (output of tests/_build-zip.mjs — never ship these
+# in source control; they balloon the repo when the build script
+# ingests prior zips).
+emifree-landing*.zip
+
+# Extracted zip contents (produced when the zip is unzipped for
+# inspection — same trap: the build script would re-include them
+# on the next build, doubling the size).
+emifree-landing*/
+
+# German blog content source files (sibling markdown drafts used
+# for reference only — not part of the shipped theme).
+Blog?_de.md
+
+# Working notes and handoffs (not part of the shipped theme).
+Handover_*.md
+NEXT_AGENT_HANDOFF*.md

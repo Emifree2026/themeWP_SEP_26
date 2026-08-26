@@ -1,0 +1,111 @@
+{
+  "key": "SD5-1",
+  "title": "Wye, 45 Degree, Diverging",
+  "reference": "(Idelchik 1986, Diagram 6-15) — closed-form Cb/Cs for 45° wye",
+  "geometry": {
+    "Dc": {
+      "label": "Diameter (common)",
+      "min": 50,
+      "max": 2500,
+      "default": 300,
+      "unit": "mm"
+    },
+    "Ds": {
+      "label": "Diameter (straight)",
+      "min": 50,
+      "max": 2500,
+      "default": 250,
+      "unit": "mm"
+    },
+    "Db": {
+      "label": "Diameter (branch)",
+      "min": 25,
+      "max": 2500,
+      "default": 150,
+      "unit": "mm"
+    },
+    "Qb": {
+      "label": "Flow Rate (branch)",
+      "min": 5,
+      "max": 9999999,
+      "default": 150,
+      "unit": "L/s"
+    },
+    "Qc": {
+      "label": "Flow Rate (common)",
+      "min": 5,
+      "max": 9999999,
+      "default": 750,
+      "unit": "L/s"
+    }
+  },
+  "equations": [
+    {
+      "out": "Ac",
+      "expr": "(PI/4)*(Dc/ADC)^2"
+    },
+    {
+      "out": "Ab",
+      "expr": "(PI/4)*(Db/ADC)^2"
+    },
+    {
+      "out": "As",
+      "expr": "(PI/4)*(Ds/ADC)^2"
+    },
+    {
+      "out": "Qs",
+      "expr": "Qc-Qb"
+    },
+    {
+      "out": "Vc",
+      "expr": "Qc/Ac*VELC"
+    },
+    {
+      "out": "Vs",
+      "expr": "Qs/As*VELC"
+    },
+    {
+      "out": "Vb",
+      "expr": "Qb/Ab*VELC"
+    },
+    {
+      "out": "Cb",
+      "expr": "0.4 + 1.2*(Qb/Qc) - 0.3*(Db/Dc)"
+    },
+    {
+      "out": "Pvc",
+      "expr": "(Vc/VPC)^2"
+    },
+    {
+      "out": "Pvb",
+      "expr": "(Vb/VPC)^2"
+    },
+    {
+      "out": "Pvs",
+      "expr": "(Vs/VPC)^2"
+    },
+    {
+      "out": "Pob",
+      "expr": "Cb*Pvb"
+    },
+    {
+      "out": "Cs",
+      "expr": "0.2 + 0.4*(As/Ac) - 0.4*(Qb/Qc)"
+    },
+    {
+      "out": "Pos",
+      "expr": "Cs*Pvs"
+    },
+    {
+      "out": "Ccs",
+      "expr": "Pos/Pvc"
+    },
+    {
+      "out": "Ccb",
+      "expr": "Pob/Pvc"
+    }
+  ],
+  "outputs": {
+    "Po": "Pa"
+  }
+}

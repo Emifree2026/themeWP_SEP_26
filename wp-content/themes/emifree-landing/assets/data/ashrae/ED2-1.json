@@ -1,0 +1,87 @@
+{
+  "key": "ED2-1",
+  "title": "Conical Diffuser, Round to Plenum, Exhaust/Return Systems",
+  "reference": "(Idelchik 1986, Diagram 5-8)",
+  "geometry": {
+    "Do": {
+      "label": "Diameter",
+      "min": 50,
+      "max": 2500,
+      "default": 300,
+      "unit": "mm"
+    },
+    "H1": {
+      "label": "Height",
+      "min": 25,
+      "max": 2500,
+      "default": 450,
+      "unit": "mm"
+    },
+    "W1": {
+      "label": "Width",
+      "min": 25,
+      "max": 2500,
+      "default": 200,
+      "unit": "mm"
+    },
+    "L": {
+      "label": "Length",
+      "min": 0,
+      "max": 2500,
+      "default": 600,
+      "unit": "mm"
+    },
+    "Q": {
+      "label": "Flow Rate",
+      "min": 5,
+      "max": 9999999,
+      "default": 700,
+      "unit": "L/s"
+    }
+  },
+  "equations": [
+    {
+      "out": "Ao",
+      "expr": "(PI/4)*(Do/ADC)^2"
+    },
+    {
+      "out": "A1",
+      "expr": "H1*W1/ARC"
+    },
+    {
+      "out": "Vo",
+      "expr": "(Q/Ao)*VELC"
+    },
+    {
+      "out": "Pvo",
+      "expr": "(Vo/VPC)^2"
+    },
+    {
+      "out": "Co",
+      "expr": "fcn((L/Do),(A1/Ao),1)"
+    },
+    {
+      "out": "Theta",
+      "expr": "fcn((L/Do),(A1/Ao),2)"
+    },
+    {
+      "out": "Po",
+      "expr": "Co*Pvo"
+    },
+    {
+      "out": "V1",
+      "expr": "Q/A1*VELC"
+    },
+    {
+      "out": "Pv1",
+      "expr": "(V1/VPC)^2"
+    },
+    {
+      "out": "C1",
+      "expr": "Co*Pvo/Pv1"
+    }
+  ],
+  "outputs": {
+    "Po": "Pa"
+  }
+}

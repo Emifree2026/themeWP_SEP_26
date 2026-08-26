@@ -1,0 +1,81 @@
+# ─── WordPress core ────────────────────────────────────────────────
+# Repo holds the emifree-landing theme only — none of the WP runtime
+# files belong here.
+/wp-admin/
+/wp-includes/
+/wp-*.php
+/xmlrpc.php
+/license.txt
+/readme.html
+/index.php
+/index.html
+/local-xdebuginfo.php
+/.htaccess
+
+# ─── wp-config & secrets (per-environment) ────────────────────────
+/wp-config*.php
+/.env
+/.env.*
+*.pem
+
+# ─── WordPress install artifacts we never want ────────────────────
+/HANDOVER.md
+/c754451484974ab3a6a10816a54becce.txt
+/*.log
+
+# ─── Sibling site dirs (not the theme) ────────────────────────────
+/assets/
+/catalog/
+/Legal/
+
+# ─── wp-content: ignore everything by default, then whitelist ────
+# /wp-content/ at WP root — Git ignores contents by default for
+# ignored dirs, so we use a different pattern: ignore specific
+# subdirs and use ! to re-include the theme.
+/wp-content/index.php
+/wp-content/plugins/
+/wp-content/upgrade/
+/wp-content/uploads/
+/wp-content/mu-plugins/
+/wp-content/cache/
+/wp-content/backups/
+/wp-content/languages/
+# Themes: ignore all, then re-include only emifree-landing.
+/wp-content/themes/index.php
+/wp-content/themes/*.zip
+/wp-content/themes/*.ps1
+/wp-content/themes/*/
+!/wp-content/themes/emifree-landing/
+
+# ─── Local by Flywheel per-site artifacts ─────────────────────────
+/.cfl-audit.log
+/.wp-cli.yml
+/.local-environment
+
+# ─── Logs / runtime ──────────────────────────────────────────────
+*.log
+debug.log
+error.log
+
+# ─── OS junk ─────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+ehthumbs_view.db
+
+# ─── Editor / IDE ────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+
+# ─── Node (defensive — no package.json at repo root) ─────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json

@@ -1,0 +1,76 @@
+{
+  "key": "ER3-1",
+  "title": "Elbow, 90 Degree, Variable Inlet/Outlet Areas,",
+  "reference": "Exhaust/ Return Systems (Idelchik 1986, Diagram 6-4)",
+  "geometry": {
+    "H": {
+      "label": "Height",
+      "min": 25,
+      "max": 2500,
+      "default": 300,
+      "unit": "mm"
+    },
+    "Wo": {
+      "label": "Width",
+      "min": 25,
+      "max": 2500,
+      "default": 300,
+      "unit": "mm"
+    },
+    "W1": {
+      "label": "Width",
+      "min": 25,
+      "max": 2500,
+      "default": 200,
+      "unit": "mm"
+    },
+    "Q": {
+      "label": "Flow Rate",
+      "min": 5,
+      "max": 9999999,
+      "default": 700,
+      "unit": "L/s"
+    }
+  },
+  "equations": [
+    {
+      "out": "Ao",
+      "expr": "H*Wo/ARC"
+    },
+    {
+      "out": "A1",
+      "expr": "H*W1/ARC"
+    },
+    {
+      "out": "Vo",
+      "expr": "Q/Ao*VELC"
+    },
+    {
+      "out": "V1",
+      "expr": "Q/A1*VELC"
+    },
+    {
+      "out": "Pvo",
+      "expr": "(Vo/VPC)^2"
+    },
+    {
+      "out": "Pv1",
+      "expr": "(V1/VPC)^2"
+    },
+    {
+      "out": "Co",
+      "expr": "fcn((W1/Wo),(H/Wo),1)"
+    },
+    {
+      "out": "Po",
+      "expr": "Co*Pvo"
+    },
+    {
+      "out": "C1",
+      "expr": "Po/Pv1"
+    }
+  ],
+  "outputs": {
+    "Po": "Pa"
+  }
+}

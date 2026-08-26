@@ -1,0 +1,99 @@
+{
+  "key": "ED4-2",
+  "title": "Transition, Round to Rectangular, Exhaust/Return Systems",
+  "reference": "(Idelchik 1986, Diagram 5-27)",
+  "geometry": {
+    "Do": {
+      "label": "Diameter",
+      "min": 50,
+      "max": 2500,
+      "default": 300,
+      "unit": "mm"
+    },
+    "H1": {
+      "label": "Height",
+      "min": 25,
+      "max": 2500,
+      "default": 600,
+      "unit": "mm"
+    },
+    "W1": {
+      "label": "Width",
+      "min": 25,
+      "max": 2500,
+      "default": 150,
+      "unit": "mm"
+    },
+    "L": {
+      "label": "Length",
+      "min": 0,
+      "max": 6000,
+      "default": 1500,
+      "unit": "mm"
+    },
+    "Q": {
+      "label": "Flow Rate",
+      "min": 5,
+      "max": 9999999,
+      "default": 700,
+      "unit": "L/s"
+    }
+  },
+  "equations": [
+    {
+      "out": "Ao",
+      "expr": "(PI/4)*sqr(Do/ADC)"
+    },
+    {
+      "out": "A1",
+      "expr": "H1*W1/ARC"
+    },
+    {
+      "out": "Vo",
+      "expr": "Q/Ao*VELC"
+    },
+    {
+      "out": "V1",
+      "expr": "Q/A1*VELC"
+    },
+    {
+      "out": "Pvo",
+      "expr": "(Vo/VPC)^2"
+    },
+    {
+      "out": "Pv1",
+      "expr": "(V1/VPC)^2"
+    },
+    {
+      "out": "L1",
+      "expr": "IFLE0(L,0.00001,L)"
+    },
+    {
+      "out": "Theta1",
+      "expr": "ABS(114.59156*ATN((H1-Do)/(2*L1)))"
+    },
+    {
+      "out": "Theta2",
+      "expr": "ABS(114.59156*ATN((W1-Do)/(2*L1)))"
+    },
+    {
+      "out": "Theta",
+      "expr": "MAX(Theta1,Theta2)"
+    },
+    {
+      "out": "Co",
+      "expr": "fcn(Theta,(Ao/A1),1)"
+    },
+    {
+      "out": "C1",
+      "expr": "Co*Pvo/Pv1"
+    },
+    {
+      "out": "Po",
+      "expr": "Co*Pvo"
+    }
+  ],
+  "outputs": {
+    "Po": "Pa"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "key": "CD3-1",
+  "title": "Elbow, Die Stamped, 90 Degree, r/D = 1.5",
+  "reference": "(Idelchik 1986, Diagram 6-1) — K = 0.18 closed-form (die-stamped, r/D=1.5)",
+  "geometry": {
+    "D": {
+      "label": "Diameter",
+      "min": 75,
+      "max": 250,
+      "default": 200,
+      "unit": "mm"
+    },
+    "Q": {
+      "label": "Flow Rate",
+      "min": 5,
+      "max": 9999999,
+      "default": 700,
+      "unit": "L/s"
+    }
+  },
+  "equations": [
+    {
+      "out": "A",
+      "expr": "(PI/4)*(D/ADC)^2"
+    },
+    {
+      "out": "Vo",
+      "expr": "Q/A*VELC"
+    },
+    {
+      "out": "Pv",
+      "expr": "(Vo/VPC)^2"
+    },
+    {
+      "out": "Co",
+      "expr": "0.18"
+    },
+    {
+      "out": "Po",
+      "expr": "Co*Pv"
+    }
+  ],
+  "outputs": {
+    "Po": "Pa"
+  }
+}

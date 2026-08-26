@@ -1,0 +1,76 @@
+{
+  "key": "ED4-1",
+  "title": "Transition, Round to Round, Exhaust/Return Systems",
+  "reference": "(Idelchik 1986, Diagrams 5-2 && 5-22)",
+  "geometry": {
+    "Do": {
+      "label": "Diameter",
+      "min": 50,
+      "max": 2500,
+      "default": 300,
+      "unit": "mm"
+    },
+    "D1": {
+      "label": "Diameter",
+      "min": 25,
+      "max": 2500,
+      "default": 150,
+      "unit": "mm"
+    },
+    "Theta": {
+      "label": "Angle",
+      "min": 8,
+      "max": 180,
+      "default": 90,
+      "unit": "deg"
+    },
+    "Q": {
+      "label": "Flow Rate",
+      "min": 5,
+      "max": 9999999,
+      "default": 700,
+      "unit": "L/s"
+    }
+  },
+  "equations": [
+    {
+      "out": "Ao",
+      "expr": "(PI/4)*(Do/ADC)^2"
+    },
+    {
+      "out": "A1",
+      "expr": "(PI/4)*(D1/ADC)^2"
+    },
+    {
+      "out": "Vo",
+      "expr": "Q/Ao*VELC"
+    },
+    {
+      "out": "V1",
+      "expr": "Q/A1*VELC"
+    },
+    {
+      "out": "Pvo",
+      "expr": "(Vo/VPC)^2"
+    },
+    {
+      "out": "Pv1",
+      "expr": "(V1/VPC)^2"
+    },
+    {
+      "out": "Co",
+      "expr": "fcn(Theta,(Ao/A1),1)"
+    },
+    {
+      "out": "C1",
+      "expr": "Co*Pvo/Pv1"
+    },
+    {
+      "out": "Po",
+      "expr": "Co*Pvo"
+    }
+  ],
+  "outputs": {
+    "Po": "Pa"
+  }
+}

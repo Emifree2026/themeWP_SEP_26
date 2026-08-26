@@ -1,0 +1,53 @@
+{
+  "key": "ED1-3",
+  "title": "Bellmouth, with Wall",
+  "reference": "(Idelchik 1986, Diagram 3-4)",
+  "geometry": {
+    "D": {
+      "label": "Diameter",
+      "min": 50,
+      "max": 2500,
+      "default": 300,
+      "unit": "mm"
+    },
+    "r": {
+      "label": "Radius",
+      "min": 0,
+      "max": 1200,
+      "default": 5,
+      "unit": "mm"
+    },
+    "Q": {
+      "label": "Flow Rate",
+      "min": 5,
+      "max": 9999999,
+      "default": 700,
+      "unit": "L/s"
+    }
+  },
+  "equations": [
+    {
+      "out": "A",
+      "expr": "(PI/4)*(D/ADC)^2"
+    },
+    {
+      "out": "Vo",
+      "expr": "Q/A*VELC"
+    },
+    {
+      "out": "Pv",
+      "expr": "(Vo/VPC)^2"
+    },
+    {
+      "out": "Co",
+      "expr": "fcn(r/D,1)"
+    },
+    {
+      "out": "Po",
+      "expr": "Co*Pv"
+    }
+  ],
+  "outputs": {
+    "Po": "Pa"
+  }
+}
