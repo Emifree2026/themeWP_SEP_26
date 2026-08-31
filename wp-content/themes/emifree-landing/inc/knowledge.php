@@ -95,7 +95,7 @@ if ( ! function_exists( 'emifree_blog_posts' ) ) :
 				'read_time'     => '8 min read',
 				'author'        => 'Victoria Pedroza',
 				'author_role'   => 'Product Manager, Emifree GmbH',
-				'hero_image'    => 'CNC_2.jpg',
+				'hero_image'    => 'Air_pressure_loss_guide_.jpeg',
 				'body_preview'  => 'Air pressure loss — also called pressure drop, static pressure loss, or ΔP — is the single most important quantity when designing any duct system. Whether you are sizing a ventilation duct for an office, an industrial oil-mist extraction line for a CNC cell, or a dust-collection manifold for a woodworking shop, the air pressure loss of your duct run determines the fan you need.',
 			),
 			'how-to-calculate-air-pressure-loss' => array(
@@ -109,7 +109,7 @@ if ( ! function_exists( 'emifree_blog_posts' ) ) :
 				'read_time'     => '6 min read',
 				'author'        => 'Victoria Pedroza',
 				'author_role'   => 'Product Manager, Emifree GmbH',
-				'hero_image'    => 'Workers_operating_CNC_machines.jpeg',
+				'hero_image'    => 'Calculating_air_pressure_loss_duct_.jpeg',
 				'body_preview'  => 'Step-by-step calculation of the air pressure loss for a typical industrial extraction run: 1,700 m³/h of oil mist through 8 m of 200 mm galvanized duct, two 90° elbows, a T-junction, and a step-down reducer to 160 mm. We use Darcy-Weisbach + Swamee-Jain for friction and ASHRAE K-factors for fittings, then apply the 1.15 oil-mist correction and a 2× fan safety margin.',
 			),
 			'air-pressure-loss-vs-pressure-drop' => array(
