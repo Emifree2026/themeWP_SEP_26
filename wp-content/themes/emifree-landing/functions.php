@@ -769,6 +769,105 @@ function emifree_legacy_redirect_map() {
 		'/en/knowledge/pressure-drop/'      => '/air-pressure-loss-calculator/',
 		'/de/wissen/druckverlust/'          => '/de/luftdruckverlust-rechner/',
 		'/de/wissen/pressure-drop/'         => '/de/luftdruckverlust-rechner/',
+
+		// --- 2026-08-31: Google-indexed broken-link batch (BrokenLinks_cleaned_list.csv) ---
+		// Inbound backlinks from external sites point at URLs the old
+		// WooCommerce / multi-language install used. The new site unifies
+		// everything onto /en/ and /de/ landing pages with section
+		// anchors. Each row below maps one old URL to the nearest live
+		// page on the new site; the user's "About Us" and "Downloads"
+		// tabs both live inside the Knowledge section, so:
+		//   /unternehmen/                 → /de/#knowledge   (About Us tab)
+		//   /download/*, /herunterladen/  → /<lang>/#knowledge (Downloads tab)
+
+		// Old WooCommerce product detail pages (English slugs).
+		'/product/flexible-spiral-hose/'                                => '/en/#products',
+		'/product/mobile-frame-for-electrostatic-oil-mist-collector/'   => '/en/#products',
+		'/product/mobile-frame-for-mechanical-oil-mist-collector/'      => '/en/#products',
+		'/product/suction-flange-200mm/'                                => '/en/#products',
+		'/product/suction-flange-150mm/'                                => '/en/#products',
+		'/product/vibration-damper/'                                    => '/en/#products',
+		'/product/frame-for-electrostatic-oil-mist-collector-big/'      => '/en/#products',
+		'/product/'                                                     => '/en/#products',
+		'/products/mechanical/'                                         => '/en/#products',
+
+		// Old WooCommerce product detail pages (German slugs under /product/).
+		'/product/flexibler-spiralschlauch/'                            => '/de/#products',
+		'/product/vibrationsdaempfer/'                                  => '/de/#products',
+
+		// Old German bare-section paths.
+		'/produkte/'                                                    => '/de/#products',
+		'/produkte/mechanical/'                                         => '/de/#products',
+		'/de/produkte/'                                                 => '/de/#products',
+		'/anwendungen/'                                                 => '/de/#applications',
+		'/kontakt/'                                                     => '/de/#contact',
+		// About/company → /de/#knowledge (the About Us tab lives there).
+		'/unternehmen/'                                                 => '/de/#knowledge',
+
+		// Old German product hub pages (different slugs from the
+		// English /mechanical-oil-mist-collector/ entries above).
+		'/elektrostatischer-oelnebelabscheider/'                        => '/de/#products',
+		'/mechanischer-oelnebelabscheider/'                             => '/de/#products',
+
+		// Old German WPML download URL.
+		'/language/de/herunterladen/'                                   => '/de/#knowledge',
+
+		// Downloads — both English and German variants land on the
+		// Downloads tab inside Knowledge for their respective language.
+		'/herunterladen/'                                               => '/de/#knowledge',
+		'/download/bdl_eac_de.pdf'                                      => '/de/#knowledge',
+		'/download/bdl_eac_en.pdf'                                      => '/en/#knowledge',
+		'/download/kat_emi_pl.pdf'                                      => '/de/#knowledge',
+
+		// English GTC under the old slug.
+		'/agb-en/'                                                      => '/terms/',
+
+		// Mobile site + defunct language (ES — the new site doesn't ship Spanish).
+		'/m/'                                                           => '/en/',
+		'/es/products/'                                                 => '/en/#products',
+
+		// Apple universal links — both URLs in the CSV point to the
+		// canonical .well-known location. The target file doesn't exist
+		// on the new server yet; create it (empty `{}` is enough for
+		// Apple's spec) under WP_ROOT/.well-known/apple-app-site-association
+		// to make this redirect land on a 200 instead of a 404.
+		'/apple-app-site-association/'                                  => '/.well-known/apple-app-site-association',
+
+		// Contact Form 7 asset (plugin not installed on the new site).
+		'/wp-content/plugins/contact-form-7/images/ajax-loader.gif'     => '/',
+
+		// Old product imagery (uploaded 2016-2019, never re-uploaded to
+		// the new site) — send to the German products section, which
+		// is where these images appeared on the old site.
+		'/wp-content/uploads/2016/07/Oil-mist-collector_dark-463x350.png' => '/de/#products',
+		'/wp-content/uploads/2016/08/blue_square_transparent.png'         => '/de/',
+		'/wp-content/uploads/2016/09/ANF200-96x96.png'                    => '/de/#products',
+		'/wp-content/uploads/2016/09/ANF200_dim-96x96.png'                => '/de/#products',
+		'/wp-content/uploads/2016/09/ANF150-600x600.png'                  => '/de/#products',
+		'/wp-content/uploads/2016/10/GST_E2G.png'                         => '/de/#products',
+		'/wp-content/uploads/2016/10/GST_E2G-96x96.png'                   => '/de/#products',
+		'/wp-content/uploads/2016/10/GST_E2G-600x600.png'                 => '/de/#products',
+		'/wp-content/uploads/2019/06/SD-ERA-12H.png'                      => '/de/#products',
+
+		// Old /img/<lang>/ icons — DE and EN preserved per language.
+		'/img/de/icon_energieeffizienzEC.jpg'                          => '/de/#products',
+		'/img/de/icon_leistung.jpg'                                    => '/de/#products',
+		'/img/de/icon_automatisierung.jpg'                             => '/de/#products',
+		'/img/en/icon_energieeffizienz.jpg'                            => '/en/#products',
+		'/img/en/icon_automatisierung.jpg'                             => '/en/#products',
+		'/img/en/icon_leistung.jpg'                                    => '/en/#products',
+		'/img/en/icon_selbstreinigung.jpg'                             => '/en/#products',
+		'/img/en/eco_filtrationsprinzip.jpg'                           => '/en/#products',
+		// Polish: new site doesn't ship PL — falls back to EN per the
+		// existing /language/pl/ catch-all convention.
+		'/img/pl/icon_automatisierung.png'                             => '/en/#products',
+		'/img/pl/icon_selbstreinigung.png'                             => '/en/#products',
+		'/img/pl/icon_energieeffizienz.png'                            => '/en/#products',
+		'/img/pl/icon_energieeffizienzIE3.jpg'                         => '/en/#products',
+		'/img/pl/diagram.jpg'                                          => '/en/#products',
+		'/img/pl/eco_filtrationsprinzip.jpg'                           => '/en/#products',
+		'/img/pl/earia_filtrationsprinzip.jpg'                         => '/en/#products',
+		'/img/pl/earia_beschreibung.jpg'                               => '/en/#products',
 	);
 }
 
