@@ -40,9 +40,9 @@ return array(
 </p>
 <div class="bg-slate-50 border border-slate-200 rounded-lg p-6 mb-6 font-mono text-base text-zinc-800">
 	<p class="mb-2"><strong>Reibung (pro gerader Abschnitt):</strong></p>
-	<p class="mb-4">&Delta;P<sub>f</sub> = f &middot; (L / D) &middot; &half; &middot; &rho; &middot; V&sup2;</p>
+	<p class="mb-4">&Delta;P<sub>f</sub> = f &middot; (L / D) &middot; ½ &middot; &rho; &middot; V&sup2;</p>
 	<p class="mb-2"><strong>Einzelwiderstand (pro Formstück):</strong></p>
-	<p class="mb-4">&Delta;P<sub>m</sub> = K &middot; &half; &middot; &rho; &middot; V&sup2;</p>
+	<p class="mb-4">&Delta;P<sub>m</sub> = K &middot; ½ &middot; &rho; &middot; V&sup2;</p>
 	<p class="mb-2"><strong>Gesamt-Luftdruckverlust:</strong></p>
 	<p>&Delta;P<sub>gesamt</sub> = ( &Sigma; &Delta;P<sub>f</sub> + &Sigma; &Delta;P<sub>m</sub> ) &times; K<sub>app</sub></p>
 </div>

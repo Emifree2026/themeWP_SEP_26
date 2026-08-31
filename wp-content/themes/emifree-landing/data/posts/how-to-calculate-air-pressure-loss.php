@@ -41,7 +41,7 @@ return array(
 </p>
 <div class="bg-slate-50 border border-slate-200 rounded-lg p-6 mb-6 font-mono text-base text-zinc-800">
 	<p class="mb-2"><strong>Friction (per straight section):</strong></p>
-	<p class="mb-4">&Delta;P<sub>f</sub> = f &middot; (L / D) &middot; (&half; &rho; V&sup2;)</p>
+	<p class="mb-4">&Delta;P<sub>f</sub> = f &middot; (L / D) &middot; (½ &rho; V&sup2;)</p>
 </div>
 <p class="text-lg text-zinc-700 leading-relaxed mb-6">Where:</p>
 <div class="bg-slate-50 border border-slate-200 rounded-lg p-6 mb-6">
@@ -56,7 +56,7 @@ return array(
 <p class="text-lg text-zinc-700 leading-relaxed mb-6">For fittings, minor loss is calculated using:</p>
 <div class="bg-slate-50 border border-slate-200 rounded-lg p-6 mb-6 font-mono text-base text-zinc-800">
 	<p class="mb-2"><strong>Minor loss (per fitting):</strong></p>
-	<p>&Delta;P<sub>m</sub> = K &middot; (&half; &rho; V&sup2;)</p>
+	<p>&Delta;P<sub>m</sub> = K &middot; (½ &rho; V&sup2;)</p>
 </div>
 
 <h2 class="text-2xl font-bold text-zinc-900 mt-10 mb-4">Worked Example: Using the Free Air Pressure Loss Calculator</h2>

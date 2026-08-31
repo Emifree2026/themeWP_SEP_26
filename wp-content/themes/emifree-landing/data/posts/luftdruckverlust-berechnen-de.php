@@ -45,7 +45,7 @@ return array(
 			<tr class="border-b border-slate-300">
 				<th class="py-2 pr-4 font-semibold">Formstück</th>
 				<th class="py-2 pr-4 font-semibold">K-Faktor</th>
-				<th class="py-2 font-semibold">&Delta;P<sub>m</sub> = K&middot;&half;&middot;&rho;&middot;V&sup2;</th>
+				<th class="py-2 font-semibold">&Delta;P<sub>m</sub> = K&middot;½&middot;&rho;&middot;V&sup2;</th>
 			</tr>
 		</thead>
 		<tbody>

@@ -42,7 +42,7 @@ return array(
 
 <h2 class="text-2xl font-bold text-zinc-900 mt-10 mb-4">What about &ldquo;static pressure loss&rdquo;?</h2>
 <p class="text-lg text-zinc-700 leading-relaxed mb-6">
-	<em>Static pressure loss</em> is the same quantity again, with one clarifying word. In a flowing duct, total pressure is the sum of static pressure (the potential to push air) and velocity pressure (&half;&middot;&rho;&middot;V&sup2;, the kinetic energy of the moving air). Pressure drop is the loss of <em>static</em> pressure, because the velocity stays roughly constant through a uniform duct run &mdash; so the more precise term is &ldquo;static pressure loss,&rdquo; but &ldquo;pressure drop&rdquo; and &ldquo;pressure loss&rdquo; are used interchangeably in almost every catalogue you will read.
+	<em>Static pressure loss</em> is the same quantity again, with one clarifying word. In a flowing duct, total pressure is the sum of static pressure (the potential to push air) and velocity pressure (½&middot;&rho;&middot;V&sup2;, the kinetic energy of the moving air). Pressure drop is the loss of <em>static</em> pressure, because the velocity stays roughly constant through a uniform duct run &mdash; so the more precise term is &ldquo;static pressure loss,&rdquo; but &ldquo;pressure drop&rdquo; and &ldquo;pressure loss&rdquo; are used interchangeably in almost every catalogue you will read.
 </p>
 
 <h2 class="text-2xl font-bold text-zinc-900 mt-10 mb-4">Does the calculator care which term I use?</h2>

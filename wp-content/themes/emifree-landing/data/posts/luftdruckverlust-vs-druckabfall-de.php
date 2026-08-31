@@ -42,7 +42,7 @@ return array(
 
 <h2 class="text-2xl font-bold text-zinc-900 mt-10 mb-4">Und &bdquo;statischer Druckverlust&ldquo;?</h2>
 <p class="text-lg text-zinc-700 leading-relaxed mb-6">
-	<em>Statischer Druckverlust</em> ist dieselbe Größe, mit einem klärenden Zusatzwort. In einem strömenden Kanal ist der Gesamtdruck die Summe aus statischem Druck (das Vermögen, Luft zu verdrängen) und Geschwindigkeitsdruck (&half;&middot;&rho;&middot;V&sup2;, die kinetische Energie der bewegten Luft). Druckverlust ist der Verlust an <em>statischem</em> Druck, weil die Geschwindigkeit in einem gleichförmigen Kanalstrang ungefähr konstant bleibt &mdash; daher ist die präzisere Bezeichnung &bdquo;statischer Druckverlust&ldquo;, aber &bdquo;Druckabfall&ldquo; und &bdquo;Druckverlust&ldquo; werden in praktisch jedem Katalog synonym verwendet.
+	<em>Statischer Druckverlust</em> ist dieselbe Größe, mit einem klärenden Zusatzwort. In einem strömenden Kanal ist der Gesamtdruck die Summe aus statischem Druck (das Vermögen, Luft zu verdrängen) und Geschwindigkeitsdruck (½&middot;&rho;&middot;V&sup2;, die kinetische Energie der bewegten Luft). Druckverlust ist der Verlust an <em>statischem</em> Druck, weil die Geschwindigkeit in einem gleichförmigen Kanalstrang ungefähr konstant bleibt &mdash; daher ist die präzisere Bezeichnung &bdquo;statischer Druckverlust&ldquo;, aber &bdquo;Druckabfall&ldquo; und &bdquo;Druckverlust&ldquo; werden in praktisch jedem Katalog synonym verwendet.
 </p>
 
 <h2 class="text-2xl font-bold text-zinc-900 mt-10 mb-4">Ist dem Rechner der Begriff egal?</h2>
