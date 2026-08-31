@@ -33,7 +33,7 @@ $emifree_current_post   = null;
 // meta is checked so an EN request doesn't accidentally pick up a
 // DE sibling when they share a slug.
 if ( $emifree_requested_slug ) {
-	$emifree_cpt_post = emifree_query_cpt_blog_post_by_slug( $emifree_requested_slug );
+	$emifree_cpt_post = emifree_query_cpt_blog_post_by_slug( $emifree_requested_slug, 'en' );
 	if ( $emifree_cpt_post ) {
 		$emifree_cpt_lang = (string) get_post_meta( $emifree_cpt_post->ID, 'emifree_language', true );
 		if ( '' === $emifree_cpt_lang || 'en' === $emifree_cpt_lang ) {

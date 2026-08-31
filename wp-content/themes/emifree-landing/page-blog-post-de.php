@@ -60,67 +60,14 @@ $emifree_de_posts = array(
 		'hero_image'    => 'CNC_2.jpg',
 	),
 
-	// --- SEO-Pillar-Artikel für „Luftdruckverlust"-Cluster (2026-08-25) ---
-	// Parallel zu emifree_blog_posts_de() in inc/knowledge.php — diese
-	// Inline-Kopie wird vom DE-Blogpost-Template direkt gelesen, also
-	// müssen beide synchron sein.
-	'was-ist-luftdruckverlust' => array(
-		'id'            => '3',
-		'slug'          => 'was-ist-luftdruckverlust',
-		'title'         => 'Was ist Luftdruckverlust? Ein Praxisleitfaden für HVAC und industrielle Lüftung',
-		'excerpt'       => 'Luftdruckverlust (auch Druckabfall, statischer Druckverlust oder ΔP) ist die Abnahme des statischen Drucks beim Strömen durch Kanäle, Formstücke und Filter. Dieser Leitfaden erklärt Physik, Formel und praktische Anwendung.',
-		'category'      => 'Technische Referenz',
-		'date'          => '2026-08-25',
-		'formatted_date'=> '25. August 2026',
-		'read_time'     => '8 Min. Lesezeit',
-		'author'        => 'Victoria Pedroza',
-		'author_role'   => 'Produktmanagerin, Emifree GmbH',
-		'hero_image'    => 'Air_pressure_loss_guide_.jpeg',
-	),
-	'luftdruckverlust-berechnen' => array(
-		'id'            => '4',
-		'slug'          => 'luftdruckverlust-berechnen',
-		'title'         => 'Luftdruckverlust im Kanal berechnen: Ausführliches Rechenbeispiel mit Darcy-Weisbach',
-		'excerpt'       => 'Schritt-für-Schritt-Rechenbeispiel für den Luftdruckverlust eines 1.700 m³/h-Stahlkanalstrangs mit zwei 90°-Bögen, T-Stück und Reduzierstück — nach Darcy-Weisbach + ASHRAE K-Faktoren.',
-		'category'      => 'Rechentutorial',
-		'date'          => '2026-08-25',
-		'formatted_date'=> '25. August 2026',
-		'read_time'     => '6 Min. Lesezeit',
-		'author'        => 'Victoria Pedroza',
-		'author_role'   => 'Produktmanagerin, Emifree GmbH',
-		'hero_image'    => 'Calculating_air_pressure_loss_duct_.jpeg',
-	),
-	'luftdruckverlust-vs-druckabfall' => array(
-		'id'            => '5',
-		'slug'          => 'luftdruckverlust-vs-druckabfall',
-		'title'         => 'Luftdruckverlust vs. Druckabfall: Bezeichnen sie dasselbe?',
-		'excerpt'       => '„Luftdruckverlust" und „Druckabfall" bezeichnen dieselbe physikalische Größe — die Abnahme des statischen Drucks in Pa. Dieser Artikel entwirrt die Begriffe, damit Sie jeden Lieferantenkatalog und jede VDI-Richtlinie sicher lesen können.',
-		'category'      => 'Technische Referenz',
-		'date'          => '2026-08-25',
-		'formatted_date'=> '25. August 2026',
-		'read_time'     => '5 Min. Lesezeit',
-		'author'        => 'Victoria Pedroza',
-		'author_role'   => 'Produktmanagerin, Emifree GmbH',
-		'hero_image'    => 'Air_pressure_loss_versus_drop_202608251416.jpeg',
-	),
-
-	// --- ToFu-Erkennungs-Artikel „Woran erkenne ich, dass ich einen
-	//     Ölnebelabscheider brauche?" (2026-08-31) ---
-	// Inline-Kopie von emifree_blog_posts_de() in inc/knowledge.php —
-	// diese beiden Arrays müssen synchron sein.
-	'5-anzeichen-oelnebelabscheider' => array(
-		'id'            => '6',
-		'slug'          => '5-anzeichen-oelnebelabscheider',
-		'title'         => '5 Anzeichen dafür, dass Ihre CNC-Fertigung einen Ölnebelabscheider benötigt (und was jetzt zu tun ist)',
-		'excerpt'       => 'Sichtbarer Dunst, ölige Oberflächen, Mitarbeiter-Beschwerden, steigender Wartungsaufwand und wachsender KSS-Verbrauch: fünf konkrete Warnzeichen, an denen Sie erkennen, dass es Zeit für einen Ölnebelabscheider ist – inklusive Lösungs-Wegweiser.',
-		'category'      => 'Technischer Leitfaden',
-		'date'          => '2026-07-01',
-		'formatted_date'=> '1. Juli 2026',
-		'read_time'     => '5 Min. Lesezeit',
-		'author'        => 'Victoria Pedroza',
-		'author_role'   => 'Produktmanagerin, Emifree GmbH',
-		'hero_image'    => 'Factory_floor_with_CNC_.webp',
-	),
+	// NOTE: The DE counterparts of the EN "air-pressure-loss" cluster
+	// (was-ist-luftdruckverlust, luftdruckverlust-berechnen,
+	// luftdruckverlust-vs-druckabfall) AND the DE "5 Signs Your CNC
+	// Shop Needs an Oil Mist Collector" post now live in the blog_post
+	// CPT, with slugs mirrored to the EN siblings. The CPT-first
+	// lookup above resolves those requests; this array now only
+	// carries the 2 English-source legacy posts that pre-date the
+	// CPT migration.
 );
 
 /**
@@ -166,7 +113,7 @@ $emifree_current_post   = null;
 // language=de (or no language set), prefer it over the legacy
 // $emifree_de_posts PHP-array.
 if ( $emifree_requested_slug ) {
-	$emifree_cpt_post = emifree_query_cpt_blog_post_by_slug( $emifree_requested_slug );
+	$emifree_cpt_post = emifree_query_cpt_blog_post_by_slug( $emifree_requested_slug, 'de' );
 	if ( $emifree_cpt_post ) {
 		$emifree_cpt_lang = (string) get_post_meta( $emifree_cpt_post->ID, 'emifree_language', true );
 		if ( '' === $emifree_cpt_lang || 'de' === $emifree_cpt_lang ) {

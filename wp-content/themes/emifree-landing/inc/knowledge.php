@@ -101,8 +101,8 @@ if ( ! function_exists( 'emifree_blog_posts' ) ) :
 			'how-to-calculate-air-pressure-loss' => array(
 				'id'            => '4',
 				'slug'          => 'how-to-calculate-air-pressure-loss',
-				'title'         => 'How to Calculate Air Pressure Loss in a Duct: Worked Example with Darcy-Weisbach',
-				'excerpt'       => 'A step-by-step worked example calculating air pressure loss for a 1,700 m³/h galvanized-steel duct run with two 90° elbows, a T-junction, and a reducer — using Darcy-Weisbach + ASHRAE K-factors.',
+				'title'         => 'How to Calculate Air Pressure Loss in a Duct: Worked Example & Guide',
+				'excerpt'       => 'Air pressure loss, also called pressure drop, is the reduction in static pressure that happens when air moves through ductwork, fittings, filters, and other restrictions — and the reason engineers use a calculator to estimate it quickly. This walkthrough shows the Darcy-Weisbach formula, the K-factor model for fittings, and how to read the calculator output.',
 				'category'      => 'Calculation Tutorial',
 				'date'          => '2026-08-25',
 				'formatted_date'=> 'August 25, 2026',
@@ -456,6 +456,14 @@ if ( ! function_exists( 'emifree_query_cpt_blog_post_by_slug' ) ) :
 	 * Used by the page-blog-post*.php shims to prefer a CPT entry
 	 * over the legacy PHP-array when both exist for the same slug.
 	 *
+	 * The optional $emifree_required_lang parameter narrows the lookup
+	 * to a single language — required for EN/DE translation pairs that
+	 * share a slug (e.g. the "5 Signs Your CNC Shop..." post, which
+	 * has both an EN CPT entry ID 15 and a DE CPT entry ID 23 with
+	 * identical post_name). Without this filter, get_posts() with
+	 * posts_per_page=1 returns whichever MySQL hands back first,
+	 * making the shim's language check non-deterministic.
+	 *
 	 * Implementation note: uses get_posts() + a direct $wpdb lookup
 	 * as fallback. We avoid `new WP_Query( 'name' => $slug )` because
 	 * the global $wp_query is in 404 state on these URLs (the CPT is
@@ -465,24 +473,38 @@ if ( ! function_exists( 'emifree_query_cpt_blog_post_by_slug' ) ) :
 	 * touch the global $wp_query.
 	 *
 	 * @param string $emifree_slug Post slug.
+	 * @param string $emifree_required_lang Optional 'en'|'de' filter.
 	 * @return WP_Post|null
 	 */
-	function emifree_query_cpt_blog_post_by_slug( $emifree_slug ) {
+	function emifree_query_cpt_blog_post_by_slug( $emifree_slug, $emifree_required_lang = '' ) {
 		if ( ! $emifree_slug ) {
 			return null;
 		}
 
-		// Primary path: get_posts() — independent of $wp_query state.
-		$emifree_posts = get_posts(
-			array(
-				'post_type'      => 'blog_post',
-				'post_status'    => 'publish',
-				'name'           => $emifree_slug,
-				'posts_per_page' => 1,
-				'no_found_rows'  => true,
-				'suppress_filters' => false,
-			)
+		$emifree_required_lang = is_string( $emifree_required_lang ) ? strtolower( $emifree_required_lang ) : '';
+		if ( ! in_array( $emifree_required_lang, array( 'en', 'de' ), true ) ) {
+			$emifree_required_lang = '';
+		}
+
+		$emifree_query_args = array(
+			'post_type'      => 'blog_post',
+			'post_status'    => 'publish',
+			'name'           => $emifree_slug,
+			'posts_per_page' => 1,
+			'no_found_rows'  => true,
+			'suppress_filters' => false,
 		);
+		if ( $emifree_required_lang ) {
+			$emifree_query_args['meta_query'] = array(
+				array(
+					'key'   => 'emifree_language',
+					'value' => $emifree_required_lang,
+				),
+			);
+		}
+
+		// Primary path: get_posts() — independent of $wp_query state.
+		$emifree_posts = get_posts( $emifree_query_args );
 		if ( ! empty( $emifree_posts ) ) {
 			return $emifree_posts[0];
 		}
@@ -490,17 +512,15 @@ if ( ! function_exists( 'emifree_query_cpt_blog_post_by_slug' ) ) :
 		// Fallback: direct $wpdb lookup. Bypasses WP_Query entirely.
 		// get_posts() can be filtered by other plugins (relevanssi,
 		// polylang, etc.) — this gives us a guaranteed-correct answer
-		// for our own internal routing logic.
+		// for our own internal routing logic. We also re-check the
+		// language meta on the post itself to be sure.
 		global $wpdb;
+		$emifree_sql = "SELECT ID FROM {$wpdb->posts} WHERE post_type = 'blog_post' AND post_status = 'publish' AND post_name = %s";
+		if ( $emifree_required_lang ) {
+			$emifree_sql = "SELECT p.ID FROM {$wpdb->posts} p INNER JOIN {$wpdb->postmeta} pm ON pm.post_id=p.ID WHERE p.post_type='blog_post' AND p.post_status='publish' AND p.post_name=%s AND pm.meta_key='emifree_language' AND pm.meta_value=%s";
+		}
 		$emifree_id = (int) $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT ID FROM {$wpdb->posts}
-				 WHERE post_type = 'blog_post'
-				   AND post_status = 'publish'
-				   AND post_name = %s
-				 LIMIT 1",
-				$emifree_slug
-			)
+			$wpdb->prepare( $emifree_sql . ' LIMIT 1', $emifree_slug, $emifree_required_lang )
 		);
 		if ( $emifree_id ) {
 			$emifree_post = get_post( $emifree_id );
@@ -554,69 +574,14 @@ if ( ! function_exists( 'emifree_blog_posts_de' ) ) :
 				'hero_image'     => 'CNC_2.jpg',
 			),
 
-			// --- SEO-Pillar-Artikel für den Suchbegriff-Cluster „Luftdruckverlust" ---
-			// Hinzugefügt am 25.08.2026 im Rahmen des Keyword-Coverage-Plans:
-			// jeder Artikel deckt eine eigene Long-Tail-Abfrage ab und verlinkt
-			// zurück auf /de/luftdruckverlust-rechner/.
-			'was-ist-luftdruckverlust' => array(
-				'id'             => '3',
-				'slug'           => 'was-ist-luftdruckverlust',
-				'title'          => 'Was ist Luftdruckverlust? Ein Praxisleitfaden für HVAC und industrielle Lüftung',
-				'excerpt'        => 'Luftdruckverlust (auch Druckabfall, statischer Druckverlust oder ΔP) ist die Abnahme des statischen Drucks beim Strömen durch Kanäle, Formstücke und Filter. Dieser Leitfaden erklärt Physik, Formel und praktische Anwendung.',
-				'category'       => 'Technische Referenz',
-				'date'           => '2026-08-25',
-				'formatted_date' => '25. August 2026',
-				'read_time'      => '8 Min. Lesezeit',
-				'author'         => 'Victoria Pedroza',
-				'author_role'    => 'Produktmanagerin, Emifree GmbH',
-				'hero_image'     => 'Air_pressure_loss_guide_.jpeg',
-			),
-			'luftdruckverlust-berechnen' => array(
-				'id'             => '4',
-				'slug'           => 'luftdruckverlust-berechnen',
-				'title'          => 'Luftdruckverlust im Kanal berechnen: Ausführliches Rechenbeispiel mit Darcy-Weisbach',
-				'excerpt'        => 'Schritt-für-Schritt-Rechenbeispiel für den Luftdruckverlust eines 1.700 m³/h-Stahlkanalstrangs mit zwei 90°-Bögen, T-Stück und Reduzierstück — nach Darcy-Weisbach + ASHRAE K-Faktoren.',
-				'category'       => 'Rechentutorial',
-				'date'           => '2026-08-25',
-				'formatted_date' => '25. August 2026',
-				'read_time'      => '6 Min. Lesezeit',
-				'author'         => 'Victoria Pedroza',
-				'author_role'    => 'Produktmanagerin, Emifree GmbH',
-				'hero_image'     => 'Calculating_air_pressure_loss_duct_.jpeg',
-			),
-			'luftdruckverlust-vs-druckabfall' => array(
-				'id'             => '5',
-				'slug'           => 'luftdruckverlust-vs-druckabfall',
-				'title'          => 'Luftdruckverlust vs. Druckabfall: Bezeichnen sie dasselbe?',
-				'excerpt'        => '„Luftdruckverlust" und „Druckabfall" bezeichnen dieselbe physikalische Größe — die Abnahme des statischen Drucks in Pa. Dieser Artikel entwirrt die Begriffe, damit Sie jeden Lieferantenkatalog und jede VDI-Richtlinie sicher lesen können.',
-				'category'       => 'Technische Referenz',
-				'date'           => '2026-08-25',
-				'formatted_date' => '25. August 2026',
-				'read_time'      => '5 Min. Lesezeit',
-				'author'         => 'Victoria Pedroza',
-				'author_role'    => 'Produktmanagerin, Emifree GmbH',
-				'hero_image'     => 'Air_pressure_loss_versus_drop_202608251416.jpeg',
-			),
-
-			// --- ToFu-Erkennungs-Artikel „Woran erkenne ich, dass ich einen
-			//     Ölnebelabscheider brauche?" (2026-08-31) ---
-			// Spricht Werksleiter an, die noch keinen Abscheider haben und
-			// eine Checkliste zur Selbsteinschätzung suchen. Cross-Link
-			// zur Ölnebel-Pillar-Seite (precision-in-every-breath) für die
-			// technische Vertiefung der Lösungs-Auswahl.
-			'5-anzeichen-oelnebelabscheider' => array(
-				'id'             => '6',
-				'slug'           => '5-anzeichen-oelnebelabscheider',
-				'title'          => '5 Anzeichen dafür, dass Ihre CNC-Fertigung einen Ölnebelabscheider benötigt (und was jetzt zu tun ist)',
-				'excerpt'        => 'Sichtbarer Dunst, ölige Oberflächen, Mitarbeiter-Beschwerden, steigender Wartungsaufwand und wachsender KSS-Verbrauch: fünf konkrete Warnzeichen, an denen Sie erkennen, dass es Zeit für einen Ölnebelabscheider ist – inklusive Lösungs-Wegweiser.',
-				'category'       => 'Technischer Leitfaden',
-				'date'           => '2026-07-01',
-				'formatted_date' => '1. Juli 2026',
-				'read_time'      => '5 Min. Lesezeit',
-				'author'         => 'Victoria Pedroza',
-				'author_role'    => 'Produktmanagerin, Emifree GmbH',
-				'hero_image'     => 'Factory_floor_with_CNC_.webp',
-			),
+			// NOTE: The DE counterparts of the EN "air-pressure-loss"
+			// cluster (was-ist-luftdruckverlust, luftdruckverlust-berechnen,
+			// luftdruckverlust-vs-druckabfall) AND the DE "5 Signs Your CNC
+			// Shop Needs an Oil Mist Collector" post now live in the
+			// blog_post CPT, with slugs mirrored to the EN siblings so the
+			// language switcher can route EN↔DE via plain /de/ prefix swap.
+			// The merged feed in emifree_get_all_blog_posts_merged()
+			// surfaces it automatically alongside these legacy posts.
 		);
 	}
 endif;

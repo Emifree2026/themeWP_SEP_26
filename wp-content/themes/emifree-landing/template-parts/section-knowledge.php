@@ -113,17 +113,16 @@ $emifree_knowledge_tabs = array(
 			</h3>
 
 			<?php
-			// Show only the 2 most-recent posts in the Featured Articles
-			// panel on the landing page. Older posts remain reachable from
-			// the blog index (/blog/) and the per-tool cross-links.
-			$emifree_featured_posts = $emifree_blog_posts;
-			usort(
-				$emifree_featured_posts,
-				function ( $a, $b ) {
-					return strcmp( $b['date'], $a['date'] );
-				}
-			);
-			$emifree_featured_posts = array_slice( $emifree_featured_posts, 0, 2 );
+			// Show only the 2 most-recent EN posts in the Featured Articles
+			// panel on the landing page. The merged feed pulls from both
+			// the legacy emifree_blog_posts() PHP-array AND any published
+			// blog_post CPT entries tagged emifree_language=en, sorted
+			// DESC by date so newly-published CPT posts surface here
+			// automatically (no template edit needed). Older posts remain
+			// reachable from the blog index (/blog/) and the per-tool
+			// cross-links.
+			$emifree_featured_posts = emifree_get_all_blog_posts_merged( 'en', $emifree_blog_posts );
+			$emifree_featured_posts = array_slice( $emifree_featured_posts, 0, 2, true );
 			?>
 
 			<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">

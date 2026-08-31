@@ -8,7 +8,14 @@
  *
  * Tab switching is handled by assets/js/sections/knowledge.js.
  * The JS is language-agnostic.
+ *
+ * Featured cards are pulled from the DE merged feed
+ * (emifree_blog_posts_de() PHP-array + DE blog_post CPT entries)
+ * and sliced to the 2 most-recent posts. This mirrors the EN
+ * section-knowledge.php behavior so both languages auto-update when
+ * a new post is added in either format.
  */
+emifree_require_section_data( 'knowledge' );
 emifree_enqueue_section_script( 'knowledge' );
 
 // Icon map — identical SVG paths to the English version, inlined so
@@ -30,37 +37,12 @@ $emifree_knowledge_icons = array(
 	'clock'          => '<circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>',
 );
 
-// German blog posts — inlined to keep the section self-contained.
-$emifree_blog_posts = array(
-	'the-strategic-edge-of-clean-air' => array(
-		'id'            => '1',
-		'slug'          => 'the-strategic-edge-of-clean-air',
-		'title'         => 'Der strategische Vorteil sauberer Luft: Warum Hochleistungs-Ölnebelfiltration für die moderne Zerspanung unverzichtbar ist',
-		'excerpt'       => 'Industrielle Ölnebelfiltration ist kein Zubehör, sondern eine strategische Investition in Arbeitssicherheit, Anlagenlebensdauer und Betriebseffizienz in hochpräzisen Fertigungsumgebungen.',
-		'category'      => 'Technischer Leitfaden',
-		'date'          => '2026-06-29',
-		'formatted_date'=> '29. Juni 2026',
-		'read_time'     => '5 Min. Lesezeit',
-		'author'        => 'Victoria Pedroza',
-		'author_role'   => 'Produktmanagerin, Emifree GmbH',
-		'hero_image'    => 'Workers_operating_CNC_machines.jpeg',
-		'body_preview'  => 'In der modernen Präzisionsfertigung ist die Luftqualität in der Fabrikhalle längst kein Nebenthema mehr. Die Luft in einer Werkstatt beeinflusst direkt die Zuverlässigkeit der Anlagen, die Einhaltung gesetzlicher Vorschriften und – am wichtigsten – die Gesundheit der Mitarbeiter. Ein industrieller Ölnebelabscheider, der an jeder Werkzeugmaschine positioniert ist, stellt eine strategische Investition dar, kein Zubehör.',
-	),
-	'precision-in-every-breath' => array(
-		'id'            => '2',
-		'slug'          => 'precision-in-every-breath',
-		'title'         => 'Präzision in jedem Atemzug: Ein technischer Leitfaden zur industriellen Ölnebelfiltration',
-		'excerpt'       => 'Ein technischer Vergleich mechanischer und elektrostatischer Ölnebelfiltrationstechnologien – und wie die Absaugung direkt an der Quelle Ihre Mitarbeiter, Ihre Maschinen und Ihr Ergebnis schützt.',
-		'category'      => 'Technischer Leitfaden',
-		'date'          => '2026-06-29',
-		'formatted_date'=> '29. Juni 2026',
-		'read_time'     => '7 Min. Lesezeit',
-		'author'        => 'Victoria Pedroza',
-		'author_role'   => 'Produktmanagerin, Emifree GmbH',
-		'hero_image'    => 'CNC_2.jpg',
-		'body_preview'  => 'Für Facility Manager und Produktionsingenieure ist die Luftqualität in der Fabrik eine betriebliche Notwendigkeit – kein bloßer Haken auf der Checkliste. Der bei Hochgeschwindigkeitsbearbeitung, Schleifen und Drehen entstehende Ölnebel wirkt sich messbar auf die Gesundheit der Belegschaft, die Maschinenverfügbarkeit und das Ergebnis aus. Dieser Artikel erläutert, wie Ölnebel entsteht, warum die Filtration direkt an der Quelle entscheidend ist, und wie Sie zwischen mechanischer und elektrostatischer Abscheidung wählen.',
-	),
-);
+// Pull DE blog posts from the merged feed (legacy PHP-array + DE CPT
+// entries). Replaces the previous hardcoded in-line array of the two
+// oldest posts — the landing-page featured cards now auto-update when
+// a new DE post is added in either format. See inc/knowledge.php for
+// the merged-feed implementation.
+$emifree_blog_posts = emifree_get_all_blog_posts_merged( 'de', emifree_blog_posts_de() );
 
 // German catalog PDFs — same shape as English, with German catalog entries.
 $emifree_catalog_uri = get_template_directory_uri() . '/assets/catalog/';
@@ -176,32 +158,30 @@ $emifree_knowledge_tabs = array(
 			</h3>
 
 			<?php
-			// Show only the 2 most-recent posts in the Featured Articles
-			// panel on the landing page. Older posts remain reachable from
-			// the German blog index (/de/blog/) and the per-tool cross-links.
-			$emifree_featured_posts = $emifree_blog_posts;
-			usort(
-				$emifree_featured_posts,
-				function ( $a, $b ) {
-					return strcmp( $b['date'], $a['date'] );
-				}
-			);
-			$emifree_featured_posts = array_slice( $emifree_featured_posts, 0, 2 );
+			// Show only the 2 most-recent DE posts in the Featured Articles
+			// panel. $emifree_blog_posts here is the DE merged feed (sorted
+			// DESC by date inside emifree_get_all_blog_posts_merged), so we
+			// only need to slice. Older posts remain reachable from the DE
+			// blog index (/de/blog/) and the per-tool cross-links.
+			$emifree_featured_posts = array_slice( $emifree_blog_posts, 0, 2, true );
 			?>
 
 			<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
 				<?php
 				// Inline German FeaturedBlogCard (mirrors inc/blog-cards.php
 				// emifree_featured_blog_card() but with German hardcoded
-				// strings for the "Read article" link).
-				$emifree_blog_uri = get_template_directory_uri() . '/assets/images/blog/';
+				// strings for the "Read article" link). Reads from the
+				// normalized shape emitted by emifree_get_all_blog_posts_merged():
+				//   hero_image_url is already a full URL (works for both
+				//   legacy {template}/assets/images/blog/ filenames and
+				//   CPT featured-image attachments from the Media Library).
 				foreach ( $emifree_featured_posts as $emifree_post ) :
 					// Point to /de/blog/{slug}/ — the German blog shim.
 					// home_url() preserves the WP install subpath on subpath
 					// installs (e.g. /wordpress/de/blog/...). A bare
 					// '/de/blog/...' would drop the subpath on click and 404.
 					$emifree_permalink = home_url( '/de/blog/' . $emifree_post['slug'] . '/' );
-					$emifree_hero_src  = $emifree_blog_uri . $emifree_post['hero_image'];
+					$emifree_hero_src  = isset( $emifree_post['hero_image_url'] ) ? (string) $emifree_post['hero_image_url'] : '';
 					$emifree_hero_alt  = $emifree_post['title'];
 					?>
 					<a
