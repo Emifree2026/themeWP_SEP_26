@@ -75,7 +75,7 @@ $emifree_de_posts = array(
 		'read_time'     => '8 Min. Lesezeit',
 		'author'        => 'Victoria Pedroza',
 		'author_role'   => 'Produktmanagerin, Emifree GmbH',
-		'hero_image'    => 'CNC_2.jpg',
+		'hero_image'    => 'Air_pressure_loss_guide_.jpeg',
 	),
 	'luftdruckverlust-berechnen' => array(
 		'id'            => '4',
@@ -88,7 +88,7 @@ $emifree_de_posts = array(
 		'read_time'     => '6 Min. Lesezeit',
 		'author'        => 'Victoria Pedroza',
 		'author_role'   => 'Produktmanagerin, Emifree GmbH',
-		'hero_image'    => 'Workers_operating_CNC_machines.jpeg',
+		'hero_image'    => 'Calculating_air_pressure_loss_duct_.jpeg',
 	),
 	'luftdruckverlust-vs-druckabfall' => array(
 		'id'            => '5',
@@ -102,6 +102,24 @@ $emifree_de_posts = array(
 		'author'        => 'Victoria Pedroza',
 		'author_role'   => 'Produktmanagerin, Emifree GmbH',
 		'hero_image'    => 'Air_pressure_loss_versus_drop_202608251416.jpeg',
+	),
+
+	// --- ToFu-Erkennungs-Artikel „Woran erkenne ich, dass ich einen
+	//     Ölnebelabscheider brauche?" (2026-08-31) ---
+	// Inline-Kopie von emifree_blog_posts_de() in inc/knowledge.php —
+	// diese beiden Arrays müssen synchron sein.
+	'5-anzeichen-oelnebelabscheider' => array(
+		'id'            => '6',
+		'slug'          => '5-anzeichen-oelnebelabscheider',
+		'title'         => '5 Anzeichen dafür, dass Ihre CNC-Fertigung einen Ölnebelabscheider benötigt (und was jetzt zu tun ist)',
+		'excerpt'       => 'Sichtbarer Dunst, ölige Oberflächen, Mitarbeiter-Beschwerden, steigender Wartungsaufwand und wachsender KSS-Verbrauch: fünf konkrete Warnzeichen, an denen Sie erkennen, dass es Zeit für einen Ölnebelabscheider ist – inklusive Lösungs-Wegweiser.',
+		'category'      => 'Technischer Leitfaden',
+		'date'          => '2026-07-01',
+		'formatted_date'=> '1. Juli 2026',
+		'read_time'     => '5 Min. Lesezeit',
+		'author'        => 'Victoria Pedroza',
+		'author_role'   => 'Produktmanagerin, Emifree GmbH',
+		'hero_image'    => 'Factory_floor_with_CNC_.webp',
 	),
 );
 
