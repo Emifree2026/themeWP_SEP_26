@@ -16,71 +16,92 @@ if ( ! defined( 'ABSPATH' ) ) {
 return array(
 	'body_html' => <<<HTML
 <p class="text-lg text-zinc-700 leading-relaxed mb-6">
-	This article walks through a real <strong>air pressure loss calculation</strong> for an industrial oil-mist extraction run: 1,700 m&sup3;/h through 8 m of 200 mm galvanized duct, two 90&deg; elbows, one T-junction, and a step-down reducer to 160 mm. We use the Darcy&ndash;Weisbach + K-factor method described in the <a href="/blog/what-is-air-pressure-loss/" class="text-blue-700 hover:text-blue-800 underline">What Is Air Pressure Loss?</a> pillar article, then apply the 1.15 oil-mist correction and a 2&times; fan safety margin. Skip to the bottom for the result, or use our free <a href="/air-pressure-loss-calculator/" class="text-blue-700 hover:text-blue-800 underline">air pressure loss calculator</a> to run your own numbers instantly.
+	Air pressure loss, also called pressure drop, is the reduction in static pressure that happens when air moves through ductwork, fittings, filters, and other restrictions. It affects airflow, fan sizing, and system performance, which is why many engineers use an <a href="/air-pressure-loss-calculator/" class="text-blue-700 hover:text-blue-800 underline">air pressure loss calculator</a> to estimate it quickly.
 </p>
 
-<h2 class="text-2xl font-bold text-zinc-900 mt-10 mb-4">Step 1 &mdash; Inputs</h2>
+<h2 class="text-2xl font-bold text-zinc-900 mt-10 mb-4">What Is Air Pressure Loss?</h2>
+<p class="text-lg text-zinc-700 leading-relaxed mb-6">
+	Air pressure loss represents the energy lost by moving air as it overcomes resistance inside a system. As air flows through a duct network, friction against the duct walls and turbulence created by changes in direction or velocity consume static pressure.
+</p>
+<p class="text-lg text-zinc-700 leading-relaxed mb-6">
+	Common causes of air pressure loss include:
+</p>
 <div class="bg-slate-50 border border-slate-200 rounded-lg p-6 mb-6">
 	<ul class="space-y-2 text-base text-zinc-800">
-		<li><strong>Airflow:</strong> Q = 1,700 m&sup3;/h = 0.472 m&sup3;/s</li>
-		<li><strong>Duct material:</strong> galvanized steel (roughness &epsilon; = 0.15 mm)</li>
-		<li><strong>Application:</strong> oil mist (correction factor K<sub>app</sub> = 1.15)</li>
-		<li><strong>Air properties:</strong> &rho; = 1.2 kg/m&sup3;, &mu; = 1.81&times;10&#8315;&#8308; Pa&middot;s (20&nbsp;&deg;C, sea level)</li>
+		<li><strong>Surface Friction:</strong> Smooth vs. rough duct materials (e.g., galvanized steel vs. flexible ducting).</li>
+		<li><strong>Duct Geometry:</strong> Narrower diameters increase air velocity and friction exponentially.</li>
+		<li><strong>Fittings &amp; Changes in Direction:</strong> Elbows, T-junctions, reducers, and branches create local turbulence losses (<em>K</em>-factors).</li>
+		<li><strong>System Components:</strong> Filters, dampers, and hoods introduce major pressure drops.</li>
 	</ul>
 </div>
 
-<h2 class="text-2xl font-bold text-zinc-900 mt-10 mb-4">Step 2 &mdash; Section A: 200 mm straight duct</h2>
+<h2 class="text-2xl font-bold text-zinc-900 mt-10 mb-4">How to Calculate Air Pressure Loss</h2>
+<p class="text-lg text-zinc-700 leading-relaxed mb-6">
+	To calculate pressure drop accurately across a system, engineers use the <strong>Darcy&ndash;Weisbach equation</strong> combined with equivalent friction parameters (<em>K</em>-factors) for fittings:
+</p>
 <div class="bg-slate-50 border border-slate-200 rounded-lg p-6 mb-6 font-mono text-base text-zinc-800">
-	<p>D = 0.200 m &middot; A = &pi;&middot;D&sup2;/4 = 0.0314 m&sup2;</p>
-	<p>V = Q/A = 0.472 / 0.0314 = 15.0 m/s</p>
-	<p>Re = &rho;&middot;V&middot;D/&mu; = 1.2 &middot; 15.0 &middot; 0.200 / 1.81&times;10&#8315;&#8308; = 199,000</p>
-	<p>f (Swamee&ndash;Jain) = 0.0206</p>
-	<p>L = 8 m &rArr; &Delta;P<sub>f</sub> = 0.0206 &middot; (8/0.2) &middot; 0.5 &middot; 1.2 &middot; 15.0&sup2; = <strong>111 Pa</strong></p>
+	<p class="mb-2"><strong>Friction (per straight section):</strong></p>
+	<p class="mb-4">&Delta;P<sub>f</sub> = f &middot; (L / D) &middot; (&half; &rho; V&sup2;)</p>
 </div>
-
-<h2 class="text-2xl font-bold text-zinc-900 mt-10 mb-4">Step 3 &mdash; Fittings on Section A</h2>
+<p class="text-lg text-zinc-700 leading-relaxed mb-6">Where:</p>
 <div class="bg-slate-50 border border-slate-200 rounded-lg p-6 mb-6">
-	<table class="w-full text-left text-base text-zinc-800">
-		<thead>
-			<tr class="border-b border-slate-300">
-				<th class="py-2 pr-4 font-semibold">Fitting</th>
-				<th class="py-2 pr-4 font-semibold">K-factor</th>
-				<th class="py-2 font-semibold">&Delta;P<sub>m</sub> = K&middot;&half;&middot;&rho;&middot;V&sup2;</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr class="border-b border-slate-200"><td class="py-2 pr-4">90&deg; elbow (die-stamped, r/D = 1.5)</td><td class="py-2 pr-4 font-mono">0.18</td><td class="py-2 font-mono">24.3 Pa</td></tr>
-			<tr class="border-b border-slate-200"><td class="py-2 pr-4">90&deg; elbow (die-stamped, r/D = 1.5)</td><td class="py-2 pr-4 font-mono">0.18</td><td class="py-2 font-mono">24.3 Pa</td></tr>
-			<tr><td class="py-2 pr-4">T-junction (through)</td><td class="py-2 pr-4 font-mono">1.20</td><td class="py-2 font-mono">162.0 Pa</td></tr>
-		</tbody>
-	</table>
+	<ul class="space-y-2 text-base text-zinc-800">
+		<li><em>f</em> = friction factor (calculated via Swamee&ndash;Jain equation)</li>
+		<li><em>L</em> = length of duct (m)</li>
+		<li><em>D</em> = duct diameter (m)</li>
+		<li><em>&rho;</em> = air density (kg/m&sup3;)</li>
+		<li><em>V</em> = air velocity (m/s)</li>
+	</ul>
 </div>
-<p class="text-lg text-zinc-700 leading-relaxed mb-6">
-	Section A subtotal: 111 + 24.3 + 24.3 + 162.0 = <strong>321.6 Pa</strong>.
-</p>
-
-<h2 class="text-2xl font-bold text-zinc-900 mt-10 mb-4">Step 4 &mdash; Section B: 160 mm after the reducer</h2>
-<p class="text-lg text-zinc-700 leading-relaxed mb-6">
-	The reducer carries K = 0.10. New V = 0.472 / (&pi;&middot;0.16&sup2;/4) = 23.4 m/s. We assume 2 m of straight 160 mm duct on the outlet side for a filter connection.
-</p>
+<p class="text-lg text-zinc-700 leading-relaxed mb-6">For fittings, minor loss is calculated using:</p>
 <div class="bg-slate-50 border border-slate-200 rounded-lg p-6 mb-6 font-mono text-base text-zinc-800">
-	<p>Re = 1.2 &middot; 23.4 &middot; 0.160 / 1.81&times;10&#8315;&#8308; = 248,000</p>
-	<p>f (Swamee&ndash;Jain) = 0.0196</p>
-	<p>Friction: &Delta;P<sub>f</sub> = 0.0196 &middot; (2/0.16) &middot; 0.5 &middot; 1.2 &middot; 23.4&sup2; = <strong>40.2 Pa</strong></p>
-	<p>Reducer K-loss: &Delta;P<sub>m</sub> = 0.10 &middot; 0.5 &middot; 1.2 &middot; 23.4&sup2; = <strong>32.9 Pa</strong></p>
+	<p class="mb-2"><strong>Minor loss (per fitting):</strong></p>
+	<p>&Delta;P<sub>m</sub> = K &middot; (&half; &rho; V&sup2;)</p>
 </div>
 
-<h2 class="text-2xl font-bold text-zinc-900 mt-10 mb-4">Step 5 &mdash; Apply oil-mist correction</h2>
+<h2 class="text-2xl font-bold text-zinc-900 mt-10 mb-4">Worked Example: Using the Free Air Pressure Loss Calculator</h2>
 <p class="text-lg text-zinc-700 leading-relaxed mb-6">
-	Raw total: 321.6 + 40.2 + 32.9 = 394.7 Pa. Multiply by K<sub>app</sub> = 1.15 for oil mist (accounts for liquid-film drag on the duct wall): <strong>&Delta;P<sub>total</sub> = 453.9 Pa</strong>.
+	Rather than manually computing complex fluid mechanics formulas, you can calculate the exact pressure drop for your duct run using our free <a href="/air-pressure-loss-calculator/" class="text-blue-700 hover:text-blue-800 underline">Air Pressure Loss Calculator</a>. Follow these simple steps to calculate your system requirements:
+</p>
+<div class="bg-slate-50 border border-slate-200 rounded-lg p-6 mb-6">
+	<ol class="space-y-3 list-decimal pl-6 text-base text-zinc-800">
+		<li><strong>Enter the Airflow:</strong> Input your target airflow volume in m&sup3;/h (e.g., 1,700&nbsp;m&sup3;/h).</li>
+		<li><strong>Select Duct Material:</strong> Choose from Galvanized Steel, Aluminum, or Black Steel to set the surface roughness factor.</li>
+		<li><strong>Select Application:</strong> Pick Oil Mist, Dust, or HVAC. The calculator automatically applies the relevant application correction factor (<em>K</em><sub>app</sub>) to account for wall drag from heavy particles or aerosols.</li>
+		<li><strong>Build Duct Sections &amp; Components:</strong>
+			<ul class="list-disc pl-6 mt-2 space-y-1">
+				<li>Add sections using different diameter ranges.</li>
+				<li>Add common piping components, including straight duct runs (custom lengths), 90&deg; or 45&deg; elbows, T-junctions, Y-connectors, or reducers.</li>
+				<li><em>Note on Reducers:</em> If you insert a reducer within a section, all subsequent components added to that section will automatically default to the exit diameter of the last reducer added.</li>
+			</ul>
+		</li>
+		<li><strong>Calculate Results:</strong> Click <strong>Calculate</strong> to generate your total friction loss and total pressure drop in Pascals (Pa).</li>
+	</ol>
+</div>
+
+<h3 class="text-xl font-bold text-zinc-900 mt-8 mb-4">Result &amp; Fan Selection Recommendation</h3>
+<p class="text-lg text-zinc-700 leading-relaxed mb-6">
+	Based on your inputs, the calculator displays the calculated static pressure drop (e.g., 453.9&nbsp;Pa for an oil-mist run) and automatically recommends a suitable fan. Factoring in safety margins and standard filter resistance (500&ndash;1,500&nbsp;Pa), the tool guides you to an ideal fan sizing rating&mdash;such as <strong>1,500&nbsp;Pa static pressure at 1,700&nbsp;m&sup3;/h</strong> for a single CNC cell extraction setup.
 </p>
 
-<h2 class="text-2xl font-bold text-zinc-900 mt-10 mb-4">Step 6 &mdash; Fan recommendation</h2>
+<h2 class="text-2xl font-bold text-zinc-900 mt-10 mb-4">Frequently Asked Questions</h2>
+<div class="space-y-6 mb-6">
+	<div>
+		<p class="text-lg font-semibold text-zinc-900 mb-2">What is the difference between static pressure loss and total pressure loss?</p>
+		<p class="text-lg text-zinc-700 leading-relaxed">Static pressure loss measures the drop in force exerted against duct walls (overcoming resistance), while total pressure loss accounts for both static pressure loss and changes in dynamic (velocity) pressure within the system.</p>
+	</div>
+	<div>
+		<p class="text-lg font-semibold text-zinc-900 mb-2">Which duct fittings cause the highest pressure loss?</p>
+		<p class="text-lg text-zinc-700 leading-relaxed">T-junctions, sharp 90&deg; mitered elbows, and rapid step-down reducers create the highest dynamic turbulence and carry the largest <em>K</em>-factors.</p>
+	</div>
+	<div>
+		<p class="text-lg font-semibold text-zinc-900 mb-2">When do I need to apply an application correction factor (<em>K</em><sub>app</sub>)?</p>
+		<p class="text-lg text-zinc-700 leading-relaxed">Application factors should be applied whenever airstreams carry particulates, heavy dust, or liquid phase aerosols (such as oil mist, steam, or sticky fumes) that increase wall friction beyond clean air standards.</p>
+	</div>
+</div>
+
 <p class="text-lg text-zinc-700 leading-relaxed mb-6">
-	Industry practice adds a 2&times; safety margin: fan static pressure rating = 2 &middot; 453.9 = <strong>~910 Pa</strong> at 1,700 m&sup3;/h. Add your filter cartridge pressure loss on top (typically 500&ndash;1,500 Pa for an oil-mist filter) to get the total fan rating. So a real selection here would be 1,500 Pa at 1,700 m&sup3;/h &mdash; a common size for a single CNC cell.
-</p>
-<p class="text-lg text-zinc-700 leading-relaxed mb-6">
-	Want to plug in your own numbers? The free <a href="/air-pressure-loss-calculator/" class="text-blue-700 hover:text-blue-800 underline">air pressure loss calculator</a> does all six steps automatically. For the underlying theory, see the <a href="/blog/what-is-air-pressure-loss/" class="text-blue-700 hover:text-blue-800 underline">What Is Air Pressure Loss?</a> pillar article.
+	Want to plug in your own numbers? Use our free <a href="/air-pressure-loss-calculator/" class="text-blue-700 hover:text-blue-800 underline">air pressure loss calculator</a> to run your own calculations instantly, or read our <a href="/blog/what-is-air-pressure-loss/" class="text-blue-700 hover:text-blue-800 underline">pillar guide on pressure loss theory</a>.
 </p>
 HTML
 );
