@@ -270,6 +270,14 @@
 		// Knowledge stem on either side and remap explicitly. Tool slugs
 		// inside the hub (e.g. ductulator) stay the same word across
 		// languages — only the language-prefixed hub stem swaps.
+		//
+		// Air-pressure-loss calculator exception: the calculator also
+		// has distinct EN/DE slugs (air-pressure-loss-calculator vs.
+		// luftdruckverlust-rechner) outside the Knowledge hub. Standalone
+		// routes: /air-pressure-loss-calculator/ (EN) and
+		// /de/luftdruckverlust-rechner/ (DE). Remap either direction
+		// explicitly so toggling the switcher on the tool lands on the
+		// correct localized URL.
 		function emifreeComputeLangTarget( code ) {
 				const emifreeLangLower = String( code ).toLowerCase();
 				const emifreeCurSite   = emifreeStripSubpath( window.location.pathname );
@@ -287,6 +295,20 @@
 				if ( emifreeCurSite.startsWith( '/en/knowledge' ) ) {
 					const emifreeTail = emifreeCurSite.substring( '/en/knowledge'.length );
 					return emifreeApplySubpath( '/de/wissen' + emifreeTail );
+				}
+				// Calculator tool remap — distinct standalone slugs (no
+				// shared stem), so the generic /de/* branch below would
+				// land on /de/air-pressure-loss-calculator/ (404) instead of
+				// /de/luftdruckverlust-rechner/. Handle exact matches only;
+				// hub-scoped /en/knowledge/air-pressure-loss-calculator/ is
+				// out of scope (no DE hub counterpart currently ships).
+				if ( '/air-pressure-loss-calculator' === emifreeCurSite
+					|| '/air-pressure-loss-calculator/' === emifreeCurSite ) {
+					return emifreeApplySubpath( '/de/luftdruckverlust-rechner/' );
+				}
+				if ( '/de/luftdruckverlust-rechner' === emifreeCurSite
+					|| '/de/luftdruckverlust-rechner/' === emifreeCurSite ) {
+					return emifreeApplySubpath( '/air-pressure-loss-calculator/' );
 				}
 				if ( 'de' === emifreeLangLower ) {
 					if ( emifreeCurSite.startsWith( '/de' ) ) {
