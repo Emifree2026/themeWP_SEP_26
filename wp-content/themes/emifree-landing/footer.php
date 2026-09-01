@@ -8,7 +8,7 @@
  * - Three link columns (Company / Resources / Legal) read from
  *   inc/footer.php so the data is editable in one place.
  * - Emifree GmbH legal line at the bottom (matches the React Footer).
- * - Social icons (LinkedIn, Email) with SVG paths.
+ * - Social icons (LinkedIn, YouTube, Email) with SVG paths.
  * - No gradient text on the heading (the React cleanup).
  */
 
