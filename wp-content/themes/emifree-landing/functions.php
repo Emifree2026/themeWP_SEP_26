@@ -752,7 +752,7 @@ function emifree_legacy_redirect_map() {
 		'/download_en/'              => '/en/',
 		'/mechanical-oil-mist-collector/'   => '/en/#products',
 		'/electrostatic-oil-mist-collector/' => '/en/#products',
-		'/hello-world/'              => '/en/blog/',
+		'/hello-world/'              => '/blog/',
 		// --- Old bare-slug German paths ---
 		'/karriere/'                 => '/de/#contact',
 		'/startseite/'               => '/de/',
