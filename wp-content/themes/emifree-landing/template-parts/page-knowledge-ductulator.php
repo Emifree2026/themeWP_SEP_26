@@ -1,6 +1,6 @@
 <?php
 /**
- * Knowledge Ductulator — /knowledge/ductulator/.
+ * Knowledge Ductulator, /knowledge/ductulator/.
  *
  * Embeds the Ductulator tool: a vanilla-JS port of ductulator.jsx
  * that sizes round or rectangular HVAC ducts using Darcy-Weisbach
@@ -9,7 +9,7 @@
  * localized labels passed to the JS via wp_localize_script.
  *
  * Labels are kept here (not in a .mo file) because the JS consumes
- * them via window.EMIFREE_DUCTULATOR_I18N — the same inline pattern
+ * them via window.EMIFREE_DUCTULATOR_I18N, the same inline pattern
  * the products section uses (functions.php emifree_enqueue_section_script).
  *
  * Loaded only when the Ductulator page is rendered. The shim
@@ -298,14 +298,14 @@ wp_localize_script( 'emifree-section-ductulator', 'EMIFREE_DUCTULATOR_I18N', $em
 			</p>
 			<h3 class="text-xl font-semibold text-zinc-900 mt-8">Limitations</h3>
 			<ul>
-				<li>Single straight section only — no fitting/elbow loss library, no summed pressure drop across a run.</li>
+				<li>Single straight section only, no fitting/elbow loss library, no summed pressure drop across a run.</li>
 				<li>Standard-size list is a reasonable approximation, not a manufacturer spec.</li>
 				<li>Velocity guidance (500–2500 fpm) is generic; not tied to duct location or building type.</li>
 				<li>No SMACAC aspect-ratio warning above ~4:1.</li>
 			</ul>
 		</section>
 
-		<?php /* Important Instructions — disclaimer; users must verify with specialists. */ ?>
+		<?php /* Important Instructions, disclaimer; users must verify with specialists. */ ?>
 		<aside class="mt-10 p-6 bg-amber-50 border border-amber-300 rounded-lg" aria-labelledby="duct-important-instructions-en">
 			<h2 id="duct-important-instructions-en" class="text-2xl font-bold text-zinc-900 mb-3">Important Instructions</h2>
 			<p class="text-zinc-800 leading-relaxed mb-3">

@@ -10,7 +10,7 @@
 require_once get_template_directory() . '/inc/i18n.php';
 
 emifree_seo_page_with_schema(
-	'Wissen — Technische Werkzeuge & Referenzen',
+	'Wissen, Technische Werkzeuge & Referenzen',
 	'HLK-Kanalauslegungswerkzeuge, Dimensionierungsreferenzen und technische Anleitungen für industrielle Luftfiltration und Lüftung.',
 	home_url( '/de/wissen' ),
 	'emifree-knowledge-schema-de',

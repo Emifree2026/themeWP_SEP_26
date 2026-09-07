@@ -1,6 +1,6 @@
 <?php
 /**
- * Front page — composes the homepage from modular template parts.
+ * Front page, composes the homepage from modular template parts.
  *
  * Sections ship in order:
  *  - Hero (Piece 4)
@@ -12,7 +12,7 @@
  *  - Inquiry modal (Piece 10, included as overlay)
  */
 
-// Landing-page SEO surface — meta description, OG/Twitter cards,
+// Landing-page SEO surface, meta description, OG/Twitter cards,
 // canonical, hreflang alternates (en ↔ de + x-default), and the
 // Organization / WebSite / Product JSON-LD set. Without this the
 // homepage ships no description and the validator flags it as

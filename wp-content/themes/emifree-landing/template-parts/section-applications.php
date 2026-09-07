@@ -1,10 +1,10 @@
 <?php
 /**
- * Applications section — 6 industrial segments with icons + descriptions + SEO questions.
+ * Applications section, 6 industrial segments with icons + descriptions + SEO questions.
  *
  * Mirrors src/components/Applications.jsx from the React app.
  * Icon SVGs come from emifree_application_icons() in inc/applications.php
- * — no external icon library required for WordPress.
+ *, no external icon library required for WordPress.
  */
 
 require_once get_template_directory() . '/inc/i18n.php';
@@ -19,7 +19,7 @@ emifree_require_section_data( 'applications' );
 				Industrial Air Filtration for Every Application
 			</h2>
 			<p class="text-xl text-zinc-600 max-w-3xl mx-auto">
-				From small tool shops to large manufacturing facilities — Emifree
+				From small tool shops to large manufacturing facilities, Emifree
 				systems capture oil mist, welding fumes, and dust at the source.
 			</p>
 		</div>
@@ -32,7 +32,7 @@ emifree_require_section_data( 'applications' );
 							<svg class="w-8 h-8" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true" style="filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));">
 								<?php
 								$emifree_icons = emifree_application_icons();
-								echo $emifree_icons[ $emifree_app['icon'] ]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled input.
+								echo $emifree_icons[ $emifree_app['icon'] ]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled input.
 								?>
 							</svg>
 						</div>
@@ -45,7 +45,7 @@ emifree_require_section_data( 'applications' );
 							<?php echo esc_html( $emifree_app['description'] ); ?>
 						</p>
 
-						<!-- SEO question — surfaced as a subtle italic line.
+						<!-- SEO question, surfaced as a subtle italic line.
 						     text-zinc-600 keeps WCAG AA contrast (5.74:1 on the
 						     white card) while still reading as muted copy. -->
 						<p class="text-sm text-zinc-600 italic">

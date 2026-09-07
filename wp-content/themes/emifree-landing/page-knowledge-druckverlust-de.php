@@ -3,7 +3,7 @@
  * Page template: /de/luftdruckverlust-rechner/  (legacy alias: /de/wissen/druckverlust/)
  * Renders the Luftdruckverlust-Rechner (Pressure Drop Calculator, German).
  *
- * The canonical URL is /de/luftdruckverlust-rechner/ — the keyword-rich
+ * The canonical URL is /de/luftdruckverlust-rechner/, the keyword-rich
  * slug. The legacy /de/wissen/druckverlust/ URL 301-redirects here.
  *
  * Mirrors page-knowledge-pressure-drop.php's shim pattern with German
@@ -15,7 +15,7 @@ require_once get_template_directory() . '/inc/i18n.php';
 emifree_enqueue_section_script( 'pressure-drop' );
 
 emifree_seo_page(
-	'Luftdruckverlust-Rechner — HVAC-Kanäle, Ventilatoren & Industrie-ΔP (Kostenlos)',
+	'Luftdruckverlust-Rechner, HVAC-Kanäle, Ventilatoren & Industrie-ΔP (Kostenlos)',
 	'Luftdruckverlust-Rechner für HVAC-Kanäle, Ventilatoren und industrielle Absauganlagen. Berechnen Sie Reibungsverlust + K-Faktor-Verluste für Bögen, T-Stücke und Reduzierstücke nach Darcy-Weisbach + ASHRAE. Kostenlos, ohne Anmeldung. Inkl. Ölnebel- und Staub-Korrektur.',
 	home_url( '/de/luftdruckverlust-rechner' ),
 	array(
@@ -56,7 +56,7 @@ emifree_seo_page(
 						'name'           => 'Was ist Luftdruckverlust?',
 						'acceptedAnswer' => array(
 							'@type' => 'Answer',
-							'text'  => 'Luftdruckverlust (auch Druckabfall oder Kanal-Druckverlust) bezeichnet die Abnahme des statischen Drucks, wenn Luft durch ein Kanalstück, ein Formstück, einen Filter oder eine andere Komponente strömt. Gemessen wird er in Pascal (Pa) — er ist die wichtigste Größe bei der Auslegung eines Ventilators oder einer Absauganlage für HVAC, Ölnebel- oder Staubabsaugung.',
+							'text'  => 'Luftdruckverlust (auch Druckabfall oder Kanal-Druckverlust) bezeichnet die Abnahme des statischen Drucks, wenn Luft durch ein Kanalstück, ein Formstück, einen Filter oder eine andere Komponente strömt. Gemessen wird er in Pascal (Pa), er ist die wichtigste Größe bei der Auslegung eines Ventilators oder einer Absauganlage für HVAC, Ölnebel- oder Staubabsaugung.',
 						),
 					),
 					array(
@@ -72,7 +72,7 @@ emifree_seo_page(
 						'name'           => 'Was ist der Unterschied zwischen Luftdruckverlust und Luftdruckabfall?',
 						'acceptedAnswer' => array(
 							'@type' => 'Answer',
-							'text'  => 'Es gibt keinen physikalischen Unterschied — beide Begriffe beschreiben dieselbe Größe (Abnahme des statischen Drucks in Pa). „Druckverlust" ist die deutsche Standardbezeichnung nach DIN / VDI; „Druckabfall" ist die wörtliche Übersetzung von „pressure drop" aus dem englischsprachigen ASHRAE-Standard.',
+							'text'  => 'Es gibt keinen physikalischen Unterschied, beide Begriffe beschreiben dieselbe Größe (Abnahme des statischen Drucks in Pa). „Druckverlust" ist die deutsche Standardbezeichnung nach DIN / VDI; „Druckabfall" ist die wörtliche Übersetzung von „pressure drop" aus dem englischsprachigen ASHRAE-Standard.',
 						),
 					),
 					array(
@@ -96,14 +96,14 @@ emifree_seo_page(
 						'name'           => 'Wie dimensioniere ich einen Ventilator für meinen Kanal?',
 						'acceptedAnswer' => array(
 							'@type' => 'Answer',
-							'text'  => 'Zwei Größen sind nötig: Luftstrom (m³/h) und Statikdruck (Pa). Der Luftstrom wird durch die Anwendung bestimmt — bei Ölnebel 1.500-2.500 m³/h pro CNC, bei Staub 2.000-5.000 m³/h pro Zelle. Der Statikdruck ist der Kanal-Druckverlust aus diesem Rechner, plus Filter- und Zyklonverlust (typisch 500-1.500 Pa).',
+							'text'  => 'Zwei Größen sind nötig: Luftstrom (m³/h) und Statikdruck (Pa). Der Luftstrom wird durch die Anwendung bestimmt, bei Ölnebel 1.500-2.500 m³/h pro CNC, bei Staub 2.000-5.000 m³/h pro Zelle. Der Statikdruck ist der Kanal-Druckverlust aus diesem Rechner, plus Filter- und Zyklonverlust (typisch 500-1.500 Pa).',
 						),
 					),
 				),
 			),
 		),
 	),
-	// hreflang alternates — point at the DE canonical (self) and the
+	// hreflang alternates, point at the DE canonical (self) and the
 	// EN sibling. x-default is emitted by emifree_seo_page() as the
 	// DE canonical itself.
 	array(

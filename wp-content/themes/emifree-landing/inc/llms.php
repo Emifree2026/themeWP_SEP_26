@@ -1,14 +1,14 @@
 <?php
 /**
- * Emifree Theme — virtual /llms.txt and /de/llms.txt.
+ * Emifree Theme, virtual /llms.txt and /de/llms.txt.
  *
  * Implements the llms.txt convention (https://llms-txt.org/) so LLM
  * crawlers (GPTBot, ClaudeBot, PerplexityBot, Google-Extended, etc.)
  * have a single, structured, plain-text manifest of the company, the
  * product line, and every principal URL the site serves. Without it,
- * models ingest whatever happens to be on the page — competing
+ * models ingest whatever happens to be on the page, competing
  * /language/de/startseite/ legacy URLs, thin archive pages, search
- * results — and that's what they end up citing. With it, we tell
+ * results, and that's what they end up citing. With it, we tell
  * them exactly which pages to ground answers in.
  *
  * Two URL surfaces:
@@ -31,7 +31,7 @@
  *
  * The body is built from data already in the theme (inc/hero.php,
  * inc/products.php, inc/footer.php, the section IDs on the landing
- * page). No new content is invented — the manifest just collects
+ * page). No new content is invented, the manifest just collects
  * what's already authoritative into a single llms-friendly surface.
  *
  * The spec is strict about the # and ## headings. The H1 must be the
@@ -54,15 +54,17 @@ if ( ! defined( 'ABSPATH' ) ) {
  * handler can pick the right body without sniffing the request URI.
  */
 function emifree_register_llms_route() {
-	// English llms.txt at the site root.
+	// English llms.txt at the site root. Accept both /llms.txt and
+	// /llms.txt/ so the WordPress permalink redirect doesn't fire
+	// before our template_redirect handler.
 	add_rewrite_rule(
-		'^llms\.txt$',
+		'^llms\.txt/?$',
 		'index.php?emifree_llms=1&emifree_llms_lang=en',
 		'top'
 	);
-	// German llms.txt at /de/llms.txt.
+	// German llms.txt at /de/llms.txt. Same trailing-slash tolerance.
 	add_rewrite_rule(
-		'^de/llms\.txt$',
+		'^de/llms\.txt/?$',
 		'index.php?emifree_llms=1&emifree_llms_lang=de',
 		'top'
 	);
@@ -92,7 +94,7 @@ function emifree_serve_llms_txt() {
 	nocache_headers();
 	header( 'Content-Type: text/plain; charset=utf-8' );
 	header( 'X-Robots-Tag: noindex' );
-	echo 'de' === $emifree_lang ? emifree_llms_txt_body_de() : emifree_llms_txt_body_en(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — static text body, no user input.
+	echo 'de' === $emifree_lang ? emifree_llms_txt_body_de() : emifree_llms_txt_body_en(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, static text body, no user input.
 	exit;
 }
 add_action( 'template_redirect', 'emifree_serve_llms_txt', 20 );
@@ -111,7 +113,7 @@ add_action( 'template_redirect', 'emifree_serve_llms_txt', 20 );
  *
  * URLs are built with home_url() so they stay correct on subpath
  * installs. The fragment URLs (e.g. /en/#products) are the same
- * anchor links the in-page nav uses — the smooth-scroll handler in
+ * anchor links the in-page nav uses, the smooth-scroll handler in
  * header.js will land an LLM scraper (or a human following a
  * citation) on the right section.
  *
@@ -127,7 +129,7 @@ function emifree_llms_txt_body_en() {
 	// ## Company summary.
 	$emifree_lines[] = '## Company';
 	$emifree_lines[] = '';
-	$emifree_lines[] = 'Emifree designs and manufactures industrial air filtration systems for machine tools, workshops, and production lines where oil mist, coolant aerosols, and dry dust must be captured at the source. Our product line covers mechanical, electrostatic, and dust filtration — engineered for low maintenance, long service life, and cleanroom-grade air quality.';
+	$emifree_lines[] = 'Emifree designs and manufactures industrial air filtration systems for machine tools, workshops, and production lines where oil mist, coolant aerosols, and dry dust must be captured at the source. Our product line covers mechanical, electrostatic, and dust filtration, engineered for low maintenance, long service life, and cleanroom-grade air quality.';
 	$emifree_lines[] = '';
 	$emifree_lines[] = 'We are trusted by industry leaders including Mercedes-Benz, BMW, GM, NSK, Knorr-Bremse, and Siemens.';
 	$emifree_lines[] = '';
@@ -160,28 +162,28 @@ function emifree_llms_txt_body_en() {
 	$emifree_lines[] = '## Key pages';
 	$emifree_lines[] = '';
 	$emifree_lines[] = '- [' . home_url( '/en/' ) . ']( ' . home_url( '/en/' ) . ' ): English landing page.';
-	$emifree_lines[] = '- [' . home_url( '/en/#products' ) . ']( ' . home_url( '/en/#products' ) . ' ): Product range — Mechanical, Electrostatic, and Dust filtration systems with specs, features, and quote CTAs.';
-	$emifree_lines[] = '- [' . home_url( '/en/#applications' ) . ']( ' . home_url( '/en/#applications' ) . ' ): Industry applications — where Emifree filters are deployed.';
-	$emifree_lines[] = '- [' . home_url( '/en/#technology' ) . ']( ' . home_url( '/en/#technology' ) . ' ): How the technology works — separation physics, HEPA performance, energy recovery.';
+	$emifree_lines[] = '- [' . home_url( '/en/#products' ) . ']( ' . home_url( '/en/#products' ) . ' ): Product range, Mechanical, Electrostatic, and Dust filtration systems with specs, features, and quote CTAs.';
+	$emifree_lines[] = '- [' . home_url( '/en/#applications' ) . ']( ' . home_url( '/en/#applications' ) . ' ): Industry applications, where Emifree filters are deployed.';
+	$emifree_lines[] = '- [' . home_url( '/en/#technology' ) . ']( ' . home_url( '/en/#technology' ) . ' ): How the technology works, separation physics, HEPA performance, energy recovery.';
 	$emifree_lines[] = '- [' . home_url( '/en/#knowledge' ) . ']( ' . home_url( '/en/#knowledge' ) . ' ): Knowledge base and engineering articles.';
 	$emifree_lines[] = '- [' . home_url( '/en/#contact' ) . ']( ' . home_url( '/en/#contact' ) . ' ): Contact form and inquiry submission.';
 	$emifree_lines[] = '- [' . home_url( '/de/' ) . ']( ' . home_url( '/de/' ) . ' ): German landing page.';
-	$emifree_lines[] = '- [' . home_url( '/de/#products' ) . ']( ' . home_url( '/de/#products' ) . ' ): Produktpalette — Mechanisch, Elektrostatisch, Staub.';
+	$emifree_lines[] = '- [' . home_url( '/de/#products' ) . ']( ' . home_url( '/de/#products' ) . ' ): Produktpalette, Mechanisch, Elektrostatisch, Staub.';
 	$emifree_lines[] = '- [' . home_url( '/de/#applications' ) . ']( ' . home_url( '/de/#applications' ) . ' ): Branchen-Anwendungen.';
 	$emifree_lines[] = '- [' . home_url( '/de/#technology' ) . ']( ' . home_url( '/de/#technology' ) . ' ): Technologie im Detail.';
 	$emifree_lines[] = '- [' . home_url( '/de/#knowledge' ) . ']( ' . home_url( '/de/#knowledge' ) . ' ): Wissensdatenbank und Engineering-Artikel.';
 	$emifree_lines[] = '- [' . home_url( '/de/#contact' ) . ']( ' . home_url( '/de/#contact' ) . ' ): Kontaktformular und Anfrage.';
 	$emifree_lines[] = '';
 
-	// ## Legal. English + German legal pages — the URLs are
+	// ## Legal. English + German legal pages, the URLs are
 	// canonical, so they're the authoritative sources a model should
 	// cite if it answers questions about privacy or terms.
 	$emifree_lines[] = '## Legal';
 	$emifree_lines[] = '';
-	$emifree_lines[] = '- [' . home_url( '/impressum/' ) . ']( ' . home_url( '/impressum/' ) . ' ): Imprint (English) — company disclosure.';
+	$emifree_lines[] = '- [' . home_url( '/impressum/' ) . ']( ' . home_url( '/impressum/' ) . ' ): Imprint (English), company disclosure.';
 	$emifree_lines[] = '- [' . home_url( '/privacy/' ) . ']( ' . home_url( '/privacy/' ) . ' ): Privacy policy (English).';
 	$emifree_lines[] = '- [' . home_url( '/terms/' ) . ']( ' . home_url( '/terms/' ) . ' ): Terms and conditions (English).';
-	$emifree_lines[] = '- [' . home_url( '/de/impressum/' ) . ']( ' . home_url( '/de/impressum/' ) . ' ): Impressum (Deutsch) — Anbieterkennzeichnung.';
+	$emifree_lines[] = '- [' . home_url( '/de/impressum/' ) . ']( ' . home_url( '/de/impressum/' ) . ' ): Impressum (Deutsch), Anbieterkennzeichnung.';
 	$emifree_lines[] = '- [' . home_url( '/de/datenschutz/' ) . ']( ' . home_url( '/de/datenschutz/' ) . ' ): Datenschutzerklärung (Deutsch).';
 	$emifree_lines[] = '- [' . home_url( '/de/agb/' ) . ']( ' . home_url( '/de/agb/' ) . ' ): Allgemeine Geschäftsbedingungen (Deutsch).';
 	$emifree_lines[] = '';
@@ -192,7 +194,7 @@ function emifree_llms_txt_body_en() {
 	$emifree_lines[] = '## Knowledge base';
 	$emifree_lines[] = '';
 	$emifree_lines[] = '- [' . home_url( '/blog/' ) . ']( ' . home_url( '/blog/' ) . ' ): Engineering articles on industrial air filtration, oil mist, and air-quality compliance.';
-	$emifree_lines[] = '- [' . home_url( '/de/blog/' ) . ']( ' . home_url( '/de/blog/' ) . ' ): Wissensdatenbank (Deutsch) — Engineering-Artikel.';
+	$emifree_lines[] = '- [' . home_url( '/de/blog/' ) . ']( ' . home_url( '/de/blog/' ) . ' ): Wissensdatenbank (Deutsch), Engineering-Artikel.';
 	$emifree_lines   = array_merge( $emifree_lines, emifree_llms_collect_blog_post_lines_en() );
 	$emifree_lines[] = '';
 
@@ -210,7 +212,7 @@ function emifree_llms_txt_body_en() {
  * Build the German llms.txt body.
  *
  * Same structure as the English version; the content is the German
- * translation. URLs are unchanged — only the human-readable labels
+ * translation. URLs are unchanged, only the human-readable labels
  * and the descriptive text are translated, because the URLs are
  * canonical regardless of the language the visitor reads.
  *
@@ -225,7 +227,7 @@ function emifree_llms_txt_body_de() {
 
 	$emifree_lines[] = '## Unternehmen';
 	$emifree_lines[] = '';
-	$emifree_lines[] = 'Emifree entwickelt und fertigt industrielle Luftfiltrationssysteme für Werkzeugmaschinen, Werkstätten und Produktionslinien, in denen Ölnebel, Kühlschmierstoff-Aerosole und trockener Staub direkt an der Quelle abgeschieden werden müssen. Die Produktlinie umfasst mechanische, elektrostatische und Staubfiltration — konstruiert für geringen Wartungsaufwand, lange Lebensdauer und Reinraum-Luftqualität.';
+	$emifree_lines[] = 'Emifree entwickelt und fertigt industrielle Luftfiltrationssysteme für Werkzeugmaschinen, Werkstätten und Produktionslinien, in denen Ölnebel, Kühlschmierstoff-Aerosole und trockener Staub direkt an der Quelle abgeschieden werden müssen. Die Produktlinie umfasst mechanische, elektrostatische und Staubfiltration, konstruiert für geringen Wartungsaufwand, lange Lebensdauer und Reinraum-Luftqualität.';
 	$emifree_lines[] = '';
 	$emifree_lines[] = 'Vertrauen unter anderem: Mercedes-Benz, BMW, GM, NSK, Knorr-Bremse und Siemens.';
 	$emifree_lines[] = '';
@@ -251,13 +253,13 @@ function emifree_llms_txt_body_de() {
 	$emifree_lines[] = '## Hauptseiten';
 	$emifree_lines[] = '';
 	$emifree_lines[] = '- [' . home_url( '/en/' ) . ']( ' . home_url( '/en/' ) . ' ): Englische Startseite.';
-	$emifree_lines[] = '- [' . home_url( '/en/#products' ) . ']( ' . home_url( '/en/#products' ) . ' ): Product range (English) — Mechanical, Electrostatic, Dust.';
+	$emifree_lines[] = '- [' . home_url( '/en/#products' ) . ']( ' . home_url( '/en/#products' ) . ' ): Product range (English), Mechanical, Electrostatic, Dust.';
 	$emifree_lines[] = '- [' . home_url( '/en/#applications' ) . ']( ' . home_url( '/en/#applications' ) . ' ): Industry applications (English).';
 	$emifree_lines[] = '- [' . home_url( '/en/#technology' ) . ']( ' . home_url( '/en/#technology' ) . ' ): Technology (English).';
 	$emifree_lines[] = '- [' . home_url( '/en/#knowledge' ) . ']( ' . home_url( '/en/#knowledge' ) . ' ): Knowledge base (English).';
 	$emifree_lines[] = '- [' . home_url( '/en/#contact' ) . ']( ' . home_url( '/en/#contact' ) . ' ): Contact form (English).';
 	$emifree_lines[] = '- [' . home_url( '/de/' ) . ']( ' . home_url( '/de/' ) . ' ): Deutsche Startseite.';
-	$emifree_lines[] = '- [' . home_url( '/de/#products' ) . ']( ' . home_url( '/de/#products' ) . ' ): Produktpalette — Mechanisch, Elektrostatisch, Staub.';
+	$emifree_lines[] = '- [' . home_url( '/de/#products' ) . ']( ' . home_url( '/de/#products' ) . ' ): Produktpalette, Mechanisch, Elektrostatisch, Staub.';
 	$emifree_lines[] = '- [' . home_url( '/de/#applications' ) . ']( ' . home_url( '/de/#applications' ) . ' ): Branchen-Anwendungen.';
 	$emifree_lines[] = '- [' . home_url( '/de/#technology' ) . ']( ' . home_url( '/de/#technology' ) . ' ): Technologie im Detail.';
 	$emifree_lines[] = '- [' . home_url( '/de/#knowledge' ) . ']( ' . home_url( '/de/#knowledge' ) . ' ): Wissensdatenbank.';
@@ -269,7 +271,7 @@ function emifree_llms_txt_body_de() {
 	$emifree_lines[] = '- [' . home_url( '/impressum/' ) . ']( ' . home_url( '/impressum/' ) . ' ): Impressum (Englisch).';
 	$emifree_lines[] = '- [' . home_url( '/privacy/' ) . ']( ' . home_url( '/privacy/' ) . ' ): Privacy policy (Englisch).';
 	$emifree_lines[] = '- [' . home_url( '/terms/' ) . ']( ' . home_url( '/terms/' ) . ' ): Terms and conditions (Englisch).';
-	$emifree_lines[] = '- [' . home_url( '/de/impressum/' ) . ']( ' . home_url( '/de/impressum/' ) . ' ): Impressum (Deutsch) — Anbieterkennzeichnung.';
+	$emifree_lines[] = '- [' . home_url( '/de/impressum/' ) . ']( ' . home_url( '/de/impressum/' ) . ' ): Impressum (Deutsch), Anbieterkennzeichnung.';
 	$emifree_lines[] = '- [' . home_url( '/de/datenschutz/' ) . ']( ' . home_url( '/de/datenschutz/' ) . ' ): Datenschutzerklärung (Deutsch).';
 	$emifree_lines[] = '- [' . home_url( '/de/agb/' ) . ']( ' . home_url( '/de/agb/' ) . ' ): Allgemeine Geschäftsbedingungen (Deutsch).';
 	$emifree_lines[] = '';
@@ -347,7 +349,7 @@ function emifree_llms_collect_blog_post_lines_de() {
 		$emifree_url  = home_url( '/de/blog/' . $emifree_slug . '/' );
 		$emifree_lines[] = '- [' . $emifree_url . ']( ' . $emifree_url . ' ): ' . $emifree_title . '.';
 	}
-	// Posts that have only shipped in English — still useful for a
+	// Posts that have only shipped in English, still useful for a
 	// German-reading model so it can cite the EN source rather than
 	// making up an answer.
 	foreach ( $emifree_merged_en as $emifree_slug => $emifree_post ) {

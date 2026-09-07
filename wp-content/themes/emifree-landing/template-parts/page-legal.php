@@ -39,7 +39,7 @@ function emifree_seo_register( $slug, $lang = 'en' ) {
 }
 
 /**
- * Phase 3: emit the page body HTML — header band, breadcrumb, article,
+ * Phase 3: emit the page body HTML, header band, breadcrumb, article,
  * back-to-home footer.
  */
 function emifree_render_legal_page_body( $slug, $lang = 'en' ) {
@@ -82,7 +82,7 @@ function emifree_render_legal_page_body( $slug, $lang = 'en' ) {
 
 		<?php
 		// Body content. emifree_render_legal_body() returns HTML.
-		echo emifree_render_legal_body( $slug, $lang ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — controlled via internal esc_* helpers.
+		echo emifree_render_legal_body( $slug, $lang ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, controlled via internal esc_* helpers.
 		?>
 	</div>
 	<?php

@@ -1,6 +1,6 @@
 <?php
 /**
- * Air Pressure Loss Calculator — /air-pressure-loss-calculator/.
+ * Air Pressure Loss Calculator, /air-pressure-loss-calculator/.
  *
  * Visual run builder: drag tube segments + fittings (90°/45° elbows,
  * T-junction, Y-connector, reducer) from the toolbox onto an SVG
@@ -13,7 +13,7 @@
  *   total_ΔP   = Σ major + Σ minor  ×  K_app
  *   where v = Q / A_section for the current diameter at that row.
  *
- * Defaults (ASHRAE/SMACNA — see methodBody i18n string for the
+ * Defaults (ASHRAE/SMACNA, see methodBody i18n string for the
  * full derivation):
  *   ρ = 1.2 kg/m³  (standard air)
  *   μ = 1.81 × 10⁻⁵ Pa·s
@@ -38,7 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // All visible labels + units live here so the JS file has no embedded
 // copy and the German variant can swap them entirely.
 // Locale strings passed to the JS.
-// Only Quick Calc keys are kept — the visual builder keys
+// Only Quick Calc keys are kept, the visual builder keys
 // (toolbox, properties, results, K-factor library) were removed
 // along with the canvas UI on 2026-08-25.
 $emifree_pd_i18n = array(
@@ -57,7 +57,7 @@ $emifree_pd_i18n = array(
 	'methodology'    => 'Methodology',
 	'methodBody'     => '<b>1. Air properties (standard conditions, 20°C / sea level):</b> ρ = 1.2 kg/m³, μ = 1.81×10⁻⁵ Pa·s. <br><br><b>2. Section flow properties (per section):</b> D = section diameter (m), A = π·D²/4, V = Q/A, Re = ρ·V·D/μ. <br><br><b>3. Friction factor (Swamee–Jain, explicit):</b> f = 0.25 / [log₁₀(ε/3.7D + 5.74/Re⁰·⁹)]². ε from material: galvanized = 0.15 mm, aluminum = 0.0015 mm, black steel = 0.045 mm. <br><br><b>4. Straight-tube friction (Darcy–Weisbach):</b> ΔP_f = f·(L/D)·½·ρ·V² per row. <br><br><b>5. Fitting loss (K-factor, Idelchik / ASHRAE averages):</b> ΔP_m = K·½·ρ·V² per row. K values: 90° elbow = 0.18, 45° elbow = 0.20, T-junction = 1.20, Y-connector = 0.60, reducer = 0.10. <br><br><b>6. Reducer step-down:</b> When a row is a reducer, the section\'s effective diameter is updated to the reducer\'s outlet for all subsequent rows. <br><br><b>7. Application correction (K_app):</b> Total raw loss is multiplied by 1.0 (HVAC), 1.15 (oil mist, accounts for liquid film drag), or 1.25 (dust, accounts for particle acceleration and wall impact). <br><br><b>8. Final result:</b> ΔP_total = (Σ ΔP_f + Σ ΔP_m) × K_app. Recommended fan static pressure = ΔP_total × 2 (industry 2× safety margin).',
 	'limitations'    => 'Limitations',
-	'limitBody'      => 'Single-run pressure drop only — no multi-branch balancing, no fan matching, no temperature/altitude correction. K-factors assume turbulent flow (Re > 4000). Adjust per-component K-values in the library if your installation deviates from ASHRAE defaults.',
+	'limitBody'      => 'Single-run pressure drop only, no multi-branch balancing, no fan matching, no temperature/altitude correction. K-factors assume turbulent flow (Re > 4000). Adjust per-component K-values in the library if your installation deviates from ASHRAE defaults.',
 );
 
 wp_localize_script( 'emifree-section-pressure-drop', 'EMIFREE_PRESSUREDROP_I18N', $emifree_pd_i18n );
@@ -171,10 +171,10 @@ wp_localize_script( 'emifree-section-pressure-drop', 'EMIFREE_PRESSUREDROP_I18N'
 			<h2 class="text-2xl font-bold text-zinc-900" data-pd-i18n="methodology">Methodology</h2>
 			<p data-pd-i18n="methodBody"><b>1. Air properties (standard conditions, 20°C / sea level):</b> ρ = 1.2 kg/m³, μ = 1.81×10⁻⁵ Pa·s. <br><br><b>2. Section flow properties (per section):</b> D = section diameter (m), A = π·D²/4, V = Q/A, Re = ρ·V·D/μ. <br><br><b>3. Friction factor (Swamee–Jain, explicit):</b> f = 0.25 / [log₁₀(ε/3.7D + 5.74/Re⁰·⁹)]². ε from material: galvanized = 0.15 mm, aluminum = 0.0015 mm, black steel = 0.045 mm. <br><br><b>4. Straight-tube friction (Darcy–Weisbach):</b> ΔP_f = f·(L/D)·½·ρ·V² per row. <br><br><b>5. Fitting loss (K-factor, Idelchik / ASHRAE averages):</b> ΔP_m = K·½·ρ·V² per row. K values: 90° elbow = 0.18, 45° elbow = 0.20, T-junction = 1.20, Y-connector = 0.60, reducer = 0.10. <br><br><b>6. Reducer step-down:</b> When a row is a reducer, the section's effective diameter is updated to the reducer's outlet for all subsequent rows. <br><br><b>7. Application correction (K_app):</b> Total raw loss is multiplied by 1.0 (HVAC), 1.15 (oil mist, accounts for liquid film drag), or 1.25 (dust, accounts for particle acceleration and wall impact). <br><br><b>8. Final result:</b> ΔP_total = (Σ ΔP_f + Σ ΔP_m) × K_app. Recommended fan static pressure = ΔP_total × 2 (industry 2× safety margin).</p>
 			<h3 class="text-xl font-semibold text-zinc-900 mt-6" data-pd-i18n="limitations">Limitations</h3>
-			<p data-pd-i18n="limitBody">Single-run pressure drop only — no multi-branch balancing, no fan matching, no temperature/altitude correction. K-factors assume turbulent flow (Re > 4000). Adjust per-component K-values in the library if your installation deviates from ASHRAE defaults.</p>
+			<p data-pd-i18n="limitBody">Single-run pressure drop only, no multi-branch balancing, no fan matching, no temperature/altitude correction. K-factors assume turbulent flow (Re > 4000). Adjust per-component K-values in the library if your installation deviates from ASHRAE defaults.</p>
 		</section>
 
-		<?php /* Frequently Asked Questions — paired with FAQPage JSON-LD in the shim. */ ?>
+		<?php /* Frequently Asked Questions, paired with FAQPage JSON-LD in the shim. */ ?>
 		<section class="mt-12" aria-labelledby="pd-faq-en">
 			<h2 id="pd-faq-en" class="text-2xl font-bold text-zinc-900 mb-6">Frequently Asked Questions</h2>
 			<div class="space-y-4">
@@ -235,7 +235,7 @@ wp_localize_script( 'emifree-section-pressure-drop', 'EMIFREE_PRESSUREDROP_I18N'
 			</div>
 		</section>
 
-		<?php /* Important Notes — disclaimer; users must verify with specialists. */ ?>
+		<?php /* Important Notes, disclaimer; users must verify with specialists. */ ?>
 		<aside class="mt-10 p-6 bg-amber-50 border border-amber-300 rounded-lg" aria-labelledby="pd-important-notes-en">
 			<h2 id="pd-important-notes-en" class="text-2xl font-bold text-zinc-900 mb-3">Important Notes</h2>
 			<p class="text-zinc-800 leading-relaxed mb-3">

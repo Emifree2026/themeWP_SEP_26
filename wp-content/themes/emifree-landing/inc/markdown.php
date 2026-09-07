@@ -63,7 +63,7 @@ function emifree_simple_markdown_to_html( $md ) {
             continue;
         }
 
-        // Normal paragraph line — collect into buffer
+        // Normal paragraph line, collect into buffer
         $buffer[] = $trim;
     }
 

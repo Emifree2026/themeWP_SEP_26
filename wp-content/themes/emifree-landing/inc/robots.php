@@ -1,6 +1,6 @@
 <?php
 /**
- * Emifree Theme — virtual /robots.txt.
+ * Emifree Theme, virtual /robots.txt.
  *
  * Three pieces, mirroring the existing emifree_register_legal_routes()
  * pattern (functions.php:164–254):
@@ -24,7 +24,7 @@
  * stays correct on subpath installs (the explore agent confirmed the
  * site is currently a root install, but the helper is subpath-safe).
  *
- * No wp-config constants are read here — the body is identical on
+ * No wp-config constants are read here, the body is identical on
  * local + production. Comments are intentionally NOT emitted (some
  * crawlers mis-parse '#' comments despite the spec allowing them).
  *
@@ -38,12 +38,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Rewrite rule + query var. Registered on init; the URL surface is
- * /robots.txt only (no language variants — robots.txt is a single
+ * /robots.txt only (no language variants, robots.txt is a single
  * file per spec). Pairs with emifree_serve_robots_txt() below.
  */
 function emifree_register_robots_route() {
+	// /robots.txt and /robots.txt/ both resolve, the trailing-slash
+	// form is what WordPress's permalink redirect (pretty-permalinks
+	// enabled) appends when a tool fetches the bare URL. Accepting
+	// both up front avoids a 301 hop on every crawler hit.
 	add_rewrite_rule(
-		'^robots\.txt$',
+		'^robots\.txt/?$',
 		'index.php?emifree_robots=1',
 		'top'
 	);
@@ -68,7 +72,7 @@ function emifree_serve_robots_txt() {
 	nocache_headers();
 	header( 'Content-Type: text/plain; charset=utf-8' );
 	header( 'X-Robots-Tag: noindex' );
-	echo emifree_robots_txt_body(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — static text body, no user input.
+	echo emifree_robots_txt_body(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, static text body, no user input.
 	exit;
 }
 add_action( 'template_redirect', 'emifree_serve_robots_txt', 20 );

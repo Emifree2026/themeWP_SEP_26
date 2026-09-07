@@ -284,17 +284,88 @@
 				const emifreeIsHome    = '/' === emifreeCurSite
 					|| '/en' === emifreeCurSite
 					|| '/en/' === emifreeCurSite;
+				// Knowledge-subsection slug remap — must run BEFORE the
+				// generic Knowledge-hub tail-preserving remap below,
+				// because a few sub-page slugs differ across languages:
+				//
+				//   Insights  → de=insights,  en=insights  (shared)
+				//   About     → de=ueber-uns, en=about     (ASCII alias)
+				//   Downloads → de=downloads, en=downloads (shared)
+				//   Tools     → de=tools,     en=tools     (shared)
+				//
+				// The DE "ueber-uns" alias was chosen (instead of
+				// "uber-uns") for ASCII safety in analytics share
+				// strings and PDF filenames; the EN slug stays plain
+				// "about" because there's no encoding benefit on the EN
+				// side. Without this remap the generic hub remap would
+				// land toggling users on /en/knowledge/ueber-uns/ or
+				// /de/wissen/about/, neither of which exists (both fall
+				// through to the homepage, which the user perceives as
+				// "the language switcher is broken").
+				//
+				// Map is bidirectional: the same table is consulted
+				// regardless of which language is being toggled TO; we
+				// look up the current slug, get the opposite-lang
+				// counterpart, and let the surrounding hub-stem remap
+				// below place it under the right language's hub.
+				const emifreeKnowledgeSlugMap = {
+					// DE → EN equivalents
+					'insights':  'insights',
+					'ueber-uns': 'about',
+					'downloads': 'downloads',
+					'tools':     'tools',
+					// EN → DE equivalents
+					'about':     'ueber-uns',
+				};
+				function emifreeMapKnowledgeSlug( slug ) {
+					return Object.prototype.hasOwnProperty.call( emifreeKnowledgeSlugMap, slug )
+						? emifreeKnowledgeSlugMap[ slug ]
+						: slug;
+				}
+				function emifreeMatchHubSlug( site, hubStem ) {
+					// Returns the slug (or '' for the hub root), or null
+					// if site doesn't start with hubStem. Matches
+					// /hubStem, /hubStem/, /hubStem/{slug}, /hubStem/{slug}/.
+					if ( ! site.startsWith( hubStem ) ) {
+						return null;
+					}
+					let rest = site.substring( hubStem.length );
+					if ( rest === '' || rest === '/' ) {
+						return '';
+					}
+					if ( rest.charAt( 0 ) !== '/' ) {
+						return null;
+					}
+					rest = rest.substring( 1 );
+					const slash = rest.indexOf( '/' );
+					const slug  = ( -1 === slash ) ? rest : rest.substring( 0, slash );
+					const tail  = ( -1 === slash ) ? '' : rest.substring( slash );
+					if ( tail !== '' && tail !== '/' ) {
+						return null;
+					}
+					return slug;
+				}
 				// Knowledge-hub remap — must run before the generic /de/* branch
 				// below because the DE and EN hub stems differ.
 				if ( emifreeCurSite.startsWith( '/de/wissen' ) ) {
-					// /de/wissen/        → /en/knowledge/
-					// /de/wissen/{slug}/ → /en/knowledge/{slug}/
-					const emifreeTail = emifreeCurSite.substring( '/de/wissen'.length );
-					return emifreeApplySubpath( '/en/knowledge' + emifreeTail );
+					const emifreeSlug = emifreeMatchHubSlug( emifreeCurSite, '/de/wissen' );
+					if ( null === emifreeSlug ) {
+						// Unknown nested path under /de/wissen — fall
+						// through to the generic remap rather than
+						// dropping the user on the homepage.
+					} else {
+						const emifreeMapped = emifreeMapKnowledgeSlug( emifreeSlug );
+						return emifreeApplySubpath( '/en/knowledge' + ( emifreeMapped ? '/' + emifreeMapped : '' ) + '/' );
+					}
 				}
 				if ( emifreeCurSite.startsWith( '/en/knowledge' ) ) {
-					const emifreeTail = emifreeCurSite.substring( '/en/knowledge'.length );
-					return emifreeApplySubpath( '/de/wissen' + emifreeTail );
+					const emifreeSlug = emifreeMatchHubSlug( emifreeCurSite, '/en/knowledge' );
+					if ( null === emifreeSlug ) {
+						// Unknown nested path under /en/knowledge.
+					} else {
+						const emifreeMapped = emifreeMapKnowledgeSlug( emifreeSlug );
+						return emifreeApplySubpath( '/de/wissen' + ( emifreeMapped ? '/' + emifreeMapped : '' ) + '/' );
+					}
 				}
 				// Calculator tool remap — distinct standalone slugs (no
 				// shared stem), so the generic /de/* branch below would

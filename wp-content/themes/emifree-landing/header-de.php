@@ -1,6 +1,6 @@
 <?php
 /**
- * Header — full markup mirroring src/components/Header.jsx from the
+ * Header, full markup mirroring src/components/Header.jsx from the
  * React landing page (commit e0b55f3e).
  *
  * Differences from the React version, intentional for WordPress:
@@ -30,13 +30,13 @@ require_once get_template_directory() . '/inc/nav.php';
 	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 		<div class="flex items-center justify-between h-16">
 
-			<!-- Dual logo (logo.png wordmark + emilogo.png) — matches the
+			<!-- Dual logo (logo.png wordmark + emilogo.png), matches the
 			     baseline React Header's setup. The logo points to the
 			     explicit German homepage (/de/) so German users stay
-			     on German — pointing to / would 301 to /de/ on every
+			     on German, pointing to / would 301 to /de/ on every
 			     logo click (one extra round-trip + cookie-clear risk). -->
 			<div class="flex-shrink-0 flex items-center gap-3">
-				<a href="<?php echo esc_url( home_url( '/de/' ) ); ?>" aria-label="Emifree — zurück zur Startseite">
+				<a href="<?php echo esc_url( home_url( '/de/' ) ); ?>" aria-label="Emifree, zurück zur Startseite">
 					<img
 						src="<?php echo esc_url( get_template_directory_uri() . '/assets/logo.png' ); ?>"
 						alt="Emifree"
@@ -45,7 +45,7 @@ require_once get_template_directory() . '/inc/nav.php';
 						height="40"
 					>
 				</a>
-				<a href="<?php echo esc_url( home_url( '/de/' ) ); ?>" aria-label="Emifree — zurück zur Startseite">
+				<a href="<?php echo esc_url( home_url( '/de/' ) ); ?>" aria-label="Emifree, zurück zur Startseite">
 					<img
 						src="<?php echo esc_url( get_template_directory_uri() . '/assets/emilogo.png' ); ?>"
 						alt="Emifree"
@@ -132,7 +132,7 @@ require_once get_template_directory() . '/inc/nav.php';
 			</div>
 
 			<!-- Mobile menu trigger (visible <md). 44×44 minimum tap target
-			     (WCAG) — the visual 24×24 SVG sits inside that larger hit area. -->
+			     (WCAG), the visual 24×24 SVG sits inside that larger hit area. -->
 			<button
 				id="emifree-mobile-menu-btn"
 				type="button"

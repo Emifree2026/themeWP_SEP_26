@@ -1,6 +1,6 @@
 <?php
 /**
- * Technology section — ECO AIR + EARIA selector cards, two Process
+ * Technology section, ECO AIR + EARIA selector cards, two Process
  * sections (step-by-step with image + description), and a CTA card
  * routing to inquiry + knowledge. Mirrors src/components/Technology.jsx
  * from the React app.
@@ -29,7 +29,7 @@ $emifree_technologies = emifree_technologies();
 				Choose the Right <span class="text-blue-700">Filtration Technology</span> for Your Process
 			</h2>
 			<p class="text-xl text-slate-600 max-w-3xl mx-auto">
-				Whether you handle oil mist, emulsions, smoke, or ultra-fine aerosols — our self-cleaning
+				Whether you handle oil mist, emulsions, smoke, or ultra-fine aerosols, our self-cleaning
 				filtration systems deliver cleaner air, lower maintenance, and stable performance.
 			</p>
 			<p class="text-slate-500 text-sm mt-3">
@@ -57,7 +57,7 @@ $emifree_technologies = emifree_technologies();
 						<?php foreach ( $emifree_t['bullets'] as $emifree_bullet ) : ?>
 							<li class="flex items-center gap-2 text-slate-700">
 								<svg class="w-[18px] h-[18px] text-emerald-600 flex-shrink-0" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-									<?php echo $emifree_tech_icons['check']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled. ?>
+									<?php echo $emifree_tech_icons['check']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
 								</svg>
 								<span><?php echo esc_html( $emifree_bullet ); ?></span>
 							</li>
@@ -70,14 +70,14 @@ $emifree_technologies = emifree_technologies();
 					>
 						Learn How It Works
 						<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-							<?php echo $emifree_tech_icons['move-right']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled. ?>
+							<?php echo $emifree_tech_icons['move-right']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
 						</svg>
 					</button>
 				</div>
 			<?php endforeach; ?>
 		</div>
 
-		<?php /* ----- Block 3: How It Works — side by side ProcessSections ----- */ ?>
+		<?php /* ----- Block 3: How It Works, side by side ProcessSections ----- */ ?>
 		<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
 			<?php foreach ( $emifree_technologies as $emifree_t_key => $emifree_t ) :
 				$emifree_initial = isset( $emifree_t['initial_step'] ) ? (int) $emifree_t['initial_step'] : 0;
@@ -96,7 +96,7 @@ $emifree_technologies = emifree_technologies();
 						<?php echo esc_html( $emifree_t['process_subtitle'] ); ?>
 					</p>
 
-					<?php /* Desktop step list — visible by default, hidden below md */ ?>
+					<?php /* Desktop step list, visible by default, hidden below md */ ?>
 					<div class="hidden md:flex flex-col gap-2 mb-6" data-emifree-step-list="desktop">
 						<?php $emifree_step_index = 0; foreach ( $emifree_t['steps'] as $emifree_step ) : ?>
 							<button
@@ -110,7 +110,7 @@ $emifree_technologies = emifree_technologies();
 						<?php $emifree_step_index++; endforeach; ?>
 					</div>
 
-					<?php /* Mobile step list — pills, horizontal scroll; hidden at md+.
+					<?php /* Mobile step list, pills, horizontal scroll; hidden at md+.
 					     -webkit-overflow-scrolling:touch gives iOS Safari momentum
 					     scroll inside the pill row. Tailwind doesn't expose this
 					     utility, so it lives in the inline style attribute. */ ?>
@@ -127,7 +127,7 @@ $emifree_technologies = emifree_technologies();
 						<?php $emifree_step_index++; endforeach; ?>
 					</div>
 
-					<?php /* Step images — only the active one is visible; JS toggles the .hidden class */ ?>
+					<?php /* Step images, only the active one is visible; JS toggles the .hidden class */ ?>
 					<div class="rounded-2xl overflow-hidden bg-slate-100 h-48 md:h-80 flex items-center justify-center p-4">
 						<?php $emifree_step_index = 0; foreach ( $emifree_t['steps'] as $emifree_step ) : ?>
 							<img
@@ -141,7 +141,7 @@ $emifree_technologies = emifree_technologies();
 						<?php $emifree_step_index++; endforeach; ?>
 					</div>
 
-					<?php /* Step captions — only the active one is visible */ ?>
+					<?php /* Step captions, only the active one is visible */ ?>
 					<div class="mt-4">
 						<?php $emifree_step_index = 0; foreach ( $emifree_t['steps'] as $emifree_step ) : ?>
 							<div data-emifree-step-caption="<?php echo esc_attr( $emifree_step_index ); ?>" class="<?php echo $emifree_initial === $emifree_step_index ? '' : 'hidden'; ?>">
@@ -161,7 +161,7 @@ $emifree_technologies = emifree_technologies();
 					Not sure which filtration technology fits your application?
 				</h3>
 				<p class="text-slate-700 text-lg mt-4 max-w-2xl mx-auto">
-					Tell us your contamination type, airflow requirements, or machine setup — we'll recommend the right solution.
+					Tell us your contamination type, airflow requirements, or machine setup, we'll recommend the right solution.
 				</p>
 				<div class="flex flex-col sm:flex-row justify-center gap-4 mt-8">
 					<button
@@ -177,7 +177,7 @@ $emifree_technologies = emifree_technologies();
 					>
 						View more Technical Specs
 						<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-							<?php echo $emifree_tech_icons['arrow-right']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled. ?>
+							<?php echo $emifree_tech_icons['arrow-right']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
 						</svg>
 					</a>
 				</div>

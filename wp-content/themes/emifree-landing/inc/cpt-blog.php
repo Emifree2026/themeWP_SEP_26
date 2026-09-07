@@ -1,6 +1,6 @@
 <?php
 /**
- * Blog Custom Post Type — blog_post.
+ * Blog Custom Post Type, blog_post.
  *
  * Authoring surface for weekly posts so we can publish from wp-admin
  * without redeploying the theme. The four existing legacy posts in
@@ -73,7 +73,7 @@ endif;
 add_action( 'init', 'emifree_register_blog_cpt' );
 
 /* -------------------------------------------------------------------------
- * 2. Meta registration — exposed in REST for the Gutenberg sidebar
+ * 2. Meta registration, exposed in REST for the Gutenberg sidebar
  * ------------------------------------------------------------------------- */
 
 if ( ! function_exists( 'emifree_register_blog_cpt_meta' ) ) :
@@ -114,7 +114,7 @@ if ( ! function_exists( 'emifree_register_blog_cpt_meta' ) ) :
 			$emifree_text_meta_args( 'sanitize_text_field' )
 		);
 
-		// Language — restricted to en / de by the sanitize callback.
+		// Language, restricted to en / de by the sanitize callback.
 		register_meta(
 			'post',
 			'emifree_language',
@@ -126,7 +126,7 @@ if ( ! function_exists( 'emifree_register_blog_cpt_meta' ) ) :
 			)
 		);
 
-		// Translation pointer — int cast, REST-invisible (set by sidebar,
+		// Translation pointer, int cast, REST-invisible (set by sidebar,
 		// not by Gutenberg itself).
 		register_meta(
 			'post',
@@ -150,7 +150,7 @@ endif;
 add_action( 'init', 'emifree_register_blog_cpt_meta' );
 
 /* -------------------------------------------------------------------------
- * 3. Meta box — sidebar "Blog Post Meta" panel
+ * 3. Meta box, sidebar "Blog Post Meta" panel
  * ------------------------------------------------------------------------- */
 
 if ( ! function_exists( 'emifree_blog_meta_box_cb' ) ) :
@@ -199,7 +199,7 @@ if ( ! function_exists( 'emifree_blog_meta_box_cb' ) ) :
 		<p>
 			<label for="emifree_language"><strong><?php esc_html_e( 'Language', 'emifree-theme' ); ?></strong></label><br>
 			<select id="emifree_language" name="emifree_language" class="widefat">
-				<option value=""  <?php selected( $emifree_language, '' );  ?>><?php esc_html_e( '— unset —', 'emifree-theme' ); ?></option>
+				<option value=""  <?php selected( $emifree_language, '' );  ?>><?php esc_html_e( ', unset —', 'emifree-theme' ); ?></option>
 				<option value="en" <?php selected( $emifree_language, 'en' ); ?>><?php esc_html_e( 'English', 'emifree-theme' ); ?></option>
 				<option value="de" <?php selected( $emifree_language, 'de' ); ?>><?php esc_html_e( 'German', 'emifree-theme' ); ?></option>
 			</select>
@@ -237,7 +237,7 @@ endif;
 add_action( 'add_meta_boxes_blog_post', 'emifree_register_blog_meta_box' );
 
 /* -------------------------------------------------------------------------
- * 4. Meta save — sanitize + persist from the sidebar meta box
+ * 4. Meta save, sanitize + persist from the sidebar meta box
  * ------------------------------------------------------------------------- */
 
 if ( ! function_exists( 'emifree_save_blog_meta_box' ) ) :
@@ -293,7 +293,7 @@ endif;
 add_action( 'save_post_blog_post', 'emifree_save_blog_meta_box', 10, 2 );
 
 /* -------------------------------------------------------------------------
- * 5. Slug mirroring — keep EN/DE siblings in sync
+ * 5. Slug mirroring, keep EN/DE siblings in sync
  *
  * When post A is saved and has emifree_translation_of = B, copy A's
  * post_name onto B. Reverse direction also covered (saving B copies B's

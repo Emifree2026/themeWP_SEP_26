@@ -46,8 +46,8 @@ return array(
 	mechanisch in mikroskopisch kleine Tröpfchen zerlegt. Gleichzeitig führen die hohen
 	Temperaturen an der Schneidkante dazu, dass ein Teil der Flüssigkeit verdampft und
 	anschließend zu feinen Aerosolen kondensiert. Ohne einen dedizierten
-	<strong>Ölnebelabscheider</strong> verteilen sich diese Partikel – häufig im Bereich von
-	Submikron bis 10 Mikrometer – in der gesamten Anlage, gelangen in den Atembereich der
+	<strong>Ölnebelabscheider</strong> verteilen sich diese Partikel, häufig im Bereich von
+	Submikron bis 10 Mikrometer, in der gesamten Anlage, gelangen in den Atembereich der
 	Bedienpersonen und setzen sich auf empfindlichen Anlagenkomponenten ab.
 </p>
 
@@ -178,7 +178,7 @@ return array(
 	Diese Konnektivität ermöglicht eine <strong>Echtzeitüberwachung</strong> von Druckverlust
 	und Filtrationseffizienz. Anstatt Filter nach einem festen Zeitplan zu wechseln, können
 	Instandhaltungsteams eine Strategie der <strong>vorausschauenden Instandhaltung</strong>
-	verfolgen – Komponenten werden nur bei tatsächlichem Bedarf ausgetauscht, wodurch
+	verfolgen, Komponenten werden nur bei tatsächlichem Bedarf ausgetauscht, wodurch
 	Verschwendung reduziert und ungeplante Stillstandszeiten vermieden werden.
 </p>
 

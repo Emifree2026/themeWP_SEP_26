@@ -1,12 +1,12 @@
 <?php
 /**
- * SEO helpers — per-page meta tags + JSON-LD injection.
+ * SEO helpers, per-page meta tags + JSON-LD injection.
  *
  * Mirrors the React pages (src/pages/Impressum.jsx, Privacy.jsx,
  * Terms.jsx, BlogPost.jsx) which inject meta + canonical + JSON-LD
  * via useEffect. The WordPress equivalent registers wp_head
  * callbacks at template-top so the meta is server-rendered into
- * the HTML head — better SEO than client-side React injection
+ * the HTML head, better SEO than client-side React injection
  * because crawlers see the meta on the first byte of HTML.
  *
  * Usage from a page template (top of file, before any output):
@@ -17,7 +17,7 @@
  *         [ 'schema_id' => 'emifree-impressum-schema',
  *           'schema'    => [ '@type' => 'WebPage', ... ] ] );
  *
- * That's it — title, description, OG, Twitter, canonical, and
+ * That's it, title, description, OG, Twitter, canonical, and
  * JSON-LD all wired in one call. Each page calls it once.
  */
 
@@ -48,7 +48,7 @@ if ( ! defined( 'EMIFREE_SITE_URL' ) ) {
  * to inject one JSON-LD block. Multiple schemas can be passed.
  *
  * Use global $post if available and the call doesn't pass a
- * $url — useful for single-post templates. Otherwise the caller
+ * $url, useful for single-post templates. Otherwise the caller
  * must pass the URL explicitly so the canonical is unambiguous.
  */
 function emifree_seo_page( $title, $description, $url, $schemas = array(), $hreflang = array() ) {
@@ -86,7 +86,7 @@ function emifree_seo_page( $title, $description, $url, $schemas = array(), $href
 			// Canonical
 			echo '<link rel="canonical" href="' . esc_attr( $url ) . '">' . "\n";
 
-			// hreflang alternates — one <link rel="alternate"> per
+			// hreflang alternates, one <link rel="alternate"> per
 			// language. Pass ['en' => '...', 'de' => '...'] from the
 			// caller. Self-pointing hreflang alongside canonical
 			// disambiguates the per-language URL set for crawlers;
@@ -131,9 +131,57 @@ function emifree_seo_page_with_schema( $title, $description, $url, $schema_id, $
 }
 
 /**
+ * Per-page SEO + WebPage JSON-LD + BreadcrumbList JSON-LD in one call.
+ *
+ * Used by the Knowledge sub-pages (insights / about / downloads /
+ * tools), each of which needs its own crawlable URL with both a
+ * WebPage (or CollectionPage) schema for the page itself and a
+ * BreadcrumbList so Google can render the crumb path in SERPs.
+ *
+ * Breadcrumb items are an ordered list of [ 'name' => ..., 'url' => ... ].
+ * The last entry is the current page and must match $url. Position is
+ * computed automatically starting at 1.
+ *
+ * @param string $title             <title> + og:title + twitter:title.
+ * @param string $description       meta description + OG/Twitter.
+ * @param string $url               Canonical URL.
+ * @param string $schema_id         <script id="..."> for the page schema.
+ * @param array  $schema_data       WebPage/CollectionPage schema body.
+ * @param array  $breadcrumb_items  Ordered breadcrumb trail (first = root).
+ * @param array  $hreflang          Optional hreflang map: [ 'en' => ..., 'de' => ..., 'x-default' => ... ].
+ */
+function emifree_seo_page_with_breadcrumb( $title, $description, $url, $schema_id, $schema_data, $breadcrumb_items, $hreflang = array() ) {
+	$emifree_breadcrumb = array(
+		'@context'        => 'https://schema.org',
+		'@type'           => 'BreadcrumbList',
+		'itemListElement' => array(),
+	);
+	$emifree_position = 1;
+	foreach ( (array) $breadcrumb_items as $emifree_crumb ) {
+		$emifree_breadcrumb['itemListElement'][] = array(
+			'@type'    => 'ListItem',
+			'position' => $emifree_position++,
+			'name'     => isset( $emifree_crumb['name'] ) ? (string) $emifree_crumb['name'] : '',
+			'item'     => isset( $emifree_crumb['url'] ) ? (string) $emifree_crumb['url'] : '',
+		);
+	}
+
+	emifree_seo_page(
+		$title,
+		$description,
+		$url,
+		array(
+			array( 'id' => $schema_id,                'data' => $schema_data ),
+			array( 'id' => $schema_id . '-breadcrumb', 'data' => $emifree_breadcrumb ),
+		),
+		$hreflang
+	);
+}
+
+/**
  * Per-post SEO for /blog/{slug}/ articles (legacy PHP-array path).
  *
- * Backward-compatible entry point — accepts the legacy PHP-array
+ * Backward-compatible entry point, accepts the legacy PHP-array
  * shape from emifree_blog_posts() and delegates to the shared
  * emifree_register_blog_post_schema() helper. New CPT-driven posts
  * use emifree_seo_blog_post_from_cpt() instead; both paths emit the
@@ -163,6 +211,19 @@ function emifree_seo_blog_post( $emifree_post, $emifree_next_post = null ) {
 		$emifree_image_url = get_template_directory_uri() . '/assets/images/blog/' . $emifree_post['hero_image'];
 	}
 
+	// Resolve DE sibling for hreflang. CPT entries use the
+	// emifree_translation_of meta (handled by
+	// emifree_seo_blog_post_from_cpt); legacy posts share a slug with
+	// the German version by convention, so the DE sibling is found by
+	// 1) a matching CPT entry with emifree_language=de, falling back
+	// to 2) the inline $emifree_de_posts array in page-blog-post-de.php
+	// when present.
+	$emifree_de_url      = '';
+	$emifree_cpt_sibling = emifree_query_cpt_blog_post_by_slug( $emifree_slug, 'de' );
+	if ( $emifree_cpt_sibling ) {
+		$emifree_de_url = home_url( '/de/blog/' . $emifree_cpt_sibling->post_name );
+	}
+
 	emifree_register_blog_post_schema(
 		array(
 			'title'         => $emifree_title,
@@ -179,6 +240,10 @@ function emifree_seo_blog_post( $emifree_post, $emifree_next_post = null ) {
 				'lang' => 'en',
 				'href' => $emifree_url,
 			),
+			'hreflang_alt'  => $emifree_de_url ? array(
+				'lang' => 'de',
+				'href' => $emifree_de_url,
+			) : null,
 		)
 	);
 }
@@ -385,16 +450,27 @@ function emifree_register_blog_post_schema( $emifree_args ) {
 			// Canonical.
 			echo '<link rel="canonical" href="' . esc_attr( $emifree_a['url'] ) . '">' . "\n";
 
-			// hreflang alternates — self + (optional) sibling. Both
-			// are emitted as alternate link tags; search engines use
-			// the self-pointing hreflang alongside the canonical to
-			// disambiguate the per-language URL set.
+			// hreflang alternates, self + sibling + x-default. Google's
+			// "Localized versions" doc requires all three on every page
+			// when the site ships more than one locale; without the
+			// x-default pointer the alternate set is treated as
+			// incomplete and search engines may serve the wrong
+			// language version to users. The x-default target is the
+			// canonical URL itself, for an EN-default site that's the
+			// /blog/{slug}/ form; the German equivalent uses its own
+			// canonical. This pattern matches what emifree_seo_page()
+			// emits for static pages.
 			if ( ! empty( $emifree_a['hreflang_self']['lang'] ) && ! empty( $emifree_a['hreflang_self']['href'] ) ) {
 				echo '<link rel="alternate" hreflang="' . esc_attr( $emifree_a['hreflang_self']['lang'] ) . '" href="' . esc_attr( $emifree_a['hreflang_self']['href'] ) . '">' . "\n";
 			}
 			if ( ! empty( $emifree_a['hreflang_alt']['lang'] ) && ! empty( $emifree_a['hreflang_alt']['href'] ) ) {
 				echo '<link rel="alternate" hreflang="' . esc_attr( $emifree_a['hreflang_alt']['lang'] ) . '" href="' . esc_attr( $emifree_a['hreflang_alt']['href'] ) . '">' . "\n";
 			}
+			// x-default, always emit on the canonical URL itself,
+			// even when no sibling exists, so Google has the signal
+			// required to pick a default when query strings or
+			// trailing slashes vary.
+			echo '<link rel="alternate" hreflang="x-default" href="' . esc_attr( $emifree_a['url'] ) . '">' . "\n";
 
 			// Per-post BlogPosting JSON-LD.
 			$emifree_schema = array(
@@ -441,13 +517,13 @@ function emifree_register_blog_post_schema( $emifree_args ) {
  * Emit a site-wide <link rel="sitemap"> tag.
  *
  * Tells browsers + crawlers where to find the sitemap. Subpath-safe
- * via home_url() with leading slash — root install gets
+ * via home_url() with leading slash, root install gets
  * https://emifree.com/sitemap.xml, subpath install gets
  * https://emifree.com/wordpress/sitemap.xml.
  *
  * Hooked at wp_head priority 2, alongside the robots meta below and
  * after the preconnect hints in inc/analytics.php (priority 1). No
- * risk of duplication — the explore phase confirmed no other
+ * risk of duplication, the explore phase confirmed no other
  * <link rel="sitemap"> emitter exists in the theme or any plugin.
  */
 function emifree_sitemap_link_tag() {
@@ -466,7 +542,7 @@ add_action( 'wp_head', 'emifree_sitemap_link_tag', 2 );
  *                           if/when added, Google will respect this).
  *
  * index, follow is the default behavior so it's spelled out for
- * clarity. No noindex anywhere — every public page should be indexed.
+ * clarity. No noindex anywhere, every public page should be indexed.
  */
 function emifree_robots_meta_tags() {
 	echo '<meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1">' . "\n";

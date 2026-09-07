@@ -1,10 +1,10 @@
 <?php
 /**
- * Knowledge Ductulator (DE) — /de/wissen/ductulator/.
+ * Knowledge Ductulator (DE), /de/wissen/ductulator/.
  *
  * German equivalent of template-parts/page-knowledge-ductulator.php.
  * Hard-separated (not a language branch) per the active theme's
- * i18n convention — see page-blog-de.php for the parallel.
+ * i18n convention, see page-blog-de.php for the parallel.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -283,14 +283,14 @@ wp_localize_script( 'emifree-section-ductulator', 'EMIFREE_DUCTULATOR_I18N', $em
 			</p>
 			<h3 class="text-xl font-semibold text-zinc-900 mt-8">Einschränkungen</h3>
 			<ul>
-				<li>Nur einzelne gerade Abschnitte — keine Bibliothek für Formstück-/Bogenverluste, keine summierten Druckverluste über einen Strang.</li>
+				<li>Nur einzelne gerade Abschnitte, keine Bibliothek für Formstück-/Bogenverluste, keine summierten Druckverluste über einen Strang.</li>
 				<li>Standardgrößenliste ist eine sinnvolle Annäherung, keine Herstellerspezifikation.</li>
 				<li>Geschwindigkeitsrichtwerte (2,5–12,5 m/s) sind generisch; nicht an Kanalposition oder Gebäudetyp gebunden.</li>
 				<li>Keine SMACNA-Warnung bei Seitenverhältnissen über ~4:1.</li>
 			</ul>
 		</section>
 
-		<?php /* Wichtige Hinweise — Haftungsausschluss; Anwender müssen mit Fachleuten abgleichen. */ ?>
+		<?php /* Wichtige Hinweise, Haftungsausschluss; Anwender müssen mit Fachleuten abgleichen. */ ?>
 		<aside class="mt-10 p-6 bg-amber-50 border border-amber-300 rounded-lg" aria-labelledby="duct-important-instructions-de">
 			<h2 id="duct-important-instructions-de" class="text-2xl font-bold text-zinc-900 mb-3">Wichtige Hinweise</h2>
 			<p class="text-zinc-800 leading-relaxed mb-3">

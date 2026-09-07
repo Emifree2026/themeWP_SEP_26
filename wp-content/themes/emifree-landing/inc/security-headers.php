@@ -1,11 +1,11 @@
 <?php
 /**
- * Emifree Theme — security response headers + 404 information leak reduction.
+ * Emifree Theme, security response headers + 404 information leak reduction.
  *
  * Loaded globally from functions.php. The work here is split into two
  * sections:
  *
- *   1. STABLE PAGE HARDENING — three baseline security headers added to
+ *   1. STABLE PAGE HARDENING, three baseline security headers added to
  *      every response the theme emits, plus a meta-generator filter
  *      that hides the exact WordPress version from the rendered HTML.
  *      These are the rows in the "Best Practices" Lighthouse audit that
@@ -13,7 +13,7 @@
  *      "Use HSTS", "Mitigate clickjacking with XFO or CSP", and "Reduce
  *      DOM-based XSS attacks with trusted types".
  *
- *   2. 404-SPECIFIC LEAK TRIMMING — when the response is a 404, the
+ *   2. 404-SPECIFIC LEAK TRIMMING, when the response is a 404, the
  *      default WP 404 page (template = `index.php` from the active
  *      theme) prints every queued inline `<style id="...-inline-css">`
  *      block from WP core and from every plugin that's active. Each
@@ -21,7 +21,7 @@
  *      means the block editor is on; "wp-img-auto-sizes-contain"
  *      means the "Image Size Auto Include" plugin is on; and so on.
  *      On a 404 these blocks do nothing (the page doesn't render
- *      anything that uses them — it's literally "Page not found" plus
+ *      anything that uses them, it's literally "Page not found" plus
  *      the search widget), so dropping them on 404 alone keeps the
  *      legitimate pages untouched but reduces the 404 echo.
  *
@@ -38,7 +38,7 @@
  *     page-by-page (Tawk on /, GTAG on /, plus conditionally-loaded
  *     section JS); a CSP that allows all of them is no CSP. The
  *     right CSP for this site needs a per-page nonce audit which
- *     is out of scope for this pass — flagged for a follow-up.
+ *     is out of scope for this pass, flagged for a follow-up.
  *
  * No state, no caching. The wp_headers filter is called exactly
  * once per response so the headers we set are the headers that ship.
@@ -70,7 +70,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *     origin. Without it, the page could be embedded in a malicious
  *     site and used to run clickjacking attacks against logged-in
  *     users. SAMEORIGIN is the right value here because we don't
- *     embed our own pages in third-party iframes anywhere — if we
+ *     embed our own pages in third-party iframes anywhere, if we
  *     did, we'd need DENY or ALLOW-FROM instead.
  *
  * The WP core filter `wp_headers` runs on every response (including
@@ -103,7 +103,7 @@ add_filter( 'wp_headers', 'emifree_set_security_headers', 25 );
  * exploits are easy to spin up.
  *
  * Filtering `the_generator` to return an empty string drops the meta
- * tag entirely. There's no functional impact — the generator tag is
+ * tag entirely. There's no functional impact, the generator tag is
  * informational only and search engines don't penalise sites for
  * omitting it (Google has confirmed, Bing doesn't care).
  *
@@ -150,8 +150,8 @@ add_filter( 'the_generator', 'emifree_strip_wp_generator' );
  * names over releases, and what we want is "no inline CSS on 404s"
  * rather than "no specific named inline CSS on 404s".
  *
- * Hooked on `wp_print_styles` at priority 100 — after every other
- * listener has run — so any conditional styles a plugin adds at a
+ * Hooked on `wp_print_styles` at priority 100, after every other
+ * listener has run, so any conditional styles a plugin adds at a
  * higher priority still get to run before we strip the inline output.
  */
 function emifree_strip_inline_css_on_404() {

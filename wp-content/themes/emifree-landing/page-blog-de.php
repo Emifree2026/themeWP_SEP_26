@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once get_template_directory() . '/inc/knowledge.php';
 
 // Local DE posts metadata. Sourced from emifree_blog_posts_de() in
-// inc/knowledge.php — full-shape (title, hero_image, category, etc.)
+// inc/knowledge.php, full-shape (title, hero_image, category, etc.)
 // so the merged-feed normalizer produces non-empty cards.
 $emifree_de_posts = function_exists( 'emifree_blog_posts_de' )
 	? emifree_blog_posts_de()
@@ -79,7 +79,7 @@ foreach ( $emifree_blog_index_posts_de as $emifree_slug => $emifree_p ) {
 }
 
 emifree_seo_page_with_schema(
-	'Emifree Engineering-Blog — Einblicke in industrielle Luftfiltration',
+	'Emifree Engineering-Blog, Einblicke in industrielle Luftfiltration',
 	'Technische Leitfäden und Praxiseinblicke zur industriellen Ölnebelfiltration, CNC-Luftqualität, mechanischen und elektrostatischen Abscheideverfahren sowie EU-Compliance. Aus dem Engineering-Team von Emifree.',
 	home_url( '/de/blog' ),
 	'emifree-blog-schema-de',

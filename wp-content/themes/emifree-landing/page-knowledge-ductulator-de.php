@@ -30,7 +30,7 @@ if ( ! in_array( $emifree_requested_slug, $emifree_known_tools, true ) ) {
 emifree_enqueue_section_script( 'ductulator' );
 
 emifree_seo_page_with_schema(
-	'Kanalrechner — Runde & rechteckige HLK-Kanäle',
+	'Kanalrechner, Runde & rechteckige HLK-Kanäle',
 	'Dimensionieren Sie runde oder rechteckige HLK-Kanäle aus Luftstrom, Reibungsverlust oder Geschwindigkeit. Verwendet Darcy-Weisbach, Swamee-Jain und ASHRAE-Äquivalentdurchmesser. Imperial und metrisch.',
 	home_url( '/de/wissen/ductulator' ),
 	'emifree-knowledge-ductulator-schema-de',

@@ -1,13 +1,13 @@
 <?php
 /**
- * Technology section — German.
+ * Technology section, German.
  *
  * Hard-coded translation of section-technology.php. ECO AIR + EARIA
  * selector cards, two Process sections (step-by-step with image +
  * description), and a CTA card routing to inquiry + knowledge.
  *
  * Step switching + mobile/desktop step-list split are handled by
- * assets/js/sections/technology.js — language-agnostic, identical
+ * assets/js/sections/technology.js, language-agnostic, identical
  * between English and German markup.
  */
 emifree_enqueue_section_script( 'technology' );
@@ -112,7 +112,7 @@ $emifree_technologies = array(
 				Wählen Sie die richtige <span class="text-blue-700">Filtrationstechnologie</span> für Ihren Prozess
 			</h2>
 			<p class="text-xl text-slate-600 max-w-3xl mx-auto">
-				Ob Ölnebel, Emulsionen, Rauch oder ultrafeine Aerosole – unsere selbstreinigenden Filtersysteme liefern sauberere Luft, geringeren Wartungsaufwand und stabile Leistung.
+				Ob Ölnebel, Emulsionen, Rauch oder ultrafeine Aerosole, unsere selbstreinigenden Filtersysteme liefern sauberere Luft, geringeren Wartungsaufwand und stabile Leistung.
 			</p>
 			<p class="text-slate-500 text-sm mt-3">
 				Vergleichen Sie die Technologien unten oder springen Sie direkt zur passenden Lösung.
@@ -139,7 +139,7 @@ $emifree_technologies = array(
 						<?php foreach ( $emifree_t['bullets'] as $emifree_bullet ) : ?>
 							<li class="flex items-center gap-2 text-slate-700">
 								<svg class="w-[18px] h-[18px] text-emerald-600 flex-shrink-0" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-									<?php echo $emifree_tech_icons['check']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled. ?>
+									<?php echo $emifree_tech_icons['check']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
 								</svg>
 								<span><?php echo esc_html( $emifree_bullet ); ?></span>
 							</li>
@@ -152,7 +152,7 @@ $emifree_technologies = array(
 					>
 						So funktioniert es
 						<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-							<?php echo $emifree_tech_icons['move-right']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled. ?>
+							<?php echo $emifree_tech_icons['move-right']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
 						</svg>
 					</button>
 				</div>
@@ -238,7 +238,7 @@ $emifree_technologies = array(
 					Nicht sicher, welche Filtrationstechnologie zu Ihrer Anwendung passt?
 				</h3>
 				<p class="text-slate-700 text-lg mt-4 max-w-2xl mx-auto">
-					Nennen Sie uns Ihre Verunreinigungsart, Ihren Luftleistungsbedarf oder Ihren Maschinenaufbau – wir empfehlen die passende Lösung.
+					Nennen Sie uns Ihre Verunreinigungsart, Ihren Luftleistungsbedarf oder Ihren Maschinenaufbau, wir empfehlen die passende Lösung.
 				</p>
 				<div class="flex flex-col sm:flex-row justify-center gap-4 mt-8">
 					<button
@@ -254,7 +254,7 @@ $emifree_technologies = array(
 					>
 						Weitere technische Daten anzeigen
 						<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-							<?php echo $emifree_tech_icons['arrow-right']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled. ?>
+							<?php echo $emifree_tech_icons['arrow-right']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
 						</svg>
 					</a>
 				</div>

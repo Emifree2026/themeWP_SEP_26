@@ -1,6 +1,6 @@
 <?php
 /**
- * Emifree Theme — IndexNow submission on blog_post publish/update.
+ * Emifree Theme, IndexNow submission on blog_post publish/update.
  *
  * IndexNow is a unified URL-submission API used by Bing, Yandex, and
  * a handful of smaller search engines. When a URL is submitted, the
@@ -19,13 +19,13 @@
  * The key verification file ({key}.txt containing just the key value)
  * must be uploaded to https://{EMIFREE_INDEXNOW_HOST}/{key}.txt on
  * production so the IndexNow API can verify host ownership. This is a
- * deploy-time step — locally the file is at
+ * deploy-time step, locally the file is at
  * C:\Users\vpedr\Local Sites\landingwptest\app\public\{key}.txt but
  * the helper no-ops because the constants default to empty.
  *
  * Submission strategy: when a blog_post is saved, submit ALL static
  * URLs (homepages, legal, blog indexes) PLUS the just-saved post's
- * EN + DE URLs. ~12 URLs per submission — cheap, keeps the IndexNow
+ * EN + DE URLs. ~12 URLs per submission, cheap, keeps the IndexNow
  * cache consistent with the sitemap, and doesn't require tracking
  * every post individually.
  *
@@ -89,7 +89,7 @@ function emifree_indexnow_submit_urls( array $emifree_urls ) {
 		'https://api.indexnow.org/indexnow',
 		array(
 			'timeout'     => 5,
-			'blocking'    => false, // fire-and-forget — don't slow save_post.
+			'blocking'    => false, // fire-and-forget, don't slow save_post.
 			'headers'     => array( 'Content-Type' => 'application/json; charset=utf-8' ),
 			'body'        => wp_json_encode( $emifree_payload ),
 			'data_format' => 'body',
@@ -97,7 +97,7 @@ function emifree_indexnow_submit_urls( array $emifree_urls ) {
 	);
 
 	if ( defined( 'WP_DEBUG' ) && WP_DEBUG && is_wp_error( $emifree_response ) ) {
-		error_log( '[emifree-indexnow] submit failed: ' . $emifree_response->get_error_message() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log — debug-only.
+		error_log( '[emifree-indexnow] submit failed: ' . $emifree_response->get_error_message() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log, debug-only.
 	}
 
 	return ! is_wp_error( $emifree_response );

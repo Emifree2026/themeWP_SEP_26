@@ -3,7 +3,7 @@
  * Page template: /air-pressure-loss-calculator/  (legacy alias: /knowledge/pressure-drop/)
  * Renders the Air Pressure Loss Calculator (English).
  *
- * The canonical URL is /air-pressure-loss-calculator/ — the keyword-rich
+ * The canonical URL is /air-pressure-loss-calculator/, the keyword-rich
  * slug that matches the dominant search query. The legacy
  * /knowledge/pressure-drop/ URL 301-redirects here so existing links
  * don't break (handler: emifree_maybe_redirect_legacy_url()).
@@ -24,9 +24,9 @@ emifree_enqueue_section_script( 'pressure-drop' );
 // pressure loss", "fan ΔP calculator" cluster. Two schemas are emitted:
 // WebApplication (with alternateName array for synonym matching) +
 // FAQPage (questions rendered in the body, paired 1:1 with the JSON-LD
-// below — keep them in sync if you edit either side).
+// below, keep them in sync if you edit either side).
 emifree_seo_page(
-	'Air Pressure Loss Calculator — HVAC Duct, Fan & Industrial ΔP (Free)',
+	'Air Pressure Loss Calculator, HVAC Duct, Fan & Industrial ΔP (Free)',
 	'Air pressure loss calculator for HVAC ducts, fans, and industrial extraction. Compute friction loss + K-factor losses for elbows, T-junctions, and reducers using Darcy-Weisbach + ASHRAE. Free, no signup. Includes oil-mist and dust correction.',
 	home_url( '/air-pressure-loss-calculator' ),
 	array(
@@ -82,7 +82,7 @@ emifree_seo_page(
 						'name'           => 'What is the difference between air pressure loss and air pressure drop?',
 						'acceptedAnswer' => array(
 							'@type' => 'Answer',
-							'text'  => 'There is no physical difference — both terms describe the same quantity (static-pressure reduction, in Pa). "Pressure drop" is the engineering / ASHRAE term; "pressure loss" is the phrasing used by HVAC installers, ductwork suppliers, and most European industrial catalogues. Search engines and supplier documentation mix the two freely; this calculator handles both, and the methodology treats them as identical.',
+							'text'  => 'There is no physical difference, both terms describe the same quantity (static-pressure reduction, in Pa). "Pressure drop" is the engineering / ASHRAE term; "pressure loss" is the phrasing used by HVAC installers, ductwork suppliers, and most European industrial catalogues. Search engines and supplier documentation mix the two freely; this calculator handles both, and the methodology treats them as identical.',
 						),
 					),
 					array(
@@ -106,14 +106,14 @@ emifree_seo_page(
 						'name'           => 'How do I size a fan for my duct?',
 						'acceptedAnswer' => array(
 							'@type' => 'Answer',
-							'text'  => 'Two numbers: airflow (m³/h) and static pressure (Pa). The airflow is set by the application — for oil-mist, 1,500-2,500 m³/h per CNC; for dust, 2,000-5,000 m³/h per cell. The static pressure is the duct pressure loss from this calculator, plus filter and cyclone loss (typically 500-1,500 Pa for an oil-mist filter cartridge). Industry practice adds a 2× safety margin on top — this calculator already applies that.',
+							'text'  => 'Two numbers: airflow (m³/h) and static pressure (Pa). The airflow is set by the application, for oil-mist, 1,500-2,500 m³/h per CNC; for dust, 2,000-5,000 m³/h per cell. The static pressure is the duct pressure loss from this calculator, plus filter and cyclone loss (typically 500-1,500 Pa for an oil-mist filter cartridge). Industry practice adds a 2× safety margin on top, this calculator already applies that.',
 						),
 					),
 				),
 			),
 		),
 	),
-	// hreflang alternates — point at the EN canonical (self) and the
+	// hreflang alternates, point at the EN canonical (self) and the
 	// DE sibling. x-default is emitted by emifree_seo_page() as the
 	// EN canonical itself.
 	array(

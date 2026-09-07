@@ -1,16 +1,16 @@
 <?php
 /**
- * Applications section — German.
+ * Applications section, German.
  *
  * Hard-coded translation of section-applications.php. 6 industrial
  * segments with inline SVG icons + German descriptions + SEO questions.
  * Icons are inline SVG paths from lucide-react (24x24 viewBox,
- * stroke-based) — same paths as the English version, no shared loader.
+ * stroke-based), same paths as the English version, no shared loader.
  */
 ?>
 
 <?php
-// German application icons — identical SVG paths to the English version.
+// German application icons, identical SVG paths to the English version.
 // Inlined here so the German template is fully self-contained.
 $emifree_app_icons = array(
 	'cog'      => '<circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 1 19.4a1.65 1.65 0 0 0-1.82-.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 1a1.65 1.65 0 0 0 .33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>',
@@ -21,7 +21,7 @@ $emifree_app_icons = array(
 	'car'      => '<path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"></path><circle cx="7" cy="17" r="2"></circle><path d="M9 17h6"></path><circle cx="17" cy="17" r="2"></circle>',
 );
 
-// German applications data — inlined to keep the section self-contained.
+// German applications data, inlined to keep the section self-contained.
 $emifree_apps = array(
 	array(
 		'icon'        => 'cog',
@@ -76,7 +76,7 @@ $emifree_apps = array(
 				Industrielle Luftfiltration für jede Anwendung
 			</h2>
 			<p class="text-xl text-zinc-600 max-w-3xl mx-auto">
-				Vom kleinen Handwerksbetrieb bis zur großen Produktionshalle – Emifree-Systeme erfassen Ölnebel, Schweißrauch und Staub direkt an der Quelle.
+				Vom kleinen Handwerksbetrieb bis zur großen Produktionshalle, Emifree-Systeme erfassen Ölnebel, Schweißrauch und Staub direkt an der Quelle.
 			</p>
 		</div>
 
@@ -86,7 +86,7 @@ $emifree_apps = array(
 					<div class="relative">
 						<div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110" style="background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%); box-shadow: 0 10px 25px rgba(37, 99, 235, 0.25);">
 							<svg class="w-8 h-8" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true" style="filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));">
-								<?php echo $emifree_app_icons[ $emifree_app['icon'] ]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled input. ?>
+								<?php echo $emifree_app_icons[ $emifree_app['icon'] ]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled input. ?>
 							</svg>
 						</div>
 
@@ -98,7 +98,7 @@ $emifree_apps = array(
 							<?php echo esc_html( $emifree_app['description'] ); ?>
 						</p>
 
-						<!-- SEO question — surfaced as a subtle italic line.
+						<!-- SEO question, surfaced as a subtle italic line.
 						     text-zinc-600 keeps WCAG AA contrast (5.74:1 on the
 						     white card) while still reading as muted copy. -->
 						<p class="text-sm text-zinc-600 italic">

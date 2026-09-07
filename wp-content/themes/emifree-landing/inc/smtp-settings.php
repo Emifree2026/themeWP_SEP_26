@@ -1,15 +1,15 @@
 <?php
 /**
- * Emifree Theme — built-in SMTP settings page.
+ * Emifree Theme, built-in SMTP settings page.
  *
  * Why: production hosts (and many test/staging environments) often ship
  * without a working local MTA. WordPress' default wp_mail() falls back to
  * PHP's mail() which returns false silently when sendmail/postfix aren't
- * installed — the contact form appears to fail with no error visible to
+ * installed, the contact form appears to fail with no error visible to
  * the admin. The cleanest fix is to point wp_mail() at a real SMTP
  * server, which WordPress exposes through the `phpmailer_init` action.
  *
- * This file does NOT implement an SMTP client — it lets the admin enter
+ * This file does NOT implement an SMTP client, it lets the admin enter
  * SMTP credentials via Settings → Emifree SMTP and wires them into
  * PHPMailer so wp_mail() transports over the configured server. That's
  * the standard, WordPress-native pattern (used by every "WP Mail SMTP"
@@ -21,7 +21,7 @@
  *   port       int     e.g. 587 (TLS), 465 (SSL), 25 (none)
  *   encryption string  'tls' | 'ssl' | 'none'
  *   username   string  SMTP auth user
- *   password   string  SMTP auth password (stored verbatim — only the
+ *   password   string  SMTP auth password (stored verbatim, only the
  *                          admin can read this page anyway; if you want
  *                          at-rest encryption, install a secrets manager
  *                          and re-key via a filter)
@@ -33,7 +33,7 @@
  * mail() with no SMTP). The settings page makes this state explicit:
  * if any required field is empty, the SMTP injector is a no-op.
  *
- * Capability gate: 'manage_options' — admin only.
+ * Capability gate: 'manage_options', admin only.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -64,7 +64,7 @@ add_action( 'admin_menu', 'emifree_register_smtp_settings_page' );
  * Register the option group so settings_fields() + do_settings_sections()
  * emit the nonce + form action. Uses a single option
  * `emifree_smtp_settings` registered as a single field so the form is
- * simple — a flat form with one save button rather than per-field
+ * simple, a flat form with one save button rather than per-field
  * settings API boxes.
  */
 function emifree_register_smtp_settings() {
@@ -81,7 +81,7 @@ function emifree_register_smtp_settings() {
 add_action( 'admin_init', 'emifree_register_smtp_settings' );
 
 /**
- * Defaults — every field empty, signalling "use native wp_mail() with
+ * Defaults, every field empty, signalling "use native wp_mail() with
  * no SMTP". The settings page surfaces this as "SMTP is not configured;
  * the theme will use the host's PHP mail() transport."
  *
@@ -107,7 +107,7 @@ function emifree_default_smtp_settings() {
  *  - port: integer 1..65535, fall back to 587
  *  - encryption: must be one of 'tls' | 'ssl' | 'none'
  *  - username: trim, no length cap (some providers use long tokens)
- *  - password: trim, do NOT mutate — verbatim
+ *  - password: trim, do NOT mutate, verbatim
  *  - from_email: must be a valid email or empty
  *  - from_name: text field, no HTML
  *
@@ -121,7 +121,7 @@ function emifree_sanitize_smtp_settings( $emifree_input ) {
 	}
 
 	$emifree_host = isset( $emifree_input['host'] ) ? trim( (string) $emifree_input['host'] ) : '';
-	// Strip scheme prefix — PHPMailer wants the bare hostname.
+	// Strip scheme prefix, PHPMailer wants the bare hostname.
 	$emifree_host = preg_replace( '#^https?://#i', '', $emifree_host );
 	// Strip trailing path, just in case.
 	$emifree_host = preg_split( '#/#', $emifree_host, 2 )[0];
@@ -139,7 +139,7 @@ function emifree_sanitize_smtp_settings( $emifree_input ) {
 
 	$emifree_username = isset( $emifree_input['username'] ) ? trim( (string) $emifree_input['username'] ) : '';
 
-	// Password is NOT trimmed of internal whitespace — some SMTP providers
+	// Password is NOT trimmed of internal whitespace, some SMTP providers
 	// include intentional spaces/tokens in their generated passwords. We
 	// do, however, drop surrounding whitespace because that's almost
 	// always an accidental paste artifact.
@@ -193,7 +193,7 @@ function emifree_get_smtp_settings() {
 /**
  * Decide whether SMTP is fully configured. Empty host OR empty
  * username → no SMTP, fall back to native wp_mail(). Password alone
- * being empty is treated as "no SMTP" too — every SMTP provider we
+ * being empty is treated as "no SMTP" too, every SMTP provider we
  * support requires authentication.
  *
  * @return bool
@@ -232,7 +232,7 @@ function emifree_render_smtp_settings_page() {
 	$emifree_status_class = $emifree_configured ? 'border-emerald-200 bg-emerald-50 text-emerald-800' : 'border-amber-200 bg-amber-50 text-amber-800';
 	$emifree_status_label = $emifree_configured
 		? __( 'SMTP is configured. Contact-form submissions are routed through the SMTP server below.', 'emifree-theme' )
-		: __( 'SMTP is not configured. The theme falls back to PHP mail() — submissions may silently fail on hosts without an MTA. Configure below to fix.', 'emifree-theme' );
+		: __( 'SMTP is not configured. The theme falls back to PHP mail(), submissions may silently fail on hosts without an MTA. Configure below to fix.', 'emifree-theme' );
 	?>
 	<div class="wrap">
 		<h1><?php echo esc_html__( 'Emifree SMTP', 'emifree-theme' ); ?></h1>
@@ -262,7 +262,7 @@ function emifree_render_smtp_settings_page() {
 							placeholder="smtp.example.com"
 							autocomplete="off"
 						>
-						<p class="description"><?php echo esc_html__( 'Hostname only — no scheme, no path. e.g. smtp.eu.mailgun.org', 'emifree-theme' ); ?></p>
+						<p class="description"><?php echo esc_html__( 'Hostname only, no scheme, no path. e.g. smtp.eu.mailgun.org', 'emifree-theme' ); ?></p>
 					</td>
 				</tr>
 				<tr>
@@ -401,7 +401,7 @@ function emifree_render_smtp_settings_page() {
  * transport from `mail()` to `smtp`, and we set host/port/encryption/
  * username/password via the standard setters.
  *
- * No-op when SMTP isn't fully configured — i.e. host or username or
+ * No-op when SMTP isn't fully configured, i.e. host or username or
  * password is empty. This preserves the existing behaviour (native PHP
  * mail()) on hosts that already work without SMTP.
  *

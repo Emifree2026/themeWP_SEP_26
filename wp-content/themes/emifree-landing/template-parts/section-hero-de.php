@@ -1,9 +1,9 @@
 <?php
 /**
- * Hero section — German.
+ * Hero section, German.
  *
  * Hard-coded German translation of section-hero.php. No data loader,
- * no shared i18n helpers — each German section template is fully
+ * no shared i18n helpers, each German section template is fully
  * self-contained. Strings come from inc/hero_de.php (the previous
  * agent's translation of the React Hero); the German logo set is
  * identical to the English one.
@@ -15,10 +15,10 @@
 
 <section id="hero" class="relative w-full min-h-[100dvh] flex flex-col overflow-hidden bg-[#0a0a0a]">
 
-	<!-- Background videos — two-up carousel (mirrors EN). Two videos
+	<!-- Background videos, two-up carousel (mirrors EN). Two videos
 	     play alternately: when the active one ends, JS cross-fades to
 	     the other and lets it play through; on its end, back to the
-	     first. Both <video> elements sit at the same z-index (z-0) —
+	     first. Both <video> elements sit at the same z-index (z-0),
 	     the carousel is driven by opacity, not stacking order. The
 	     dark gradient overlay sits at z-20 (above both videos) and
 	     foreground content at z-30 so the headline + chips always read
@@ -67,7 +67,7 @@
 			Wartungsarme Luftfiltrationslösungen
 		</h1>
 
-		<?php /* Value strip — mirrors the English hero. Three short
+		<?php /* Value strip, mirrors the English hero. Three short
 		   keyword chips rendered as rounded pills with a small blue
 		   SVG icon prefix + label. Built inline (rather than loaded
 		   from a data file) because this DE section template ships
@@ -96,7 +96,7 @@
 				<li>
 					<span class="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 backdrop-blur-sm px-4 py-2 text-sm sm:text-base font-medium text-white whitespace-nowrap">
 						<?php if ( '' !== $emifree_de_chip_icon ) : ?>
-							<span class="text-blue-300 flex items-center justify-center"><?php echo $emifree_de_chip_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — closed allowlist above, no user input. ?></span>
+							<span class="text-blue-300 flex items-center justify-center"><?php echo $emifree_de_chip_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, closed allowlist above, no user input. ?></span>
 						<?php endif; ?>
 						<?php echo esc_html( $emifree_de_chip['label'] ); ?>
 					</span>
@@ -104,7 +104,7 @@
 			<?php endforeach; ?>
 		</ul>
 
-		<?php /* Secondary CTA — quiet underlined link, mirrors EN.
+		<?php /* Secondary CTA, quiet underlined link, mirrors EN.
 		   Sits between keywords and primary CTA. text-shadow lifts the
 		   small underlined text off bright frames. mb-8 below gives a
 		   clear gap before the primary button. */ ?>
@@ -116,9 +116,9 @@
 			Die Technologie dahinter ansehen →
 		</a>
 
-		<?php /* Primary CTA — single dominant button at the bottom of the
+		<?php /* Primary CTA, single dominant button at the bottom of the
 		   stack, mirrors EN. Anchors to #contact. No arrow on the button
-		   label — visual weight stays on the "Kontakt aufnehmen!" text. */ ?>
+		   label, visual weight stays on the "Kontakt aufnehmen!" text. */ ?>
 		<a
 			href="#contact"
 			class="bg-gradient-to-r from-blue-700 to-cyan-500 text-white px-10 py-5 rounded-full font-semibold text-xl flex items-center justify-center transition-all duration-300 shadow-lg hover:shadow-xl hero-fade-up"

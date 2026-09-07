@@ -1,6 +1,6 @@
 <?php
 /**
- * Contact section — German.
+ * Contact section, German.
  *
  * Hard-coded translation of section-contact.php. 4-field contact form
  * (left) + 3 contact-info cards (right). Form submit is wired to the
@@ -9,13 +9,13 @@
  * returns contact.website@emifree.com by default (overridable via
  * the EMIFREE_CONTACT_RECIPIENT_EMAIL wp-config constant) regardless
  * of language. The Email Us card shown to visitors below still
- * displays info@emifree.com by design — the visible-card address
+ * displays info@emifree.com by design, the visible-card address
  * and the form-submission inbox are intentionally separate.
  *
  * Per-section JS (assets/js/sections/contact.js) is language-agnostic
- * — it operates on data-emifree-* attributes. The localized success /
+ *, it operates on data-emifree-* attributes. The localized success /
  * error messages come from wp_localize_script() in functions.php, which
- * uses WordPress __() (default text-domain) — those strings are
+ * uses WordPress __() (default text-domain), those strings are
  * already English. Localizing them is a separate piece (header/footer
  * chrome is out of scope per the user's "homepage sections only" choice).
  */
@@ -41,7 +41,7 @@ $emifree_contact_info = array(
 		'icon'        => 'phone',
 		'title'       => 'Rufen Sie uns an',
 		'content'     => '+49 307 628 3520',
-		'description' => 'Mo–Fr von 8 bis 18 Uhr',
+		'description' => 'Mo bis Fr von 8 bis 18 Uhr',
 		'href'        => 'tel:+493076283520',
 	),
 	array(
@@ -88,9 +88,9 @@ $emifree_contact_info = array(
 					<input type="hidden" name="emifree_contact_nonce" value="<?php echo esc_attr( wp_create_nonce( 'emifree_contact' ) ); ?>">
 
 					<?php /*
-					 * Antispam — Tier 1: timestamp + honeypot.
+					 * Antispam, Tier 1: timestamp + honeypot.
 					 * See EN sibling (template-parts/section-contact.php) for
-					 * the full rationale — identical implementation.
+					 * the full rationale, identical implementation.
 					 */ ?>
 					<input type="hidden" name="emifree_ts" value="<?php echo esc_attr( time() ); ?>">
 					<input
@@ -103,7 +103,7 @@ $emifree_contact_info = array(
 					>
 
 					<?php /*
-					 * Product-of-interest tag — populated by contact.js when
+					 * Product-of-interest tag, populated by contact.js when
 					 * the visitor clicks a product-section "Request Quote"
 					 * CTA. The slug (e.g. "mechanical") is whitelisted
 					 * server-side in emifree_handle_contact_submit(); the
@@ -197,7 +197,7 @@ $emifree_contact_info = array(
 							viewBox="0 0 24 24"
 							aria-hidden="true"
 						>
-							<?php echo $emifree_contact_icons['send']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled. ?>
+							<?php echo $emifree_contact_icons['send']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
 						</svg>
 						<svg
 							data-emifree-contact-submit-icon-loading
@@ -210,7 +210,7 @@ $emifree_contact_info = array(
 							viewBox="0 0 24 24"
 							aria-hidden="true"
 						>
-							<?php echo $emifree_contact_icons['loader']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled. ?>
+							<?php echo $emifree_contact_icons['loader']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
 						</svg>
 					</button>
 				</form>
@@ -232,7 +232,7 @@ $emifree_contact_info = array(
 									viewBox="0 0 24 24"
 									aria-hidden="true"
 								>
-									<?php echo $emifree_contact_icons[ $emifree_info['icon'] ]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled. ?>
+									<?php echo $emifree_contact_icons[ $emifree_info['icon'] ]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
 								</svg>
 							</div>
 							<div>

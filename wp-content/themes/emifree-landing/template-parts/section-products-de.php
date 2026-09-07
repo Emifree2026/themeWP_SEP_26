@@ -1,17 +1,17 @@
 <?php
 /**
- * Products section — German.
+ * Products section, German.
  *
  * Hard-coded translation of section-products.php. Three product lines
  * (Mechanisch / Elektrostatisch / Staub) with image gallery, features
  * grid, applications list, and per-product inquiry CTA.
  *
  * Tab switching + image cycling are handled by the same
- * assets/js/sections/products.js — the JS is language-agnostic.
+ * assets/js/sections/products.js, the JS is language-agnostic.
  */
 emifree_enqueue_section_script( 'products' );
 
-// Compact feature icons — short SVG paths, decorative only (the
+// Compact feature icons, short SVG paths, decorative only (the
 // accessible name comes from the heading text).
 $emifree_product_icons = array(
 	'settings'  => '<circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 1 19.4a1.65 1.65 0 0 0-1.82-.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 1a1.65 1.65 0 0 0 .33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>',
@@ -26,7 +26,7 @@ $emifree_product_icons = array(
 	'layers'    => '<polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline>',
 );
 
-// German product data — inlined to keep the section self-contained.
+// German product data, inlined to keep the section self-contained.
 $emifree_products = array(
 	'mechanical'    => array(
 		'name'        => 'Mechanische Filtration',
@@ -46,8 +46,8 @@ $emifree_products = array(
 	'electrostatic' => array(
 		'name'        => 'Elektrostatische Filtration',
 		'tagline'     => 'Fortschrittliche Koronaentladungstechnologie',
-		'short_desc'  => 'Überlegene Abscheidung von Feinstpartikeln, Rauch, Ölnebel im Submikronbereich und industriellen Gerüchen – dort, wo mechanische Filter an ihre Grenzen stoßen.',
-		'description' => 'Fortschrittliche Koronaentladungstechnologie zur Abscheidung feinster Partikel. Ideal für Rauch, Ölnebel im Submikronbereich und die Kontrolle industrieller Gerüche. Die elektrostatische Filtration ionisiert Partikel und scheidet sie mit hoher Effizienz auf Sammelplatten ab – dort, wo herkömmliche Filter an ihre Grenzen stoßen.',
+		'short_desc'  => 'Überlegene Abscheidung von Feinstpartikeln, Rauch, Ölnebel im Submikronbereich und industriellen Gerüchen, dort, wo mechanische Filter an ihre Grenzen stoßen.',
+		'description' => 'Fortschrittliche Koronaentladungstechnologie zur Abscheidung feinster Partikel. Ideal für Rauch, Ölnebel im Submikronbereich und die Kontrolle industrieller Gerüche. Die elektrostatische Filtration ionisiert Partikel und scheidet sie mit hoher Effizienz auf Sammelplatten ab, dort, wo herkömmliche Filter an ihre Grenzen stoßen.',
 		'images'      => array( 'fotoe1.webp', 'fotoe2.webp', 'fotoe3.webp' ),
 		'features'    => array(
 			array( 'icon' => 'cpu',    'title' => 'Elektrostatische Technologie', 'desc' => 'Ionisiert und erfasst Partikel im Submikronbereich (einschließlich Rauch) auf Sammelplatten. Erzielt hohe Abscheideleistung, wo herkömmliche Filter an ihre Grenzen stoßen.' ),
@@ -62,7 +62,7 @@ $emifree_products = array(
 		'name'        => 'Staubfiltration',
 		'tagline'     => 'Hocheffiziente Staubabscheidung für Trockenprozesse',
 		'short_desc'  => 'Zuverlässige Patronen- und Schlauchfilterlösungen für hohe Staubbelastungen aus Holzbearbeitung, Metallschleifen und Schüttgutumschlag.',
-		'description' => 'Unsere Staubfiltrationssysteme sind für den Einsatz bei trockenem Staub konzipiert. Dank fortschrittlicher Filtermedientechnologie und Druckluft-Abreinigung sorgen sie für gleichbleibende Luftleistung und eine lange Filterlebensdauer – selbst in den anspruchsvollsten industriellen Umgebungen.',
+		'description' => 'Unsere Staubfiltrationssysteme sind für den Einsatz bei trockenem Staub konzipiert. Dank fortschrittlicher Filtermedientechnologie und Druckluft-Abreinigung sorgen sie für gleichbleibende Luftleistung und eine lange Filterlebensdauer, selbst in den anspruchsvollsten industriellen Umgebungen.',
 		'images'      => array( 'Coming Soon.webp', 'Coming Soon.webp', 'Coming Soon.webp' ),
 		'features'    => array(
 			array( 'icon' => 'box',    'title' => 'Modulares Design',         'desc' => 'Skalierbare Patronen- und Schlauchfilterkonfigurationen, angepasst an Luftleistungs- und Platzanforderungen.' ),
@@ -75,7 +75,7 @@ $emifree_products = array(
 	),
 );
 
-// Tab SVG glyphs — kept tiny (single-path), decorative only.
+// Tab SVG glyphs, kept tiny (single-path), decorative only.
 $emifree_tab_icons = array(
 	'mechanical'    => '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 10v6M4.22 4.22l4.24 4.24m7.08 7.08l4.24 4.24M1 12h6m10 0h6M4.22 19.78l4.24-4.24m7.08-7.08l4.24-4.24"></path></svg>',
 	'electrostatic' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>',
@@ -107,7 +107,7 @@ $emifree_tab_icons = array(
 					data-emifree-tab="<?php echo esc_attr( $emifree_key ); ?>"
 					class="emifree-product-tab px-8 py-4 rounded-full font-semibold transition-all duration-300 flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 <?php echo $emifree_first ? 'bg-blue-700 text-white shadow-lg' : 'bg-white text-zinc-600 hover:bg-slate-100 hover:text-blue-700 border border-slate-200'; ?>"
 				>
-					<?php echo $emifree_tab_icons[ $emifree_key ]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled. ?>
+					<?php echo $emifree_tab_icons[ $emifree_key ]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
 					<?php echo esc_html( $emifree_product['name'] ); ?>
 				</button>
 			<?php $emifree_first = false; endforeach; ?>
@@ -128,7 +128,7 @@ $emifree_tab_icons = array(
 							<?php $emifree_img_index = 0; foreach ( $emifree_product['images'] as $emifree_img ) : ?>
 								<img
 									src="<?php echo esc_url( get_template_directory_uri() . '/assets/products/' . $emifree_img ); ?>"
-									alt="<?php echo esc_attr( $emifree_product['name'] ); ?> – Ansicht <?php echo esc_attr( $emifree_img_index + 1 ); ?>"
+									alt="<?php echo esc_attr( $emifree_product['name'] ); ?>, Ansicht <?php echo esc_attr( $emifree_img_index + 1 ); ?>"
 									class="absolute inset-0 w-full h-full object-contain p-6 <?php echo 0 === $emifree_img_index ? '' : 'hidden'; ?>"
 									data-emifree-image="<?php echo esc_attr( $emifree_img_index ); ?>"
 									loading="lazy"
@@ -189,7 +189,7 @@ $emifree_tab_icons = array(
 									<div class="flex items-start gap-3">
 										<div class="p-2 bg-blue-100 rounded-lg">
 											<svg class="w-5 h-5" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-												<?php echo $emifree_product_icons[ $emifree_feature['icon'] ]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled. ?>
+												<?php echo $emifree_product_icons[ $emifree_feature['icon'] ]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
 											</svg>
 										</div>
 										<div>

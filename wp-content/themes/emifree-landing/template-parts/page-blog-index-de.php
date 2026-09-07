@@ -1,18 +1,18 @@
 <?php
 /**
- * Blog index (German) — /de/blog/.
+ * Blog index (German), /de/blog/.
  *
  * Hard-coded translation of template-parts/page-blog-index.php. The
  * post metadata + featured card shape come from a German posts array
  * declared inline below (the previous agent's inc/knowledge_de.php
- * DE data file was removed during the homepage i18n refactor — the
+ * DE data file was removed during the homepage i18n refactor, the
  * homepage section-knowledge-de.php has its own inline copy of this
  * data for the 2-up featured cards; this is the index-page variant
  * that uses the 3-up small variant instead).
  *
  * The 3-up small card markup is duplicated inline (mirrors
  * emifree_blog_card() in inc/blog-cards.php) so this template part
- * stays self-contained — no shared helper, no data loader.
+ * stays self-contained, no shared helper, no data loader.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -24,7 +24,7 @@ $emifree_knowledge_icons = array(
 	'calendar'     => '<rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>',
 );
 
-// German blog posts — sourced from emifree_blog_posts_de() in
+// German blog posts, sourced from emifree_blog_posts_de() in
 // inc/knowledge.php (same data the shim uses for the merged feed).
 // If the shim resolved a merged DE feed (legacy + CPT), use that
 // instead so newly-published CPT entries show up here too.
@@ -51,7 +51,7 @@ if ( isset( $emifree_blog_index_posts_de ) && is_array( $emifree_blog_index_post
 
 			<h1 class="text-4xl md:text-5xl font-bold text-zinc-900 mb-4">Emifree Engineering-Blog</h1>
 			<p class="text-xl text-zinc-600 max-w-3xl">
-				Technische Leitfäden und Praxiseinblicke zur industriellen Ölnebelfiltration, CNC-Luftqualität und EU-Compliance – geschrieben von den Ingenieurinnen und Ingenieuren, die unsere Systeme entwickeln.
+				Technische Leitfäden und Praxiseinblicke zur industriellen Ölnebelfiltration, CNC-Luftqualität und EU-Compliance, geschrieben von den Ingenieurinnen und Ingenieuren, die unsere Systeme entwickeln.
 			</p>
 		</div>
 	</div>
@@ -60,7 +60,7 @@ if ( isset( $emifree_blog_index_posts_de ) && is_array( $emifree_blog_index_post
 	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
 		<div class="flex items-center gap-2 mb-8 text-zinc-700">
 			<svg class="w-5 h-5 text-blue-700" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-				<?php echo $emifree_knowledge_icons['book-open']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled. ?>
+				<?php echo $emifree_knowledge_icons['book-open']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
 			</svg>
 			<h2 class="text-2xl font-bold">Alle Artikel</h2>
 		</div>

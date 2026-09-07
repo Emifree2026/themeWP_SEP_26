@@ -1,16 +1,16 @@
 <?php
 /**
- * Emifree Theme — long Cache-Control for static assets.
+ * Emifree Theme, long Cache-Control for static assets.
  *
  * PageSpeed Insights on /en/ and /de/ reports an "efficient cache
- * dwell time" issue with an 8.8 MiB savings estimate — every static
+ * dwell time" issue with an 8.8 MiB savings estimate, every static
  * asset the theme ships (videos, product photos, logos, SVG icons,
  * built CSS, per-section JS) is currently served with either a
  * 300-second `Cache-Control: max-age=300, public` (images/CSS from
  * LocalWP's nginx) or no `Cache-Control` at all (videos from LocalWP
  * nginx, which doesn't include video MIME types in its cache-rules
  * map). The hero carousel videos are 3.5 MiB + 2.5 MiB + 2.2 MiB =
- * 8.2 MiB of that — a repeat visitor is re-downloading all three
+ * 8.2 MiB of that, a repeat visitor is re-downloading all three
  * videos on every page load.
  *
  * This file sets per-extension Cache-Control values on the response
@@ -39,7 +39,7 @@
  *
  * Why this filter and not .htaccess?  LocalWP runs nginx, not
  * Apache, so .htaccess mod_expires rules have no effect there.  The
- * production server may be Apache, nginx, or LiteSpeed — depending
+ * production server may be Apache, nginx, or LiteSpeed, depending
  * on the host.  Emitting Cache-Control from PHP via wp_headers is
  * the one surface that works identically on every host.  It also
  * sits BELOW the wp_loaded/wp action stack so a caching plugin (if
@@ -49,7 +49,7 @@
  * Important: this REPLACES the Cache-Control array (not appends to
  * it).  A response can carry multiple Cache-Control headers; browsers
  * pick the most restrictive.  LocalWP's nginx already emits
- * `max-age=300, public` — appending `max-age=31536000` here would
+ * `max-age=300, public`, appending `max-age=31536000` here would
  * not change the effective TTL because the 300 from nginx wins.
  * Removing the upstream `max-age=300` and writing only our own value
  * is what actually bumps the TTL to 1 year / 30 days.
@@ -143,7 +143,7 @@ function emifree_static_asset_ttl( $emifree_uri ) {
  * For any request whose URI extension matches a known static asset
  * type, REPLACE the upstream Cache-Control with our own max-age +
  * public + immutable (for versioned files).  For HTML, PHP routes,
- * AJAX, etc. — leave the headers alone, this filter is a no-op.
+ * AJAX, etc., leave the headers alone, this filter is a no-op.
  *
  * @param array $emifree_headers  Existing response headers (key => value).
  * @return array  Headers with Cache-Control replaced where applicable.
@@ -158,7 +158,7 @@ function emifree_set_cache_headers( $emifree_headers ) {
 	// `public` lets intermediate proxies (CDN, Cloudflare, the
 	// browser's HTTP cache) share the response.  `immutable` is a
 	// hint to the browser that the body will not change during its
-	// freshness lifetime — no conditional revalidation — which
+	// freshness lifetime, no conditional revalidation, which
 	// matches what versioned assets already guarantee.
 	$emifree_headers['Cache-Control'] = sprintf(
 		'public, max-age=%d, immutable',
@@ -167,7 +167,7 @@ function emifree_set_cache_headers( $emifree_headers ) {
 
 	// Drop the redundant Expires header if present.  When both
 	// Cache-Control and Expires are set, RFC 7234 says Cache-Control
-	// wins — but leaving Expires in the response confuses some
+	// wins, but leaving Expires in the response confuses some
 	// proxies (LiteSpeed, older Cloudflare versions) into using the
 	// Expires date instead.  Stays out of the way.
 	unset( $emifree_headers['Expires'] );
@@ -179,7 +179,7 @@ add_filter( 'wp_headers', 'emifree_set_cache_headers', 20 );
 /**
  * Disable WP's own Last-Modified / ETag conditional revalidation
  * for static assets too.  WP emits `Cache-Control: no-cache,
- * must-revalidate` for many of its own routes — we override it
+ * must-revalidate` for many of its own routes, we override it
  * above, but `nocache_headers()` calls (used by robots/sitemap/llms
  * virtual routes) emit their own Cache-Control at a higher priority.
  *

@@ -1,6 +1,6 @@
 <?php
 /**
- * Hero data — English.
+ * Hero data, English.
  *
  * Mirrors the strings in src/components/Hero.jsx. The German sibling
  * file is inc/hero_de.php (loaded automatically by
@@ -18,26 +18,26 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Return the English Hero data array.
  *
  * Shape (returned to the template):
- *   - 'headline'              (string) — the H1.
- *   - 'value_strip'           (array<{label, icon}>) — three short
+ *   - 'headline'              (string), the H1.
+ *   - 'value_strip'           (array<{label, icon}>), three short
  *                            keyword chips rendered as a horizontal
  *                            strip directly under the headline, each
  *                            as a pill-shaped button with a small
  *                            blue SVG icon prefix. The 'icon' field is
  *                            a 'kind' key the template maps to inline
  *                            SVG markup ('cycle', 'cartridge',
- *                            'hepa') — keeps the data array free of
+ *                            'hepa'), keeps the data array free of
  *                            raw SVG and the icon set extensible.
- *   - 'primary_cta_label'     (string) — text for the single dominant
+ *   - 'primary_cta_label'     (string), text for the single dominant
  *                            button ("Contact Us!"). Anchors to #contact.
- *   - 'secondary_link_label'  (string) — text for the quiet underlined
+ *   - 'secondary_link_label'  (string), text for the quiet underlined
  *                            link that sits between the value strip
  *                            and the primary CTA, routing to
- *                            #technology. NO competing button — one
+ *                            #technology. NO competing button, one
  *                            CTA, one path.
- *   - 'logos_label'           (string) — the small caps caption above
+ *   - 'logos_label'           (string), the small caps caption above
  *                            the logos row.
- *   - 'logos'                 (array<{name, file, max}>) — name, file in
+ *   - 'logos'                 (array<{name, file, max}>), name, file in
  *                            assets/logo_clients/, and inline max-width
  *                            style. Unchanged.
  */
