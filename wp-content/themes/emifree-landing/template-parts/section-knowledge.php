@@ -1,6 +1,6 @@
 <?php
 /**
- * Knowledge section — 3 tabs (Industry Insights / About Us / Downloads).
+ * Knowledge section, 3 tabs (Industry Insights / About Us / Downloads).
  *
  * Mirrors src/components/Knowledge.jsx from the React app post-cleanup
  * (no FAQ, no Latest Articles grid).
@@ -20,7 +20,7 @@
  * enqueued in functions.php when this section template is loaded.
  *
  * Card links (/blog/{slug}/) and the Contact CTA (/#contact) 404 in this
- * commit — known-limited, fixed in Pieces 15 + 16 + 9 respectively.
+ * commit, known-limited, fixed in Pieces 15 + 16 + 9 respectively.
  */
 
 require_once get_template_directory() . '/inc/i18n.php';
@@ -32,21 +32,28 @@ $emifree_knowledge_icons   = emifree_knowledge_icons();
 $emifree_blog_posts        = emifree_blog_posts();
 $emifree_catalog_pdfs      = emifree_catalog_pdfs();
 
-// Tab config: key => [label, icon-key]. Drives the tab list; the panel
-// IDs follow the same key (data-emifree-tab="blog" pairs with
-// data-emifree-panel="blog").
+// Tab config: key => [label, icon-key, href]. Drives the tab list;
+// the panel IDs follow the same key (data-emifree-tab="blog" pairs
+// with data-emifree-panel="blog"). Each `href` is the crawlable
+// sub-page URL, used by the <a> tab elements below so the tabs
+// are real links (not just JS-driven buttons). Knowledge.js
+// intercepts the click to keep the in-page tab UX; with JS off the
+// href is followed normally.
 $emifree_knowledge_tabs = array(
 	'blog'      => array(
 		'label' => 'Industry Insights',
 		'icon'  => 'book-open',
+		'href'  => home_url( '/en/knowledge/insights/' ),
 	),
 	'about'     => array(
 		'label' => 'About Us',
 		'icon'  => 'users',
+		'href'  => home_url( '/en/knowledge/about/' ),
 	),
 	'downloads' => array(
 		'label' => 'Downloads',
 		'icon'  => 'download',
+		'href'  => home_url( '/en/knowledge/downloads/' ),
 	),
 );
 ?>
@@ -64,7 +71,7 @@ $emifree_knowledge_tabs = array(
 			</p>
 			<div class="mt-8">
 				<a
-					href="<?php echo esc_url( home_url( '/en/knowledge/' ) ); ?>"
+					href="<?php echo esc_url( home_url( '/en/knowledge/tools/' ) ); ?>"
 					class="inline-flex items-center gap-2 text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-xl transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
 					style="background: linear-gradient(90deg, #1d4ed8 0%, #06b6d4 100%); box-shadow: 0 10px 25px rgba(6, 182, 212, 0.25);"
 				>
@@ -77,11 +84,20 @@ $emifree_knowledge_tabs = array(
 			</div>
 		</div>
 
-		<?php /* ----- Tab list (3 tabs) ----- */ ?>
+		<?php /* ----- Tab list (3 tabs) ----- Real <a href> elements, not
+		   <button>. Each tab now points at its own crawlable sub-page
+		   (e.g. /en/knowledge/insights/) so Googlebot, screen readers,
+		   and no-JS visitors get a real link. assets/js/sections/knowledge.js
+		   intercepts the click when JS is available so the in-page
+		   tab-switching UX still works on the hub itself; with JS off
+		   the link navigates to the sub-page. The "Free Engineering
+		   Tools" CTA below is the same idea but as a primary button. */ ?>
 		<div class="flex flex-wrap justify-center gap-4 mb-12" role="tablist" aria-label="Knowledge center sections">
-			<?php $emifree_ktab_first = true; foreach ( $emifree_knowledge_tabs as $emifree_ktab_key => $emifree_ktab ) : ?>
-				<button
-					type="button"
+			<?php $emifree_ktab_first = true; foreach ( $emifree_knowledge_tabs as $emifree_ktab_key => $emifree_ktab ) :
+				$emifree_ktab_href = isset( $emifree_ktab['href'] ) ? $emifree_ktab['href'] : home_url( '/en/knowledge/' . $emifree_ktab_key . '/' );
+				?>
+				<a
+					href="<?php echo esc_url( $emifree_ktab_href ); ?>"
 					role="tab"
 					id="emifree-tab-<?php echo esc_attr( $emifree_ktab_key ); ?>"
 					aria-selected="<?php echo $emifree_ktab_first ? 'true' : 'false'; ?>"
@@ -90,10 +106,10 @@ $emifree_knowledge_tabs = array(
 					class="emifree-knowledge-tab px-8 py-4 rounded-full font-semibold transition-all duration-300 flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 <?php echo $emifree_ktab_first ? 'bg-blue-700 text-white shadow-lg' : 'bg-white text-slate-600 hover:bg-slate-100 hover:text-blue-700 border border-slate-200'; ?>"
 				>
 					<svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-						<?php echo $emifree_knowledge_icons[ $emifree_ktab['icon'] ]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled. ?>
+						<?php echo $emifree_knowledge_icons[ $emifree_ktab['icon'] ]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
 					</svg>
 					<?php echo esc_html( $emifree_ktab['label'] ); ?>
-				</button>
+				</a>
 			<?php $emifree_ktab_first = false; endforeach; ?>
 		</div>
 
@@ -107,7 +123,7 @@ $emifree_knowledge_tabs = array(
 		>
 			<h3 class="text-2xl md:text-3xl font-bold text-zinc-900 flex items-center gap-3 mb-8">
 				<svg class="w-7 h-7 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-					<?php echo $emifree_knowledge_icons['award']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled. ?>
+					<?php echo $emifree_knowledge_icons['award']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
 				</svg>
 				Featured Articles
 			</h3>
@@ -138,7 +154,7 @@ $emifree_knowledge_tabs = array(
 				>
 					View All Articles
 					<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-						<?php echo $emifree_knowledge_icons['arrow-right']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled. ?>
+						<?php echo $emifree_knowledge_icons['arrow-right']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
 					</svg>
 				</a>
 			</div>
@@ -152,12 +168,12 @@ $emifree_knowledge_tabs = array(
 			data-emifree-panel="about"
 			class="hidden emifree-knowledge-panel"
 		>
-			<?php /* Our Story — 2-column grid */ ?>
+			<?php /* Our Story, 2-column grid */ ?>
 			<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16 items-center">
 				<div>
 					<h3 class="text-2xl md:text-3xl font-bold text-zinc-900 flex items-center gap-3 mb-6">
 						<svg class="w-7 h-7 text-blue-700" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-							<?php echo $emifree_knowledge_icons['book-marked']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled. ?>
+							<?php echo $emifree_knowledge_icons['book-marked']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
 						</svg>
 						Our Story
 					</h3>
@@ -189,7 +205,7 @@ $emifree_knowledge_tabs = array(
 				</div>
 			</div>
 
-			<?php /* Our Mission — 4 value cards */ ?>
+			<?php /* Our Mission, 4 value cards */ ?>
 			<div class="mb-16 text-center">
 				<h3 class="text-2xl md:text-3xl font-bold text-zinc-900 mb-4">Our Mission</h3>
 				<p class="text-lg text-slate-600 max-w-3xl mx-auto mb-12">
@@ -225,7 +241,7 @@ $emifree_knowledge_tabs = array(
 						<div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-lg transition-all duration-300">
 							<div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
 								<svg class="w-6 h-6 text-blue-700" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-									<?php echo $emifree_knowledge_icons[ $emifree_value['icon'] ]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled. ?>
+									<?php echo $emifree_knowledge_icons[ $emifree_value['icon'] ]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
 								</svg>
 							</div>
 							<h4 class="font-semibold text-zinc-900 mb-2"><?php echo esc_html( $emifree_value['title'] ); ?></h4>
@@ -235,7 +251,7 @@ $emifree_knowledge_tabs = array(
 				</div>
 			</div>
 
-			<?php /* Trusted by Industry Leaders — clients strip */ ?>
+			<?php /* Trusted by Industry Leaders, clients strip */ ?>
 			<div class="bg-slate-100 rounded-3xl p-8 text-center">
 				<h3 class="text-2xl md:text-3xl font-bold text-zinc-900 mb-6">Trusted by Industry Leaders</h3>
 				<div class="flex flex-wrap justify-center gap-x-8 gap-y-3 items-center">
@@ -270,7 +286,7 @@ $emifree_knowledge_tabs = array(
 		>
 			<h3 class="text-2xl md:text-3xl font-bold text-zinc-900 flex items-center gap-3 mb-8">
 				<svg class="w-7 h-7 text-blue-700" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-					<?php echo $emifree_knowledge_icons['book-open']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled. ?>
+					<?php echo $emifree_knowledge_icons['book-open']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
 				</svg>
 				Product Brochures
 			</h3>
@@ -292,7 +308,7 @@ $emifree_knowledge_tabs = array(
 				>
 					Contact Technical Support
 					<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-						<?php echo $emifree_knowledge_icons['arrow-right']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled. ?>
+						<?php echo $emifree_knowledge_icons['arrow-right']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
 					</svg>
 				</a>
 			</div>

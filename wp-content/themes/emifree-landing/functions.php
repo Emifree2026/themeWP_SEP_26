@@ -1,6 +1,6 @@
 <?php
 /**
- * Emifree Theme — primary entry point.
+ * Emifree Theme, primary entry point.
  *
  * Responsibilities:
  *  - Enqueue built CSS (and per-section JS via wp_enqueue_script when added)
@@ -18,20 +18,20 @@ if ( ! defined( 'EMIFREE_THEME_VERSION' ) ) {
 	define( 'EMIFREE_THEME_VERSION', '1.4.9' );
 }
 
-// i18n.php shim — kept so the English section templates continue to
+// i18n.php shim, kept so the English section templates continue to
 // work unchanged. The bilingual dispatcher (emifree_get_lang +
 // function-guard approach) was retired; the German templates inline
 // their own data. See inc/i18n.php for the full rationale.
 require_once get_template_directory() . '/inc/i18n.php';
 
-// SEO helpers — defines emifree_seo_page(), emifree_seo_page_with_schema(),
+// SEO helpers, defines emifree_seo_page(), emifree_seo_page_with_schema(),
 // emifree_seo_blog_post(), and the EMIFREE_SITE_URL constant. Used by
 // page-blog.php, page-blog-post.php, and the German blog shim siblings.
 // Loaded globally so every page template can call into it; defining
 // functions inside inc/seo.php is idempotent (no re-declare errors).
 require_once get_template_directory() . '/inc/seo.php';
 
-// Analytics helpers — emits Google Analytics 4 + GSC + Bing Webmaster
+// Analytics helpers, emits Google Analytics 4 + GSC + Bing Webmaster
 // verification tags against wp_head. Each tag is gated on a wp-config
 // constant (EMIFREE_GA4_ID, EMIFREE_GSC_VERIFICATION,
 // EMIFREE_BING_VERIFICATION) so the same theme ships to staging +
@@ -40,7 +40,7 @@ require_once get_template_directory() . '/inc/seo.php';
 // front-page and the legal pages.
 require_once get_template_directory() . '/inc/analytics.php';
 
-// Blog CPT — blog_post custom post type + meta + sidebar meta box +
+// Blog CPT, blog_post custom post type + meta + sidebar meta box +
 // slug-mirroring helper. Registered as invisible to the front end
 // (rewrite=false, publicly_queryable=false) so the existing
 // ^blog/([^/]+)/?$ rewrite in emifree_register_blog_route() stays the
@@ -48,13 +48,14 @@ require_once get_template_directory() . '/inc/analytics.php';
 // inside the page-blog-post*.php shims.
 require_once get_template_directory() . '/inc/cpt-blog.php';
 
-// SEO route surfaces — virtual /robots.txt + /sitemap.xml emitted by
+// SEO route surfaces, virtual /robots.txt + /sitemap.xml emitted by
 // the theme. Single source of truth (no physical files at the
 // document root), subpath-safe via home_url(). Each file owns its
 // rewrite rule + query var + template_redirect handler.
 require_once get_template_directory() . '/inc/robots.php';
 require_once get_template_directory() . '/inc/sitemap.php';
-// LLM manifest — /llms.txt + /de/llms.txt so AI crawlers (GPTBot,
+
+// LLM manifest, /llms.txt + /de/llms.txt so AI crawlers (GPTBot,
 // ClaudeBot, Perplexity, Google-Extended, etc.) get a single,
 // structured, plain-text manifest of who we are, our product line,
 // and the principal URLs the site serves. Same virtual-route
@@ -62,7 +63,7 @@ require_once get_template_directory() . '/inc/sitemap.php';
 // rewrite rules register before any request can land.
 require_once get_template_directory() . '/inc/llms.php';
 
-// IndexNow — fires wp_remote_post to api.indexnow.org on every
+// IndexNow, fires wp_remote_post to api.indexnow.org on every
 // blog_post save. Gated on EMIFREE_INDEXNOW_KEY + EMIFREE_INDEXNOW_HOST
 // being non-empty (defaults to empty in wp-config); no-op locally.
 require_once get_template_directory() . '/inc/indexnow.php';
@@ -73,7 +74,7 @@ require_once get_template_directory() . '/inc/indexnow.php';
 // through a real SMTP server on hosts without a local MTA.
 require_once get_template_directory() . '/inc/smtp-settings.php';
 
-// Long Cache-Control headers for static assets — videos, images,
+// Long Cache-Control headers for static assets, videos, images,
 // built CSS/JS. PageSpeed flagged an 8.8 MiB cache-dwell savings
 // because LocalWP's nginx serves static files with max-age=300 (or
 // no Cache-Control at all for video MIME types). Replacing the
@@ -84,17 +85,17 @@ require_once get_template_directory() . '/inc/cache-headers.php';
 // Security response headers + 404 leak reduction. The default WP 404
 // page leaks a meaningful amount of information that helps anyone
 // probing for vulnerabilities:
-//   - <meta name="generator" content="WordPress X.Y.Z" /> — exact WP
+//   - <meta name="generator" content="WordPress X.Y.Z" />, exact WP
 //     version, which lets attackers target known version-specific CVEs.
 //   - <style id="wp-img-auto-sizes-contain-inline-css"> and similar
-//     <style id="wp-...-inline-css"> blocks — each one is a unique
+//     <style id="wp-...-inline-css"> blocks, each one is a unique
 //     signature identifying which plugin or core subsystem is active.
 //     "wp-img-auto-sizes-contain" is the per-page inline-CSS
 //     fingerprint for the "Image Size Auto Include" plugin;
 //     "wp-block-library" is the block editor's CSS. Listing them in
 //     page source is the equivalent of yelling the plugin list out
 //     into the empty lot for anyone who's listening.
-//   - <link rel="sitemap" href="..."> — the sitemap location is useful
+//   - <link rel="sitemap" href="...">, the sitemap location is useful
 //     for SEO but also tells attackers exactly where to find the
 //     listing of posts, pages, custom post types, etc.
 // inc/security-headers.php strips the generator tag, removes the WP
@@ -105,7 +106,7 @@ require_once get_template_directory() . '/inc/cache-headers.php';
 require_once get_template_directory() . '/inc/security-headers.php';
 
 /**
- * Home subpath — the directory under which WordPress is installed
+ * Home subpath, the directory under which WordPress is installed
  * on this site, derived from home_url(). '' for a root install
  * (home_url returns 'https://example.com', no path component),
  * '/wordpress' for a subpath install (home_url returns
@@ -113,7 +114,7 @@ require_once get_template_directory() . '/inc/security-headers.php';
  *
  * The site lives at one of these locations, and every internal path
  * we generate or compare against (e.g. '/de/', '/impressum/') is
- * RELATIVE to this subpath — not to the bare domain. The /de/
+ * RELATIVE to this subpath, not to the bare domain. The /de/
  * rewrite rule WP registers, for example, resolves against the
  * home subpath, so '/de/' on a root install becomes
  * 'https://example.com/de/' and on a subpath install becomes
@@ -136,7 +137,7 @@ function emifree_home_subpath() {
 
 /**
  * Get the active site language code ('en' or 'de') for the Header
- * dispatcher. Path is the source of truth — a request to /de/...
+ * dispatcher. Path is the source of truth, a request to /de/...
  * always resolves to 'de', even on a first visit with no cookie
  * (e.g. after the / → /de/ 301 redirect lands a fresh user on /de/).
  * The emifree_lang cookie is the fallback for routes that don't
@@ -170,7 +171,7 @@ function emifree_get_lang() {
  * Enqueue built stylesheet (assets/css/main.css, committed to the repo so
  * the theme is install-and-go). Also enqueues per-section JS files.
  * Per-section JS is loaded only on pages where the section actually
- * renders — header.js loads everywhere (header.php is global), the
+ * renders, header.js loads everywhere (header.php is global), the
  * others load only on the routes that use them.
  */
 function emifree_enqueue_assets() {
@@ -180,11 +181,11 @@ function emifree_enqueue_assets() {
 	// onload handler promotes the asset to a real stylesheet once the
 	// bytes arrive. Without this, PageSpeed Insights flags main.css as
 	// a render-blocking resource (~300ms on mobile) even though the
-	// file is only 35 KB — the bottleneck is the network RTT, not the
+	// file is only 35 KB, the bottleneck is the network RTT, not the
 	// parse time.
 	//
 	// The <noscript> fallback keeps the stylesheet in the document for
-	// visitors with JS disabled — without it the page would render
+	// visitors with JS disabled, without it the page would render
 	// unstyled. The onload media-swap is the widely-supported
 	// "print-trick" pattern: setting media="print" defers the
 	// stylesheet's application (browsers don't apply print-media rules
@@ -202,7 +203,7 @@ function emifree_enqueue_assets() {
 		3
 	);
 
-	// Global header script — loaded on every page because the
+	// Global header script, loaded on every page because the
 	// header is rendered by header.php globally.
 	wp_enqueue_script(
 		'emifree-header',
@@ -212,7 +213,7 @@ function emifree_enqueue_assets() {
 		true
 	);
 
-	// Page-level script — hero video autoplay retry, sticky header,
+	// Page-level script, hero video autoplay retry, sticky header,
 	// mobile menu toggle, contact form AJAX, smooth-scroll. Loaded
 	// globally because the hero + header render on every page.
 	wp_enqueue_script(
@@ -223,7 +224,7 @@ function emifree_enqueue_assets() {
 		true
 	);
 
-	// Subpath metadata — header.js needs to know where WordPress is
+	// Subpath metadata, header.js needs to know where WordPress is
 	// installed so language-swap math and nav-link click handlers
 	// preserve the install subpath on subpath installs like
 	// /wordpress/. Mirrors inc/nav.php + inc/footer.php + emifree_get_lang()
@@ -246,7 +247,119 @@ add_theme_support( 'title-tag' );
 add_theme_support( 'post-thumbnails' );
 
 /**
- * Legal page routing — /impressum/, /privacy/, /terms/.
+ * Language-aware <html lang="…"> attribute.
+ *
+ * WP's default language_attributes() emits the WP locale (en-US on this
+ * install) on every page, including /de/, /de/impressum/, /de/blog/,
+ * and every other German route. That breaks SEO (Google treats the
+ * German content as English) and accessibility (screen readers use
+ * the lang attribute to pick a pronunciation voice).
+ *
+ * The active language is path-then-cookie (see emifree_get_lang()),
+ * which means a fresh visitor on /de/ who never set a cookie still
+ * gets <html lang="de">. The filter only swaps the lang= value;
+ * dir="ltr" (and any future attributes WP adds) is preserved by
+ * preg_replace against the existing output.
+ */
+function emifree_filter_language_attributes( $emifree_output ) {
+	$emifree_lang_code = function_exists( 'emifree_get_lang' ) ? emifree_get_lang() : 'en';
+	$emifree_full_locale = ( 'de' === $emifree_lang_code ) ? 'de' : 'en-US';
+	// WP's language_attributes() returns a string that starts with
+	// lang="..." (no leading space), match both that and the
+	// " lang=..." form so a future WP version adding dir="ltr" or
+	// any other leading attribute doesn't break the swap.
+	return preg_replace( '/(^|\s)lang="[^"]*"/', '$1lang="' . esc_attr( $emifree_full_locale ) . '"', (string) $emifree_output );
+}
+add_filter( 'language_attributes', 'emifree_filter_language_attributes' );
+
+/**
+ * Skip WP's redirect_canonical for the virtual /robots.txt, /sitemap.xml,
+ * and /llms.txt endpoints.
+ *
+ * redirect_canonical() runs at template_redirect priority -100, earlier
+ * than any rewrite rule we register, and 301-redirects the bare URL to
+ * the trailing-slash form when pretty-permalinks are enabled. That's
+ * harmless for posts/pages, but for the virtual files above it produces
+ * a wasted 301 round-trip on every Bing WMT / GSC / IndexNow / llms.txt
+ * fetcher hit, and breaks any tool that doesn't follow redirects.
+ *
+ * The fix: filter redirect_canonical to return false for these paths.
+ * Our rewrite rules (loosened to accept both forms in inc/robots.php,
+ * inc/sitemap.php, inc/llms.php) handle the response directly, so the
+ * canonical redirect would just add latency.
+ */
+function emifree_skip_redirect_canonical_for_virtual_files( $emifree_redirect ) {
+	if ( ! is_string( $emifree_redirect ) ) {
+		return $emifree_redirect;
+	}
+	$emifree_path = (string) parse_url( $emifree_redirect, PHP_URL_PATH );
+	if ( in_array( $emifree_path, array( '/robots.txt/', '/sitemap.xml/', '/llms.txt/', '/de/llms.txt/' ), true ) ) {
+		return false;
+	}
+	return $emifree_redirect;
+}
+add_filter( 'redirect_canonical', 'emifree_skip_redirect_canonical_for_virtual_files' );
+
+/**
+ * /.well-known/apple-app-site-association, static file route.
+ *
+ * Apple's universal-link spec requires the AASA file to be served
+ * from `https://<domain>/.well-known/apple-app-site-association` (or
+ * from `/apple-app-site-association` as a fallback). The file is a
+ * real static JSON file on disk under app/public/.well-known/, but
+ * WordPress's rewrite rules catch the path before nginx serves it
+ * as a static file, so the AASA fetch would 404 without an explicit
+ * rewrite. This dispatcher:
+ *   1. Matches the URL at the rewrite level.
+ *   2. Reads the file from disk.
+ *   3. Streams it with application/json Content-Type and exits
+ *      before WP renders its 404 template.
+ *
+ * The legacy redirect map (emifree_legacy_redirect_map) keeps the
+ * /apple-app-site-association/ → /.well-known/apple-app-site-association
+ * alias so any inbound link to the bare URL still lands on a 200.
+ */
+function emifree_register_apple_app_site_association_route() {
+	add_rewrite_rule(
+		'^\.well-known/apple-app-site-association/?$',
+		'index.php?emifree_apple_aasa=1',
+		'top'
+	);
+	add_rewrite_rule(
+		'^apple-app-site-association/?$',
+		'index.php?emifree_apple_aasa=1',
+		'top'
+	);
+}
+add_action( 'init', 'emifree_register_apple_app_site_association_route' );
+
+function emifree_register_apple_aasa_query_var( $vars ) {
+	$vars[] = 'emifree_apple_aasa';
+	return $vars;
+}
+add_filter( 'query_vars', 'emifree_register_apple_aasa_query_var' );
+
+function emifree_serve_apple_app_site_association() {
+	if ( ! get_query_var( 'emifree_apple_aasa' ) ) {
+		return;
+	}
+	$emifree_aasa_path = ABSPATH . '.well-known/apple-app-site-association';
+	if ( ! file_exists( $emifree_aasa_path ) ) {
+		status_header( 404 );
+		nocache_headers();
+		return;
+	}
+	nocache_headers();
+	header( 'Content-Type: application/json; charset=utf-8' );
+	header( 'X-Robots-Tag: noindex' );
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, static JSON file on disk, no user input.
+	echo file_get_contents( $emifree_aasa_path );
+	exit;
+}
+add_action( 'template_redirect', 'emifree_serve_apple_app_site_association', 5 );
+
+/**
+ * Legal page routing, /impressum/, /privacy/, /terms/.
  *
  * The page-{slug}.php templates (and the SEO/body data in inc/legal.php
  * + inc/seo.php) are on disk; only the URI-to-template binding is
@@ -278,7 +391,7 @@ function emifree_register_legal_routes() {
 		'index.php?emifree_legal=terms&emifree_lang=en',
 		'top'
 	);
-	// German (de) routes — slug names match the German page names
+	// German (de) routes, slug names match the German page names
 	// (impressum unchanged, datenschutz, agb).
 	add_rewrite_rule(
 		'^de/impressum/?$',
@@ -305,8 +418,8 @@ add_action( 'init', 'emifree_register_legal_routes' );
  * slugs (e.g. /agb-en/, /impressum-de/, /de-agb/) before the
  * single-route-per-language scheme was settled on (/terms/, /impressum/,
  * /privacy/ for English; /de/agb/, /de/impressum/, /de/datenschutz/ for
- * German).  Old inlinks — from cached crawls, social shares, third-party
- * directories, and the React app's old index.html — still hit those
+ * German).  Old inlinks, from cached crawls, social shares, third-party
+ * directories, and the React app's old index.html, still hit those
  * paths today and WP returns 404.  Each request ends up as a dead end in
  * the eyes of both users and search engines.
  *
@@ -325,7 +438,7 @@ add_action( 'init', 'emifree_register_legal_routes' );
  * (the URL is already canonical) free, and the legitimate-redirect case
  * fast (no DB round-trip).
  *
- * Last edit: 2026-08-05 — added 22 legacy variants after a probe showed
+ * Last edit: 2026-08-05, added 22 legacy variants after a probe showed
  * every `*-en/` / `*-de/` / `de-*-` URL still returning 404 against the
  * production server.
  */
@@ -369,6 +482,14 @@ function emifree_redirect_legacy_legal_urls( $query_vars ) {
 		'de-datenschutz' => '/de/datenschutz/',
 		'de-privacy'     => '/de/datenschutz/',
 		'de-terms'       => '/de/agb/',
+		// Slash-form German variants, the English slugs (/privacy/,
+		// /terms/) under the /de/ prefix. These are "wrong" URLs a
+		// visitor or inbound link might type, and previously 404'd
+		// because the rewrite rules only accept the German slugs
+		// (datenschutz, agb). Each one lands on the canonical German
+		// legal page.
+		'de/privacy'     => '/de/datenschutz/',
+		'de/terms'       => '/de/agb/',
 		// Bare-suffix-less variants that show up in third-party directories.
 		'agb'            => '/terms/',
 		'gtc'            => '/terms/',
@@ -379,6 +500,11 @@ function emifree_redirect_legacy_legal_urls( $query_vars ) {
 		'en/impressum'   => '/impressum/',
 		'en/privacy'     => '/privacy/',
 		'en/terms'       => '/terms/',
+		// German slug under the English /en/ prefix, also "wrong",
+		// a visitor typing /en/datenschutz/ gets the English privacy
+		// page (the only legal content in EN with the same semantic
+		// meaning).
+		'en/datenschutz' => '/privacy/',
 		// Old "terms-of-service" / "tos" / "imprint" English variants.
 		'tos'            => '/terms/',
 		'terms-of-service' => '/terms/',
@@ -415,7 +541,7 @@ add_filter( 'query_vars', 'emifree_register_legal_query_var' );
  * emifree_legal query var, hand the template selection to the
  * matching page-{slug}.php template. The slug includes the
  * language prefix (e.g. "impressum" for English, "impressum"
- * for German — same slug because we use one template per page
+ * for German, same slug because we use one template per page
  * that dispatches on emifree_lang).
  */
 function emifree_route_legal_template() {
@@ -491,7 +617,7 @@ add_action( 'after_switch_theme', 'emifree_flush_section_rewrite_rules' );
  * unified flush from firing.
  */
 function emifree_maybe_flush_section_routes() {
-	if ( get_transient( 'emifree_section_routes_flushed_v11' ) ) {
+	if ( get_transient( 'emifree_section_routes_flushed_v15' ) ) {
 		return;
 	}
 	emifree_register_legal_routes();
@@ -508,7 +634,10 @@ function emifree_maybe_flush_section_routes() {
 	if ( function_exists( 'emifree_register_llms_route' ) ) {
 		emifree_register_llms_route();
 	}
-	// Hard flush (true) — the soft flush (false) only updates when rules
+	if ( function_exists( 'emifree_register_apple_app_site_association_route' ) ) {
+		emifree_register_apple_app_site_association_route();
+	}
+	// Hard flush (true), the soft flush (false) only updates when rules
 	// changed, which can leave stale v4 rules in the DB if the v4 transient
 	// was set under a different code path. Hard flush is idempotent and
 	// safe to call on every version bump.
@@ -524,12 +653,16 @@ function emifree_maybe_flush_section_routes() {
 	delete_transient( 'emifree_section_routes_flushed_v8' );
 	delete_transient( 'emifree_section_routes_flushed_v9' );
 	delete_transient( 'emifree_section_routes_flushed_v10' );
-	set_transient( 'emifree_section_routes_flushed_v11', 1, DAY_IN_SECONDS );
+	delete_transient( 'emifree_section_routes_flushed_v11' );
+	delete_transient( 'emifree_section_routes_flushed_v12' );
+	delete_transient( 'emifree_section_routes_flushed_v13' );
+	delete_transient( 'emifree_section_routes_flushed_v14' );
+	set_transient( 'emifree_section_routes_flushed_v15', 1, DAY_IN_SECONDS );
 }
 add_action( 'init', 'emifree_maybe_flush_section_routes', 99 );
 
 /* -------------------------------------------------------------------------
- * /blog/ route — same plumbing pattern as the legal routes.
+ * /blog/ route, same plumbing pattern as the legal routes.
  *
  * Routes /blog/ to page-blog.php without requiring a Page record in
  * wp_posts. Page-blog.php handles its own SEO + body rendering.
@@ -550,7 +683,22 @@ function emifree_register_blog_route() {
 		'index.php?emifree_blog=post&emifree_blog_slug=$matches[1]',
 		'top'
 	);
-	// German (de) blog routes — slug names mirror the English ones
+	// /en/blog/, explicit-English alias for /blog/ so the
+	// /en/ → /en/blog/ nav link and any inbound /en/ prefixed
+	// URLs resolve. The dispatcher picks the English template
+	// (emifree_blog_lang defaults to '' which is treated as EN
+	// by emifree_route_blog_template).
+	add_rewrite_rule(
+		'^en/blog/?$',
+		'index.php?emifree_blog=index&emifree_blog_lang=en',
+		'top'
+	);
+	add_rewrite_rule(
+		'^en/blog/([^/]+)/?$',
+		'index.php?emifree_blog=post&emifree_blog_slug=$matches[1]&emifree_blog_lang=en',
+		'top'
+	);
+	// German (de) blog routes, slug names mirror the English ones
 	// so the link (href) just adds the /de/ prefix.
 	add_rewrite_rule(
 		'^de/blog/?$',
@@ -566,7 +714,7 @@ function emifree_register_blog_route() {
 add_action( 'init', 'emifree_register_blog_route' );
 
 /**
- * Homepage language routes — /de/ and /en/.
+ * Homepage language routes, /de/ and /en/.
  *
  * Each route registers as a SEPARATE WP rewrite so the homepage serves
  * the correct language even if the user's cookie is unset. We deliberately
@@ -576,7 +724,7 @@ add_action( 'init', 'emifree_register_blog_route' );
  * an English user hitting /en/ sees English even if their cookie expired.
  *
  * The bare / (and the alternate WP URL /index.php) is redirected to /de/
- * by emifree_maybe_redirect_home_to_de() below — that's the default-lang
+ * by emifree_maybe_redirect_home_to_de() below, that's the default-lang
  * flip, not this dispatcher.
  */
 function emifree_register_homepage_lang_route() {
@@ -606,7 +754,7 @@ add_filter( 'query_vars', 'emifree_register_homepage_lang_query_var' );
  * emifree_maybe_redirect_home_to_de() before this dispatcher runs,
  * so this callback only fires for the explicit /de/ and /en/
  * routes. Cookie-based language detection inside the templates
- * picks the right strings regardless — the dispatcher only picks
+ * picks the right strings regardless, the dispatcher only picks
  * the template file.
  */
 function emifree_route_homepage_lang_template() {
@@ -620,7 +768,7 @@ function emifree_route_homepage_lang_template() {
 	}
 	if ( ! $emifree_target ) {
 		// Fall back to whatever the active front-page.php is so the
-		// route serves content rather than 404'ing — better than a
+		// route serves content rather than 404'ing, better than a
 		// blank white screen if a template file goes missing.
 		$emifree_target = locate_template( 'front-page.php' );
 	}
@@ -642,7 +790,7 @@ add_action( 'template_redirect', 'emifree_route_homepage_lang_template' );
  * the resolved template to the German sibling.
  *
  * This avoids needing to modify every page template to call
- * get_header('de') — the dispatcher does it once, globally.
+ * get_header('de'), the dispatcher does it once, globally.
  *
  * Note: header-de.php is provided by the user (data file mirror of
  * header.php with German strings).
@@ -663,19 +811,19 @@ function emifree_route_de_header_template( $template ) {
 add_filter( 'template_include', 'emifree_route_de_header_template' );
 
 /**
- * Legacy URL redirect — old WPML permalinks and the old site's
+ * Legacy URL redirect, old WPML permalinks and the old site's
  * flat slugs → the new site's /en/ or /de/ landing page (with
  * the matching in-page anchor where one exists).
  *
  * The old WordPress site used two URL patterns:
  *
- *   1. /language/<code>/<slug>/  — the WPML permalink schema. The
+ *   1. /language/<code>/<slug>/, the WPML permalink schema. The
  *      new theme doesn't register that pattern, so every /language/...
  *      URL the old site indexed now 404s. Examples: /language/de/
  *      startseite/, /language/pl/pobierz/, /language/cz/domovska-
  *      stranka/, /language/en/product/flexible-spiral-hose/.
  *
- *   2. Bare English/German slugs — /products/, /contact,
+ *   2. Bare English/German slugs, /products/, /contact,
  *      /applications/, /careers/, /karriere/, /download_en/,
  *      /download/kat_emi_de.pdf, /mechanical-oil-mist-collector/,
  *      /electrostatic-oil-mist-collector/, /impressum/, etc.
@@ -694,12 +842,12 @@ add_filter( 'template_include', 'emifree_route_de_header_template' );
  * homepage dispatcher tries to handle it.
  *
  * Why not just send everything to /en/? The old URLs were seen by
- * Google per-language — sending /language/de/startseite/ to /en/
+ * Google per-language, sending /language/de/startseite/ to /en/
  * would drop the visitor into the wrong language. We split on the
  * detected source language and send each visitor to the matching
  * landing page (DE old URL → /de/ landing page, EN old URL → /en/
  * landing page). The exception is /language/pl/... and /language/cz/
- * and /language/sk/ — those languages are no longer shipped, so we
+ * and /language/sk/, those languages are no longer shipped, so we
  * route them to /en/ (the closest fallback we'll ever offer).
  *
  * The map is a flat PHP array of exact-path => redirect-path. We
@@ -761,7 +909,7 @@ function emifree_legacy_redirect_map() {
 		// 301 to itself is an infinite redirect loop.
 		'/download/'                 => '/de/',
 		'/download/kat_emi_de.pdf'   => '/de/',
-		// --- Air pressure loss / Druckverlust — keyword URL change (2026-08-25) ---
+		// --- Air pressure loss / Druckverlust, keyword URL change (2026-08-25) ---
 		// Old slugs 301 to the new keyword-rich canonicals so existing
 		// inbound links (chat-shared URLs, indexed pages, bookmarks)
 		// keep working and any PageRank transfers.
@@ -812,7 +960,7 @@ function emifree_legacy_redirect_map() {
 		// Old German WPML download URL.
 		'/language/de/herunterladen/'                                   => '/de/#knowledge',
 
-		// Downloads — both English and German variants land on the
+		// Downloads, both English and German variants land on the
 		// Downloads tab inside Knowledge for their respective language.
 		'/herunterladen/'                                               => '/de/#knowledge',
 		'/download/bdl_eac_de.pdf'                                      => '/de/#knowledge',
@@ -822,11 +970,11 @@ function emifree_legacy_redirect_map() {
 		// English GTC under the old slug.
 		'/agb-en/'                                                      => '/terms/',
 
-		// Mobile site + defunct language (ES — the new site doesn't ship Spanish).
+		// Mobile site + defunct language (ES, the new site doesn't ship Spanish).
 		'/m/'                                                           => '/en/',
 		'/es/products/'                                                 => '/en/#products',
 
-		// Apple universal links — both URLs in the CSV point to the
+		// Apple universal links, both URLs in the CSV point to the
 		// canonical .well-known location. The target file doesn't exist
 		// on the new server yet; create it (empty `{}` is enough for
 		// Apple's spec) under WP_ROOT/.well-known/apple-app-site-association
@@ -837,7 +985,7 @@ function emifree_legacy_redirect_map() {
 		'/wp-content/plugins/contact-form-7/images/ajax-loader.gif'     => '/',
 
 		// Old product imagery (uploaded 2016-2019, never re-uploaded to
-		// the new site) — send to the German products section, which
+		// the new site), send to the German products section, which
 		// is where these images appeared on the old site.
 		'/wp-content/uploads/2016/07/Oil-mist-collector_dark-463x350.png' => '/de/#products',
 		'/wp-content/uploads/2016/08/blue_square_transparent.png'         => '/de/',
@@ -849,7 +997,7 @@ function emifree_legacy_redirect_map() {
 		'/wp-content/uploads/2016/10/GST_E2G-600x600.png'                 => '/de/#products',
 		'/wp-content/uploads/2019/06/SD-ERA-12H.png'                      => '/de/#products',
 
-		// Old /img/<lang>/ icons — DE and EN preserved per language.
+		// Old /img/<lang>/ icons, DE and EN preserved per language.
 		'/img/de/icon_energieeffizienzEC.jpg'                          => '/de/#products',
 		'/img/de/icon_leistung.jpg'                                    => '/de/#products',
 		'/img/de/icon_automatisierung.jpg'                             => '/de/#products',
@@ -858,7 +1006,7 @@ function emifree_legacy_redirect_map() {
 		'/img/en/icon_leistung.jpg'                                    => '/en/#products',
 		'/img/en/icon_selbstreinigung.jpg'                             => '/en/#products',
 		'/img/en/eco_filtrationsprinzip.jpg'                           => '/en/#products',
-		// Polish: new site doesn't ship PL — falls back to EN per the
+		// Polish: new site doesn't ship PL, falls back to EN per the
 		// existing /language/pl/ catch-all convention.
 		'/img/pl/icon_automatisierung.png'                             => '/en/#products',
 		'/img/pl/icon_selbstreinigung.png'                             => '/en/#products',
@@ -895,9 +1043,9 @@ function emifree_maybe_redirect_legacy_url() {
 	// old site indexed has a row.
 	$emifree_path = '/' . ltrim( $emifree_path, '/' );
 	if ( '/' !== $emifree_path && '/' === substr( $emifree_path, -1 ) ) {
-		// Already a trailing slash — keep.
+		// Already a trailing slash, keep.
 	} elseif ( '/' !== $emifree_path && false === strpos( basename( $emifree_path ), '.' ) ) {
-		// Bare path with no extension — add trailing slash so
+		// Bare path with no extension, add trailing slash so
 		// '/products' and '/products/' share one map entry.
 		$emifree_path .= '/';
 	}
@@ -911,7 +1059,7 @@ function emifree_maybe_redirect_legacy_url() {
 		// map didn't catch. The old site had a product detail page
 		// per language under /language/<code>/product/<slug>/ and
 		// /language/<code>/<anything>/ for misc. landing pages. The
-		// new site doesn't ship detail pages — every visitor lands
+		// new site doesn't ship detail pages, every visitor lands
 		// on the single landing page for their language. EN / DE are
 		// the two languages the new site actually ships; everything
 		// else falls back to /en/ as the closest language we'll
@@ -958,13 +1106,13 @@ function emifree_maybe_redirect_legacy_url() {
 add_action( 'template_redirect', 'emifree_maybe_redirect_legacy_url', 1 );
 
 /**
- * Default-language redirect — /  →  /de/.
+ * Default-language redirect, /  →  /de/.
  *
  * German is the primary language of this site (primary market is
  * Germany, traffic skews German). A fresh visitor with no
  * emifree_lang cookie who hits the bare homepage is bounced to
- * /de/ via a 301 permanent redirect. 301 is correct here — this
- * is a permanent flip, not a temporary routing decision — and
+ * /de/ via a 301 permanent redirect. 301 is correct here, this
+ * is a permanent flip, not a temporary routing decision, and
  * transfers any existing PageRank from / to /de/.
  *
  * The redirect only fires when:
@@ -985,10 +1133,10 @@ function emifree_maybe_redirect_home_to_de() {
 	}
 	$emifree_uri  = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '';
 	$emifree_path = parse_url( $emifree_uri, PHP_URL_PATH );
-	// Only the bare homepage — both with and without trailing slash,
+	// Only the bare homepage, both with and without trailing slash,
 	// plus the /index.php alternate URL WordPress may serve. On a
 	// subpath install (home at /wordpress), also accept /wordpress
-	// and /wordpress/index.php — those are THIS site's bare
+	// and /wordpress/index.php, those are THIS site's bare
 	// homepage, not /wordpress/impressum/ or similar.
 	$emifree_home       = emifree_home_subpath();
 	$emifree_allowlist  = array( '', '/', '/index.php' );
@@ -1042,7 +1190,7 @@ function emifree_route_blog_template() {
 add_action( 'template_redirect', 'emifree_route_blog_template' );
 
 /* -------------------------------------------------------------------------
- * /knowledge/ route — Knowledge hub + tools.
+ * /knowledge/ route, Knowledge hub + tools.
  *
  * Same plumbing pattern as /blog/: virtual rewrite rules (no Page record
  * needed in wp_posts), query-var filter, and template_redirect dispatcher
@@ -1075,7 +1223,7 @@ function emifree_register_knowledge_route() {
 		'index.php?emifree_knowledge=post&emifree_knowledge_slug=$matches[1]',
 		'top'
 	);
-	// English (en) knowledge routes — /en/knowledge/ is the canonical
+	// English (en) knowledge routes, /en/knowledge/ is the canonical
 	// URL the "Open Our Free Engineering Tools" CTA on /en/ points at
 	// (and the same shape other section links use, e.g. /en/#products).
 	add_rewrite_rule(
@@ -1084,11 +1232,11 @@ function emifree_register_knowledge_route() {
 		'top'
 	);
 	add_rewrite_rule(
-		'^en/knowledge/([^/]+)/?$',
+		'^en/knowledge/(?!insights$|about$|downloads$|tools$)([^/]+)/?$',
 		'index.php?emifree_knowledge=post&emifree_knowledge_slug=$matches[1]&emifree_knowledge_lang=en',
 		'top'
 	);
-	// German (de) knowledge routes — hub slug is "wissen" to match the
+	// German (de) knowledge routes, hub slug is "wissen" to match the
 	// existing DE nav label; tool slugs stay English (e.g. "ductulator").
 	add_rewrite_rule(
 		'^de/wissen/?$',
@@ -1096,12 +1244,26 @@ function emifree_register_knowledge_route() {
 		'top'
 	);
 	add_rewrite_rule(
-		'^de/wissen/([^/]+)/?$',
+		'^de/wissen/(?!insights$|ueber-uns$|downloads$|tools$)([^/]+)/?$',
+		'index.php?emifree_knowledge=post&emifree_knowledge_slug=$matches[1]&emifree_knowledge_lang=de',
+		'top'
+	);
+	// /de/knowledge/, explicit-German alias for /de/wissen/ so the
+	// German-translated nav label and any inbound /de/knowledge/
+	// URLs resolve to the same content. "knowledge" isn't a German
+	// word, but English-speaking editors and inbound links use it.
+	add_rewrite_rule(
+		'^de/knowledge/?$',
+		'index.php?emifree_knowledge=index&emifree_knowledge_lang=de',
+		'top'
+	);
+	add_rewrite_rule(
+		'^de/knowledge/(?!insights$|ueber-uns$|downloads$|tools$)([^/]+)/?$',
 		'index.php?emifree_knowledge=post&emifree_knowledge_slug=$matches[1]&emifree_knowledge_lang=de',
 		'top'
 	);
 	// New SEO-targeted canonical slugs (keyword-rich). These are the
-	// canonical URLs as of 2026-08-25 — the legacy /knowledge/pressure-drop/
+	// canonical URLs as of 2026-08-25, the legacy /knowledge/pressure-drop/
 	// and /de/wissen/druckverlust/ URLs 301 to them via
 	// emifree_legacy_redirect_map().
 	add_rewrite_rule(
@@ -1117,6 +1279,75 @@ function emifree_register_knowledge_route() {
 	add_rewrite_rule(
 		'^de/luftdruckverlust-rechner/?$',
 		'index.php?emifree_knowledge=post&emifree_knowledge_slug=luftdruckverlust-rechner&emifree_knowledge_lang=de',
+		'top'
+	);
+
+	// Knowledge subsection routes. As of 2026-09 the Knowledge hub
+	// at /en/knowledge/ (DE twin /de/wissen/) carries 3 JS-driven
+	// tabs — Industry Insights (blog), About Us, Downloads — plus a
+	// Free Tools entry point. The hub's tab content was previously
+	// only reachable via /en/knowledge/ itself, which conflated all
+	// four themes under one URL and split no SEO signal between them.
+	//
+	// Each subsection now has its own crawlable URL:
+	//   /en/knowledge/insights/    (EN Industry Insights landing)
+	//   /en/knowledge/about/       (EN About Us landing)
+	//   /en/knowledge/downloads/   (EN Product Brochures landing)
+	//   /en/knowledge/tools/       (EN Free Engineering Tools landing)
+	//   /de/wissen/insights/       (DE Branchen-Insights)
+	//   /de/wissen/ueber-uns/      (DE Über uns, uses ASCII-safe slug)
+	//   /de/wissen/downloads/      (DE Produktbroschüren)
+	//   /de/wissen/tools/          (DE Werkzeuge)
+	//
+	// Why ASCII-only DE slugs: umlauts in DE URLs work in modern
+	// browsers but break in copy/paste, share dialogs, and some
+	// analytics tools (utm parameters anchored to URL strings).
+	// /ueber-uns/ follows the ASCII-convention used elsewhere in
+	// the German site (/wissen/, /luftdruckverlust-rechner/, etc.).
+	//
+	// These rules are emitted at 'top' priority, before the broad
+	// ^en/knowledge/([^/]+)/?$ tool rule at line 1232. That broad
+	// rule would otherwise match "insights" and try to dispatch
+	// it as a tool slug, hitting the 404 fallback in the
+	// dispatcher. 'top' priority + explicit patterns below win.
+	add_rewrite_rule(
+		'^en/knowledge/insights/?$',
+		'index.php?emifree_knowledge=subsection&emifree_knowledge_slug=insights&emifree_knowledge_lang=en',
+		'top'
+	);
+	add_rewrite_rule(
+		'^en/knowledge/about/?$',
+		'index.php?emifree_knowledge=subsection&emifree_knowledge_slug=about&emifree_knowledge_lang=en',
+		'top'
+	);
+	add_rewrite_rule(
+		'^en/knowledge/downloads/?$',
+		'index.php?emifree_knowledge=subsection&emifree_knowledge_slug=downloads&emifree_knowledge_lang=en',
+		'top'
+	);
+	add_rewrite_rule(
+		'^en/knowledge/tools/?$',
+		'index.php?emifree_knowledge=subsection&emifree_knowledge_slug=tools&emifree_knowledge_lang=en',
+		'top'
+	);
+	add_rewrite_rule(
+		'^de/wissen/insights/?$',
+		'index.php?emifree_knowledge=subsection&emifree_knowledge_slug=insights&emifree_knowledge_lang=de',
+		'top'
+	);
+	add_rewrite_rule(
+		'^de/wissen/ueber-uns/?$',
+		'index.php?emifree_knowledge=subsection&emifree_knowledge_slug=ueber-uns&emifree_knowledge_lang=de',
+		'top'
+	);
+	add_rewrite_rule(
+		'^de/wissen/downloads/?$',
+		'index.php?emifree_knowledge=subsection&emifree_knowledge_slug=downloads&emifree_knowledge_lang=de',
+		'top'
+	);
+	add_rewrite_rule(
+		'^de/wissen/tools/?$',
+		'index.php?emifree_knowledge=subsection&emifree_knowledge_slug=tools&emifree_knowledge_lang=de',
 		'top'
 	);
 }
@@ -1139,11 +1370,32 @@ function emifree_route_knowledge_template() {
 
 	if ( 'index' === $emifree_knowledge_mode ) {
 		$emifree_template_name = $emifree_is_de ? 'page-knowledge-de.php' : 'page-knowledge.php';
+	} elseif ( 'subsection' === $emifree_knowledge_mode ) {
+		// SEO-dedicated sub-pages: each Knowledge hub tab now has its
+		// own crawlable URL (insights / about / downloads / tools).
+		// Whitelist the slug set so an unknown subsection falls
+		// through to WP's 404 rather than rendering empty markup.
+		// DE twin of "about" uses the slug "ueber-uns" (ASCII-safe).
+		$emifree_subsection_templates = array(
+			'insights'  => array( 'page-knowledge-insights.php',  'page-knowledge-insights-de.php' ),
+			'about'     => array( 'page-knowledge-about.php',     'page-knowledge-about-de.php' ),
+			'downloads' => array( 'page-knowledge-downloads.php', 'page-knowledge-downloads-de.php' ),
+			'tools'     => array( 'page-knowledge-tools.php',     'page-knowledge-tools-de.php' ),
+			// DE-side alias: 'about' is the URL the German nav uses
+			// as /de/wissen/ueber-uns/, mapped to the same template.
+			'ueber-uns' => array( 'page-knowledge-about.php',     'page-knowledge-about-de.php' ),
+		);
+		$emifree_subsection_slug = get_query_var( 'emifree_knowledge_slug' );
+		if ( ! isset( $emifree_subsection_templates[ $emifree_subsection_slug ] ) ) {
+			return;
+		}
+		$emifree_pair            = $emifree_subsection_templates[ $emifree_subsection_slug ];
+		$emifree_template_name   = $emifree_is_de ? $emifree_pair[1] : $emifree_pair[0];
 	} elseif ( 'post' === $emifree_knowledge_mode ) {
 		// Per-slug dispatch. The rewrite rules above already accept
 		// any non-slash string as the slug; this map picks the
 		// matching template pair. Unknown slugs fall through and
-		// return WP's normal 404 — the per-shim whitelists
+		// return WP's normal 404, the per-shim whitelists
 		// ($emifree_known_tools) provide a second layer of 404
 		// defense with friendlier "Tool not found" copy.
 		$emifree_knowledge_slug = get_query_var( 'emifree_knowledge_slug' );
@@ -1154,7 +1406,7 @@ function emifree_route_knowledge_template() {
 			// the new keyword-rich canonical slugs.
 			'pressure-drop' => array( 'page-knowledge-pressure-drop.php', 'page-knowledge-druckverlust-de.php' ),
 			'druckverlust'  => array( 'page-knowledge-pressure-drop.php', 'page-knowledge-druckverlust-de.php' ),
-			// New SEO-targeted canonical slugs — keyword in URL.
+			// New SEO-targeted canonical slugs, keyword in URL.
 			'air-pressure-loss-calculator' => array( 'page-knowledge-pressure-drop.php', 'page-knowledge-druckverlust-de.php' ),
 			'luftdruckverlust-rechner'     => array( 'page-knowledge-pressure-drop.php', 'page-knowledge-druckverlust-de.php' ),
 		);
@@ -1200,7 +1452,7 @@ function emifree_enqueue_section_script( $emifree_section_slug ) {
 		);
 	}
 
-	// Product-section prefill template — only emitted when the
+	// Product-section prefill template, only emitted when the
 	// products section is actually being loaded, so other section
 	// scripts don't carry unused localize data. The {product}
 	// placeholder is substituted with the human label from
@@ -1208,7 +1460,7 @@ function emifree_enqueue_section_script( $emifree_section_slug ) {
 	//
 	// Both EN + DE strings live here (rather than a translated
 	// .mo file) because the template is short and tightly coupled
-	// to this section — keeping it inline avoids a separate
+	// to this section, keeping it inline avoids a separate
 	// gettext load and a translation context.
 	if ( 'products' === $emifree_section_slug && function_exists( 'emifree_get_lang' ) ) {
 		$emifree_prefill_en = "I would like a quote for {product}.\n\n";
@@ -1225,7 +1477,7 @@ function emifree_enqueue_section_script( $emifree_section_slug ) {
 }
 
 /**
- * Contact section — localizes the AJAX endpoint + nonce alongside the
+ * Contact section, localizes the AJAX endpoint + nonce alongside the
  * per-section JS, then enqueues the script.
  *
  * Used by template-parts/section-contact.php. Distinct from
@@ -1270,7 +1522,7 @@ function emifree_enqueue_contact_script() {
  *
  * Renders the Tawk.to bootstrap inline (defining `window.Tawk_API`)
  * and then loads the actual widget script from tawk.to's CDN. Both
- * fire on wp_footer (priority 100 — late) so they don't block page
+ * fire on wp_footer (priority 100, late) so they don't block page
  * render.
  *
  * Property ID: 1jsu0245o (separate widget from the production
@@ -1280,7 +1532,7 @@ function emifree_enqueue_contact_script() {
  * Privacy note: per the Privacy Policy text, the Tawk.to widget
  * "will not load, and no data will be transferred until you grant
  * permission via the Cookiebot banner." That gate is currently NOT
- * implemented — the widget loads unconditionally, matching the
+ * implemented, the widget loads unconditionally, matching the
  * behavior of the React app's index.html. If you want strict
  * consent-gating here, swap this for a Cookiebot API call that
  * fires on consent.
@@ -1297,7 +1549,7 @@ function emifree_enqueue_contact_script() {
  *    is present on the requested resource."
  * That error dropped the Lighthouse Best Practices score from 100
  * to 96.  Removing `crossorigin='*'` makes the loader a normal
- * (non-CORS) script fetch — the response is allowed regardless of
+ * (non-CORS) script fetch, the response is allowed regardless of
  * ACAO and the widget loads as designed.  The official Tawk.to
  * install snippet does NOT set a crossorigin attribute either.
  *
@@ -1307,18 +1559,18 @@ function emifree_enqueue_contact_script() {
  * but returns a 404 against the local-dev widgets `1ju1qnllp` and
  * `1jv8hhqib` (Tawk appears to 404 any unknown trailing path segment
  * for the per-language widgets). The 404 caused the loader to silently
- * fail — the page emitted the script tag, but the browser got a
+ * fail, the page emitted the script tag, but the browser got a
  * 0-byte x-javascript response and the widget never initialized.
  * Drop the `/default` suffix; the CDN serves the widget JS at the
  * bare `<account>/<widget>` path for these properties.
  * Both the account ID and the widget ID are derived from the
  * configured property ID string (which is already an
- * "<account>/<widget>" pair — see the EMIFREE_TAWK_* defaults below).
+ * "<account>/<widget>" pair, see the EMIFREE_TAWK_* defaults below).
  *
  * Per the original implementation, two property IDs are configured
  * (one per language) so each language routes to its own Tawk inbox
  * without language fallback.  Both IDs default to the live production
- * widgets as of 2026-07-20 — the EN widget `1jsu0245o` and the DE
+ * widgets as of 2026-07-20, the EN widget `1jsu0245o` and the DE
  * widget `1ju1qnllp` from account `1jogl5hfo`.
  */
 function emifree_enqueue_tawk_widget() {
@@ -1326,7 +1578,7 @@ function emifree_enqueue_tawk_widget() {
 		return;
 	}
 
-	// Two Tawk dashboards — one per language, configured via wp-config
+	// Two Tawk dashboards, one per language, configured via wp-config
 	// so staging + production stay in sync via code, not via UI. Override
 	// in wp-config.php; defaults match the live production widgets as of
 	// 2026-07-20.
@@ -1354,7 +1606,7 @@ function emifree_enqueue_tawk_widget() {
 	$emifree_tawk_account_part = $emifree_tawk_id_parts[0];
 	$emifree_tawk_widget_part  = $emifree_tawk_id_parts[1];
 	if ( '' === $emifree_tawk_account_part || '' === $emifree_tawk_widget_part ) {
-		// Misconfigured property ID (missing the "/" separator) — skip the
+		// Misconfigured property ID (missing the "/" separator), skip the
 		// widget load entirely to avoid surfacing a broken Tawk error in
 		// the browser console (the previous bug silently produced a CORS
 		// error every page load).
@@ -1494,7 +1746,7 @@ function emifree_check_contact_antispam() {
  * inc/contact.php and returns a JSON response.
  *
  * Registers for both logged-in and anonymous visitors via the two
- * add_action() calls below — wp_ajax_nopriv_* is the no-auth variant.
+ * add_action() calls below, wp_ajax_nopriv_* is the no-auth variant.
  */
 function emifree_handle_contact_submit() {
 	if ( ! isset( $_POST['emifree_contact_nonce'] )
@@ -1526,7 +1778,7 @@ function emifree_handle_contact_submit() {
 	$emifree_company = isset( $_POST['company'] ) ? sanitize_text_field( wp_unslash( $_POST['company'] ) )         : '';
 	$emifree_message = isset( $_POST['message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['message'] ) )     : '';
 
-	// Product-of-interest tag — populated by contact.js when the
+	// Product-of-interest tag, populated by contact.js when the
 	// visitor clicks a product-section "Request Quote" CTA. The slug
 	// is whitelisted against the three known product keys; anything
 	// else is dropped (defensive: a malicious client could send
@@ -1547,7 +1799,7 @@ function emifree_handle_contact_submit() {
 	}
 	$emifree_has_product = '' !== $emifree_product_slug && '' !== $emifree_product_label;
 
-	// Server-side re-validation — never trust the client.
+	// Server-side re-validation, never trust the client.
 	$emifree_errors = array();
 	if ( strlen( $emifree_name ) < 2 ) {
 		$emifree_errors['name'] = __( 'Name must be at least 2 characters.', 'emifree-theme' );
@@ -1645,7 +1897,7 @@ function emifree_handle_contact_submit() {
 		// the user to email us directly (the recipient address is shown
 		// in the contact-info cards just above the form).
 		//
-		// Always log the full submission body on failure — even when
+		// Always log the full submission body on failure, even when
 		// WP_DEBUG is off. The form's user-facing error banner says
 		// "we couldn't send your message automatically, please email
 		// us directly"; this log line gives the admin the actual
@@ -1661,7 +1913,7 @@ function emifree_handle_contact_submit() {
 			error_log( '[emifree-contact] SMTP transcript at failure: ' . $emifree_phpmailer_error );
 		}
 		error_log( sprintf(
-			"[emifree-contact] wp_mail() failed — submission to %s discarded from SMTP. Body follows:\n%s",
+			"[emifree-contact] wp_mail() failed, submission to %s discarded from SMTP. Body follows:\n%s",
 			$emifree_recipient,
 			$emifree_body
 		) );

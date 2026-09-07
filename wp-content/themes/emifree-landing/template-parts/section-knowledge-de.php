@@ -1,6 +1,6 @@
 <?php
 /**
- * Knowledge section — German.
+ * Knowledge section, German.
  *
  * Hard-coded translation of section-knowledge.php. Three tabs
  * (Brancheneinblicke / Über uns / Downloads) with two featured
@@ -18,7 +18,7 @@
 emifree_require_section_data( 'knowledge' );
 emifree_enqueue_section_script( 'knowledge' );
 
-// Icon map — identical SVG paths to the English version, inlined so
+// Icon map, identical SVG paths to the English version, inlined so
 // the German template is self-contained.
 $emifree_knowledge_icons = array(
 	'book-open'      => '<path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H4a1 1 0 0 1-1-1z"></path><path d="M21 18a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7a1 1 0 0 0 1-1z"></path>',
@@ -39,12 +39,12 @@ $emifree_knowledge_icons = array(
 
 // Pull DE blog posts from the merged feed (legacy PHP-array + DE CPT
 // entries). Replaces the previous hardcoded in-line array of the two
-// oldest posts — the landing-page featured cards now auto-update when
+// oldest posts, the landing-page featured cards now auto-update when
 // a new DE post is added in either format. See inc/knowledge.php for
 // the merged-feed implementation.
 $emifree_blog_posts = emifree_get_all_blog_posts_merged( 'de', emifree_blog_posts_de() );
 
-// German catalog PDFs — same shape as English, with German catalog entries.
+// German catalog PDFs, same shape as English, with German catalog entries.
 $emifree_catalog_uri = get_template_directory_uri() . '/assets/catalog/';
 $emifree_catalog_pdfs = array(
 	array(
@@ -81,19 +81,25 @@ $emifree_catalog_pdfs = array(
 	),
 );
 
-// German tab config.
+// German tab config. Each tab now carries its own `href` pointing at
+// the crawlable DE sub-page URL so the tabs are real <a> links (see
+// EN sibling section-knowledge.php for the rationale). The slug for
+// "Über uns" is "ueber-uns" (ASCII-safe), reflected in the href below.
 $emifree_knowledge_tabs = array(
 	'blog'      => array(
-		'label' => 'Brancheneinblicke',
+		'label' => 'Branchen-Insights',
 		'icon'  => 'book-open',
+		'href'  => home_url( '/de/wissen/insights/' ),
 	),
 	'about'     => array(
 		'label' => 'Über uns',
 		'icon'  => 'users',
+		'href'  => home_url( '/de/wissen/ueber-uns/' ),
 	),
 	'downloads' => array(
 		'label' => 'Downloads',
 		'icon'  => 'download',
+		'href'  => home_url( '/de/wissen/downloads/' ),
 	),
 );
 ?>
@@ -110,7 +116,7 @@ $emifree_knowledge_tabs = array(
 			</p>
 			<div class="mt-8">
 				<a
-					href="<?php echo esc_url( home_url( '/de/wissen/' ) ); ?>"
+					href="<?php echo esc_url( home_url( '/de/wissen/tools/' ) ); ?>"
 					class="inline-flex items-center gap-2 text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-xl transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
 					style="background: linear-gradient(90deg, #1d4ed8 0%, #06b6d4 100%); box-shadow: 0 10px 25px rgba(6, 182, 212, 0.25);"
 				>
@@ -124,9 +130,11 @@ $emifree_knowledge_tabs = array(
 		</div>
 
 		<div class="flex flex-wrap justify-center gap-4 mb-12" role="tablist" aria-label="Wissenszentrum-Bereiche">
-			<?php $emifree_ktab_first = true; foreach ( $emifree_knowledge_tabs as $emifree_ktab_key => $emifree_ktab ) : ?>
-				<button
-					type="button"
+			<?php $emifree_ktab_first = true; foreach ( $emifree_knowledge_tabs as $emifree_ktab_key => $emifree_ktab ) :
+				$emifree_ktab_href = isset( $emifree_ktab['href'] ) ? $emifree_ktab['href'] : home_url( '/de/wissen/' . $emifree_ktab_key . '/' );
+				?>
+				<a
+					href="<?php echo esc_url( $emifree_ktab_href ); ?>"
 					role="tab"
 					id="emifree-tab-<?php echo esc_attr( $emifree_ktab_key ); ?>"
 					aria-selected="<?php echo $emifree_ktab_first ? 'true' : 'false'; ?>"
@@ -135,10 +143,10 @@ $emifree_knowledge_tabs = array(
 					class="emifree-knowledge-tab px-8 py-4 rounded-full font-semibold transition-all duration-300 flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 <?php echo $emifree_ktab_first ? 'bg-blue-700 text-white shadow-lg' : 'bg-white text-slate-600 hover:bg-slate-100 hover:text-blue-700 border border-slate-200'; ?>"
 				>
 					<svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-						<?php echo $emifree_knowledge_icons[ $emifree_ktab['icon'] ]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled. ?>
+						<?php echo $emifree_knowledge_icons[ $emifree_ktab['icon'] ]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
 					</svg>
 					<?php echo esc_html( $emifree_ktab['label'] ); ?>
-				</button>
+				</a>
 			<?php $emifree_ktab_first = false; endforeach; ?>
 		</div>
 
@@ -152,7 +160,7 @@ $emifree_knowledge_tabs = array(
 		>
 			<h3 class="text-2xl md:text-3xl font-bold text-zinc-900 flex items-center gap-3 mb-8">
 				<svg class="w-7 h-7 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-					<?php echo $emifree_knowledge_icons['award']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled. ?>
+					<?php echo $emifree_knowledge_icons['award']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
 				</svg>
 				Empfohlene Artikel
 			</h3>
@@ -176,7 +184,7 @@ $emifree_knowledge_tabs = array(
 				//   legacy {template}/assets/images/blog/ filenames and
 				//   CPT featured-image attachments from the Media Library).
 				foreach ( $emifree_featured_posts as $emifree_post ) :
-					// Point to /de/blog/{slug}/ — the German blog shim.
+					// Point to /de/blog/{slug}/, the German blog shim.
 					// home_url() preserves the WP install subpath on subpath
 					// installs (e.g. /wordpress/de/blog/...). A bare
 					// '/de/blog/...' would drop the subpath on click and 404.
@@ -259,7 +267,7 @@ $emifree_knowledge_tabs = array(
 			data-emifree-panel="about"
 			class="hidden emifree-knowledge-panel"
 		>
-			<?php /* Unsere Geschichte — 2-column grid */ ?>
+			<?php /* Unsere Geschichte, 2-column grid */ ?>
 			<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16 items-center">
 				<div>
 					<h3 class="text-2xl md:text-3xl font-bold text-zinc-900 flex items-center gap-3 mb-6">
@@ -296,7 +304,7 @@ $emifree_knowledge_tabs = array(
 				</div>
 			</div>
 
-			<?php /* Unsere Mission — 4 value cards */ ?>
+			<?php /* Unsere Mission, 4 value cards */ ?>
 			<div class="mb-16 text-center">
 				<h3 class="text-2xl md:text-3xl font-bold text-zinc-900 mb-4">Unsere Mission</h3>
 				<p class="text-lg text-slate-600 max-w-3xl mx-auto mb-12">
@@ -342,7 +350,7 @@ $emifree_knowledge_tabs = array(
 				</div>
 			</div>
 
-			<?php /* Vertraut von Branchenführern — client strip */ ?>
+			<?php /* Vertraut von Branchenführern, client strip */ ?>
 			<div class="bg-slate-100 rounded-3xl p-8 text-center">
 				<h3 class="text-2xl md:text-3xl font-bold text-zinc-900 mb-6">Vertraut von Branchenführern</h3>
 				<div class="flex flex-wrap justify-center gap-x-8 gap-y-3 items-center">
@@ -389,7 +397,7 @@ $emifree_knowledge_tabs = array(
 						? '<a href="' . esc_url( $emifree_pdf['url'] ) . '" download class="bg-white rounded-xl p-6 shadow-sm border border-slate-100 hover:shadow-lg hover:border-blue-200 transition-all duration-300 group block focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2">'
 						: '<div class="bg-white rounded-xl p-6 shadow-sm border border-slate-100 opacity-60 cursor-not-allowed" aria-disabled="true">';
 					$emifree_close   = $emifree_has_link ? '</a>' : '</div>';
-					echo $emifree_open; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — controlled opening tag.
+					echo $emifree_open; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, controlled opening tag.
 					?>
 					<div class="w-12 h-12 bg-blue-100 <?php echo $emifree_has_link ? 'group-hover:bg-blue-700' : ''; ?> rounded-xl flex items-center justify-center mb-4 transition-colors duration-300">
 						<svg class="w-6 h-6 text-blue-700 <?php echo $emifree_has_link ? 'group-hover:text-white' : ''; ?> transition-colors duration-300" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
@@ -407,7 +415,7 @@ $emifree_knowledge_tabs = array(
 						<span class="bg-slate-100 px-2 py-0.5 rounded text-xs font-semibold"><?php echo esc_html( $emifree_pdf['lang'] ); ?></span>
 					</div>
 					<?php
-					echo $emifree_close; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — controlled closing tag.
+					echo $emifree_close; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, controlled closing tag.
 				endforeach; ?>
 			</div>
 

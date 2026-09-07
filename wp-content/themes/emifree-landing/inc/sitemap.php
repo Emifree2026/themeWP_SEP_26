@@ -1,11 +1,11 @@
 <?php
 /**
- * Emifree Theme — virtual /sitemap.xml.
+ * Emifree Theme, virtual /sitemap.xml.
  *
  * Five pieces:
  *   1. Disable WP core sitemap (wp_sitemaps_enabled filter). Without
  *      this, WP 5.5+ serves /wp-sitemap.xml + per-type /wp-sitemap-*-
- *      *.xml in parallel — two competing sitemap surfaces would
+ *      *.xml in parallel, two competing sitemap surfaces would
  *      confuse GSC + Bing WMT. The disable is the user's call (per
  *      Phase 3 clarification).
  *   2. Rewrite rule + query var, registered at 'top' priority. Same
@@ -22,13 +22,13 @@
  *      site serves: 10 static (homepages, legal pages, blog indexes)
  *      plus 2 per blog post (EN + DE). The merged feed in
  *      inc/knowledge.php (emifree_get_all_blog_posts_merged) is the
- *      canonical source — it already merges legacy PHP-array posts
+ *      canonical source, it already merges legacy PHP-array posts
  *      with CPT entries and filters by language.
  *
  * Cache invalidation hooks (save_post_blog_post, before_delete_post,
  * wp_trash_post, untrash_post) all call delete_transient on the
  * sitemap cache key. This means a freshly-published post appears in
- * the sitemap on the next request — no 1-hour stale window.
+ * the sitemap on the next request, no 1-hour stale window.
  *
  * Single sitemap (no /sitemap_index.xml) is correct for this site:
  * the spec allows up to 50,000 URLs / 50 MB per sitemap; the
@@ -41,13 +41,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // 1. Disable WP core sitemap so /sitemap.xml is the single canonical
 //    source. Without this, /wp-sitemap.xml + the per-type split files
-//    would also be served — confusing for GSC + Bing WMT submissions.
+//    would also be served, confusing for GSC + Bing WMT submissions.
 add_filter( 'wp_sitemaps_enabled', '__return_false' );
 
 // 2. Rewrite rule + query var.
 function emifree_register_sitemap_route() {
+	// /sitemap.xml and /sitemap.xml/ both resolve. The trailing-slash
+	// form is what WordPress's permalink redirect appends when the
+	// canonical bare URL is fetched; without this the sitemap returns
+	// a 301 on every Bing WMT / GSC / IndexNow fetch, which is wasted
+	// round-trips and breaks tools that don't follow redirects.
 	add_rewrite_rule(
-		'^sitemap\.xml$',
+		'^sitemap\.xml/?$',
 		'index.php?emifree_sitemap=1',
 		'top'
 	);
@@ -70,14 +75,14 @@ function emifree_serve_sitemap_xml() {
 	header( 'Content-Type: application/xml; charset=utf-8' );
 	header( 'X-Robots-Tag: noindex' );
 	header( 'Cache-Control: public, max-age=300, s-maxage=300, must-revalidate' );
-	echo emifree_get_sitemap_xml(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — generated XML, every value escaped via esc_xml() below.
+	echo emifree_get_sitemap_xml(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, generated XML, every value escaped via esc_xml() below.
 	exit;
 }
 add_action( 'template_redirect', 'emifree_serve_sitemap_xml', 20 );
 
 // 4. Transient-cached wrapper.
 function emifree_get_sitemap_xml() {
-	$emifree_cache_key = 'emifree_sitemap_xml_v3';
+	$emifree_cache_key = 'emifree_sitemap_xml_v4';
 	$emifree_cached    = get_transient( $emifree_cache_key );
 	if ( false !== $emifree_cached ) {
 		return $emifree_cached;
@@ -91,6 +96,7 @@ function emifree_get_sitemap_xml() {
 function emifree_build_sitemap_xml() {
 	$emifree_urls = array_merge(
 		emifree_collect_sitemap_static_urls(),
+		emifree_collect_sitemap_knowledge_subsection_urls(),
 		emifree_collect_sitemap_blog_post_urls()
 	);
 
@@ -111,7 +117,7 @@ function emifree_build_sitemap_xml() {
 		if ( isset( $emifree_url['priority'] ) ) {
 			$emifree_lines[] = '    <priority>' . emifree_xml_escape( (string) $emifree_url['priority'] ) . '</priority>';
 		}
-		// hreflang alternates — emitted as <xhtml:link> per URL so
+		// hreflang alternates, emitted as <xhtml:link> per URL so
 		// Google can pair EN/DE siblings without a separate file.
 		if ( ! empty( $emifree_url['hreflang'] ) ) {
 			foreach ( $emifree_url['hreflang'] as $emifree_lang_code => $emifree_lang_url ) {
@@ -127,7 +133,7 @@ function emifree_build_sitemap_xml() {
 }
 
 /**
- * Static URL set — homepages, legal pages, blog indexes.
+ * Static URL set, homepages, legal pages, blog indexes.
  * 10 entries. lastmod is the sitemap build time (these pages change
  * rarely; the 1-hour transient + cache-bust on save_post covers any
  * real change).
@@ -151,8 +157,8 @@ function emifree_collect_sitemap_static_urls() {
 		// --- Knowledge hub + tools ---
 		// Added 2026-08-25 with the air-pressure-loss URL change. The
 		// hub and tool pages are the highest-priority non-homepage
-		// URLs on the site — they're the targets of every Tier A/B
-		// SEO edit — so they sit at 0.9 / 1.0 respectively.
+		// URLs on the site, they're the targets of every Tier A/B
+		// SEO edit, so they sit at 0.9 / 1.0 respectively.
 		array(
 			'loc'        => home_url( '/en/knowledge/' ),
 			'lastmod'    => $emifree_now,
@@ -241,7 +247,69 @@ function emifree_collect_sitemap_static_urls() {
 }
 
 /**
- * Dynamic URL set — blog posts, language-paired.
+ * Knowledge sub-page URL set.
+ *
+ * Each Knowledge hub tab (Industry Insights, About Us, Downloads,
+ * Free Tools) now has its own crawlable URL on both EN and DE paths.
+ * Previously the tabs were JS-driven panels on /en/knowledge/, which
+ * conflated all four topics under one URL and split no SEO signal
+ * between them.
+ *
+ * 8 <url> blocks emitted here, paired by hreflang like the blog
+ * posts. Priority sits one notch below the blog posts (0.7) because
+ * the sub-pages are mostly navigational, but their content is
+ * substantial (intro paragraphs + section + cross-links) and they
+ * rank for the umbrella terms.
+ */
+function emifree_collect_sitemap_knowledge_subsection_urls() {
+	$emifree_now = mysql2date( 'c', current_time( 'mysql', true ) );
+
+	$emifree_pairs = array(
+		'insights'  => array(
+			'en' => home_url( '/en/knowledge/insights/' ),
+			'de' => home_url( '/de/wissen/insights/' ),
+		),
+		'about'     => array(
+			'en' => home_url( '/en/knowledge/about/' ),
+			'de' => home_url( '/de/wissen/ueber-uns/' ),
+		),
+		'downloads' => array(
+			'en' => home_url( '/en/knowledge/downloads/' ),
+			'de' => home_url( '/de/wissen/downloads/' ),
+		),
+		'tools'     => array(
+			'en' => home_url( '/en/knowledge/tools/' ),
+			'de' => home_url( '/de/wissen/tools/' ),
+		),
+	);
+
+	$emifree_urls = array();
+	foreach ( $emifree_pairs as $emifree_pair ) {
+		$emifree_hreflang = array(
+			'en' => $emifree_pair['en'],
+			'de' => $emifree_pair['de'],
+		);
+		$emifree_urls[]   = array(
+			'loc'        => $emifree_pair['en'],
+			'lastmod'    => $emifree_now,
+			'changefreq' => 'weekly',
+			'priority'   => '0.7',
+			'hreflang'   => $emifree_hreflang,
+		);
+		$emifree_urls[] = array(
+			'loc'        => $emifree_pair['de'],
+			'lastmod'    => $emifree_now,
+			'changefreq' => 'weekly',
+			'priority'   => '0.7',
+			'hreflang'   => $emifree_hreflang,
+		);
+	}
+
+	return $emifree_urls;
+}
+
+/**
+ * Dynamic URL set, blog posts, language-paired.
  *
  * For each entry returned by emifree_get_all_blog_posts_merged('en'),
  * emit two <url> blocks: one for /blog/{slug}/, one for
@@ -250,17 +318,17 @@ function emifree_collect_sitemap_static_urls() {
  * sibling is always reachable at the same slug.
  *
  * Both <url> blocks carry the same pair of hreflang alternates —
- * one self, one alternate — which is what Google wants for paired
+ * one self, one alternate, which is what Google wants for paired
  * locales.
  *
  * lastmod source:
  *   - CPT entries: post_modified_gmt (ISO 8601).
  *   - Legacy entries (from emifree_blog_posts()): the 'date' field
- *     cast to midnight ISO 8601 — legacy posts are frozen content.
+ *     cast to midnight ISO 8601, legacy posts are frozen content.
  */
 function emifree_collect_sitemap_blog_post_urls() {
 	// The merged feed + normalizer live in inc/knowledge.php. functions.php
-	// doesn't load it globally — it loads on demand from page-blog*.php
+	// doesn't load it globally, it loads on demand from page-blog*.php
 	// shims. The sitemap endpoint never hits those shims, so require
 	// knowledge.php here to make sure emifree_get_all_blog_posts_merged()
 	// and emifree_normalize_post_for_card() exist.
@@ -279,7 +347,7 @@ function emifree_collect_sitemap_blog_post_urls() {
 	$emifree_urls   = array();
 
 	foreach ( $emifree_merged as $emifree_slug => $emifree_post ) {
-		// Resolve lastmod — prefer modified_gmt (set on CPT entries
+		// Resolve lastmod, prefer modified_gmt (set on CPT entries
 		// via emifree_cpt_to_array_shape in inc/knowledge.php),
 		// fall back to the legacy 'date' field.
 		$emifree_lastmod = '';
@@ -319,7 +387,7 @@ function emifree_collect_sitemap_blog_post_urls() {
 
 /**
  * XML-escape a string for use inside element text. WP 6.1+ ships a
- * global esc_xml() in wp-includes/formatting.php — use it where
+ * global esc_xml() in wp-includes/formatting.php, use it where
  * available, fall back to a manual escape on older installs. The
  * fallback only handles the five XML predefined entities, which is
  * all that's required by the sitemap spec.
@@ -332,7 +400,7 @@ function emifree_xml_escape( $emifree_value ) {
 }
 
 /**
- * XML-escape a URL. Same as emifree_xml_escape() — URLs need the
+ * XML-escape a URL. Same as emifree_xml_escape(), URLs need the
  * same five XML predefined entities (especially & → &amp;) escaped.
  */
 function emifree_xml_escape_url( $emifree_url ) {
@@ -342,14 +410,14 @@ function emifree_xml_escape_url( $emifree_url ) {
 /**
  * XML-escape a URL. Same as esc_xml() but also encodes the ampersand
  * as &amp; (which is what the sitemap spec requires inside <loc>
- * and href attributes — the raw & breaks XML parsing).
+ * and href attributes, the raw & breaks XML parsing).
  */
 function esc_xml_url( $emifree_url ) {
 	return esc_xml( (string) $emifree_url );
 }
 
 /**
- * Cache invalidation — bust the sitemap transient whenever a blog
+ * Cache invalidation, bust the sitemap transient whenever a blog
  * post is published, updated, trashed, or restored. Priority 20 on
  * save_post_blog_post runs after emifree_save_blog_meta_box (priority
  * 10) so the post meta is final by the time we invalidate. The
@@ -364,7 +432,7 @@ function emifree_invalidate_sitemap_cache( $emifree_post_id = 0 ) {
 			return;
 		}
 	}
-	delete_transient( 'emifree_sitemap_xml_v3' );
+	delete_transient( 'emifree_sitemap_xml_v4' );
 }
 add_action( 'save_post_blog_post', 'emifree_invalidate_sitemap_cache', 20 );
 add_action( 'before_delete_post', 'emifree_invalidate_sitemap_cache' );
