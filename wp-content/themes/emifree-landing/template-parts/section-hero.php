@@ -1,6 +1,6 @@
 <?php
 /**
- * Hero section — Piece 4 (extract from front-page.php into a template part).
+ * Hero section, Piece 4 (extract from front-page.php into a template part).
  *
  * Full markup mirrors the live state of src/components/Hero.jsx from the
  * React landing page (commit e0b55f3e):
@@ -21,11 +21,11 @@ $emifree_hero = emifree_hero_data();
 
 <section id="hero" class="relative w-full min-h-[100dvh] flex flex-col overflow-hidden bg-[#0a0a0a]">
 
-	<!-- Background videos — two-up carousel.
+	<!-- Background videos, two-up carousel.
 	     Two videos play alternately: when the active one ends, JS
 	     cross-fades to the other and lets it play through; on its end,
 	     back to the first. Both <video> elements sit at the same
-	     z-index (z-0) — the carousel is driven by opacity, not stacking
+	     z-index (z-0), the carousel is driven by opacity, not stacking
 	     order. The dark gradient overlay sits at z-20 so the
 	     foreground copy always reads on the same scrim regardless of
 	     which video is visible; foreground content sits at z-30.
@@ -81,7 +81,7 @@ $emifree_hero = emifree_hero_data();
 			<?php echo esc_html( $emifree_hero['headline'] ); ?>
 		</h1>
 
-		<?php /* Value strip — three short keyword chips. Each chip is a
+		<?php /* Value strip, three short keyword chips. Each chip is a
 		   rounded-pill with a small blue SVG icon prefix + label. The
 		   data array provides {label, icon} pairs; the icon "kind" maps
 		   to inline SVG below so the data layer stays free of raw
@@ -96,7 +96,7 @@ $emifree_hero = emifree_hero_data();
 		   (H1 → chips → quiet link → primary CTA) as four distinct
 		   phases.
 
-		   Chip styling — contrast pass after the first iteration read as
+		   Chip styling, contrast pass after the first iteration read as
 		   too subtle on bright video frames. Background is now a real
 		   tinted navy with backdrop-blur (the frosted look from the
 		   reference screenshot) instead of a 4% white wash, and the
@@ -120,7 +120,7 @@ $emifree_hero = emifree_hero_data();
 				<li>
 					<span class="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 backdrop-blur-sm px-4 py-2 text-sm sm:text-base font-medium text-white whitespace-nowrap">
 						<?php if ( '' !== $emifree_chip_icon ) : ?>
-							<span class="text-blue-300 flex items-center justify-center"><?php echo $emifree_chip_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — closed allowlist above, no user input. ?></span>
+							<span class="text-blue-300 flex items-center justify-center"><?php echo $emifree_chip_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, closed allowlist above, no user input. ?></span>
 						<?php endif; ?>
 						<?php echo esc_html( $emifree_chip['label'] ); ?>
 					</span>
@@ -128,7 +128,7 @@ $emifree_hero = emifree_hero_data();
 			<?php endforeach; ?>
 		</ul>
 
-		<?php /* Secondary CTA — a quiet underlined text link, NOT a button.
+		<?php /* Secondary CTA, a quiet underlined text link, NOT a button.
 		   Sits below the keywords and ABOVE the primary button so the
 		   primary remains the visual peak (last + most-button-shaped in
 		   the stack). White text + soft underline keep it intentionally
@@ -149,7 +149,7 @@ $emifree_hero = emifree_hero_data();
 			<?php echo esc_html( $emifree_hero['secondary_link_label'] ); ?>
 		</a>
 
-		<?php /* Primary CTA — single dominant button at the bottom of the
+		<?php /* Primary CTA, single dominant button at the bottom of the
 		   stack. Anchors to #contact (existing contact section). Uses an
 		   <a> styled as a button so the browser's native smooth-scroll
 		   (wired in assets/js/sections/header.js for all in-page anchors)

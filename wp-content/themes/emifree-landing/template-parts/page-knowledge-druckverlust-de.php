@@ -1,6 +1,6 @@
 <?php
 /**
- * Luftdruckverlust-Rechner (DE) — /de/luftdruckverlust-rechner/.
+ * Luftdruckverlust-Rechner (DE), /de/luftdruckverlust-rechner/.
  *
  * German equivalent of template-parts/page-knowledge-pressure-drop.php.
  * Hard-separated (not a language branch) per the active theme's
@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Locale strings passed to the JS.
-// Only Quick Calc keys are kept — the visual builder keys
+// Only Quick Calc keys are kept, the visual builder keys
 // (toolbox, properties, results, K-factor library) were removed
 // along with the canvas UI on 2026-08-25.
 $emifree_pd_i18n_de = array(
@@ -31,7 +31,7 @@ $emifree_pd_i18n_de = array(
 	'methodology'    => 'Methodik',
 	'methodBody'     => '<b>1. Luftdaten (Normbedingungen, 20°C / Meereshöhe):</b> ρ = 1,2 kg/m³, μ = 1,81×10⁻⁵ Pa·s. <br><br><b>2. Strömungsgrößen pro Abschnitt:</b> D = Abschnittsdurchmesser (m), A = π·D²/4, V = Q/A, Re = ρ·V·D/μ. <br><br><b>3. Reibungsfaktor (Swamee–Jain, explizit):</b> f = 0,25 / [log₁₀(ε/3,7D + 5,74/Re⁰·⁹)]². ε nach Material: verzinkter Stahl = 0,15 mm, Aluminium = 0,0015 mm, Schwarzstahl = 0,045 mm. <br><br><b>4. Reibungsverlust gerader Rohre (Darcy–Weisbach):</b> ΔP_f = f·(L/D)·½·ρ·V² pro Zeile. <br><br><b>5. Einzelwiderstand Formstücke (K-Faktor, Idelchik / ASHRAE Mittelwerte):</b> ΔP_m = K·½·ρ·V² pro Zeile. K-Werte: 90°-Bogen = 0,18, 45°-Bogen = 0,20, T-Stück = 1,20, Y-Stück = 0,60, Reduzierstück = 0,10. <br><br><b>6. Reduzierstück-Durchmesserübergang:</b> Wird eine Zeile als Reduzierstück markiert, wird der effektive Durchmesser des Abschnitts ab dieser Zeile auf den Reduzierstück-Ausgang aktualisiert. <br><br><b>7. Anwendungskorrektur (K_app):</b> Der Roh-Gesamtverlust wird mit 1,0 (HVAC), 1,15 (Ölnebel, berücksichtigt die Reibung des Flüssigkeitsfilms an der Rohrwand) oder 1,25 (Staub, berücksichtigt Partikelbeschleunigung und Wandaufprall) multipliziert. <br><br><b>8. Endergebnis:</b> ΔP_gesamt = (Σ ΔP_f + Σ ΔP_m) × K_app. Empfohlener Ventilator-Statikdruck = ΔP_gesamt × 2 (branchenübliche 2×-Sicherheitsmarge).',
 	'limitations'    => 'Einschränkungen',
-	'limitBody'      => 'Nur Einzelstrang-Druckverlust — kein Mehrstrang-Abgleich, keine Lüfterauswahl, keine Temperatur-/Höhenkorrektur. K-Faktoren setzen turbulente Strömung voraus (Re > 4000). Passen Sie die K-Werte pro Komponente in der Bibliothek an, wenn Ihre Installation von den ASHRAE-Standards abweicht.',
+	'limitBody'      => 'Nur Einzelstrang-Druckverlust, kein Mehrstrang-Abgleich, keine Lüfterauswahl, keine Temperatur-/Höhenkorrektur. K-Faktoren setzen turbulente Strömung voraus (Re > 4000). Passen Sie die K-Werte pro Komponente in der Bibliothek an, wenn Ihre Installation von den ASHRAE-Standards abweicht.',
 );
 
 wp_localize_script( 'emifree-section-pressure-drop', 'EMIFREE_PRESSUREDROP_I18N', $emifree_pd_i18n_de );
@@ -139,10 +139,10 @@ wp_localize_script( 'emifree-section-pressure-drop', 'EMIFREE_PRESSUREDROP_I18N'
 			<h2 class="text-2xl font-bold text-zinc-900" data-pd-i18n="methodology">Methodik</h2>
 			<p data-pd-i18n="methodBody"><b>1. Luftdaten (Normbedingungen, 20°C / Meereshöhe):</b> ρ = 1,2 kg/m³, μ = 1,81×10⁻⁵ Pa·s. <br><br><b>2. Strömungsgrößen pro Abschnitt:</b> D = Abschnittsdurchmesser (m), A = π·D²/4, V = Q/A, Re = ρ·V·D/μ. <br><br><b>3. Reibungsfaktor (Swamee–Jain, explizit):</b> f = 0,25 / [log₁₀(ε/3,7D + 5,74/Re⁰·⁹)]². ε nach Material: verzinkter Stahl = 0,15 mm, Aluminium = 0,0015 mm, Schwarzstahl = 0,045 mm. <br><br><b>4. Reibungsverlust gerader Rohre (Darcy–Weisbach):</b> ΔP_f = f·(L/D)·½·ρ·V² pro Zeile. <br><br><b>5. Einzelwiderstand Formstücke (K-Faktor, Idelchik / ASHRAE Mittelwerte):</b> ΔP_m = K·½·ρ·V² pro Zeile. K-Werte: 90°-Bogen = 0,18, 45°-Bogen = 0,20, T-Stück = 1,20, Y-Stück = 0,60, Reduzierstück = 0,10. <br><br><b>6. Reduzierstück-Durchmesserübergang:</b> Wird eine Zeile als Reduzierstück markiert, wird der effektive Durchmesser des Abschnitts ab dieser Zeile auf den Reduzierstück-Ausgang aktualisiert. <br><br><b>7. Anwendungskorrektur (K_app):</b> Der Roh-Gesamtverlust wird mit 1,0 (HVAC), 1,15 (Ölnebel, berücksichtigt die Reibung des Flüssigkeitsfilms an der Rohrwand) oder 1,25 (Staub, berücksichtigt Partikelbeschleunigung und Wandaufprall) multipliziert. <br><br><b>8. Endergebnis:</b> ΔP_gesamt = (Σ ΔP_f + Σ ΔP_m) × K_app. Empfohlener Ventilator-Statikdruck = ΔP_gesamt × 2 (branchenübliche 2×-Sicherheitsmarge).</p>
 			<h3 class="text-xl font-semibold text-zinc-900 mt-6" data-pd-i18n="limitations">Einschränkungen</h3>
-			<p data-pd-i18n="limitBody">Nur Einzelstrang-Druckverlust — kein Mehrstrang-Abgleich, keine Lüfterauswahl, keine Temperatur-/Höhenkorrektur. K-Faktoren setzen turbulente Strömung voraus (Re > 4000). Passen Sie die K-Werte pro Komponente in der Bibliothek an, wenn Ihre Installation von den ASHRAE-Standards abweicht.</p>
+			<p data-pd-i18n="limitBody">Nur Einzelstrang-Druckverlust, kein Mehrstrang-Abgleich, keine Lüfterauswahl, keine Temperatur-/Höhenkorrektur. K-Faktoren setzen turbulente Strömung voraus (Re > 4000). Passen Sie die K-Werte pro Komponente in der Bibliothek an, wenn Ihre Installation von den ASHRAE-Standards abweicht.</p>
 		</section>
 
-		<?php /* Häufig gestellte Fragen — gepaart mit FAQPage-JSON-LD im Shim. */ ?>
+		<?php /* Häufig gestellte Fragen, gepaart mit FAQPage-JSON-LD im Shim. */ ?>
 		<section class="mt-12" aria-labelledby="pd-faq-de">
 			<h2 id="pd-faq-de" class="text-2xl font-bold text-zinc-900 mb-6">Häufig gestellte Fragen</h2>
 			<div class="space-y-4">
@@ -203,7 +203,7 @@ wp_localize_script( 'emifree-section-pressure-drop', 'EMIFREE_PRESSUREDROP_I18N'
 			</div>
 		</section>
 
-		<?php /* Wichtige Hinweise — Haftungsausschluss; Anwender müssen mit Fachleuten abgleichen. */ ?>
+		<?php /* Wichtige Hinweise, Haftungsausschluss; Anwender müssen mit Fachleuten abgleichen. */ ?>
 		<aside class="mt-10 p-6 bg-amber-50 border border-amber-300 rounded-lg" aria-labelledby="pd-important-notes-de">
 			<h2 id="pd-important-notes-de" class="text-2xl font-bold text-zinc-900 mb-3">Wichtige Hinweise</h2>
 			<p class="text-zinc-800 leading-relaxed mb-3">

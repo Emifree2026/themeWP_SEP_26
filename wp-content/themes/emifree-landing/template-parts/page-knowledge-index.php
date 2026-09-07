@@ -1,6 +1,6 @@
 <?php
 /**
- * Knowledge hub index — /knowledge/.
+ * Knowledge hub index, /knowledge/.
  *
  * Lists available tools (Ductulator first) and leaves room for
  * future additions (PDF library, glossary, sizing guides, etc.).

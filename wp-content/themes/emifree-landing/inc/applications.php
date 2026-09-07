@@ -5,7 +5,7 @@
  * Mirrors src/components/Applications.jsx from the React app. Each entry
  * has an icon, title, description, color gradient class, and SEO question.
  * Icons are inline SVG paths from the lucide-react library (24x24
- * viewBox, stroke-based) — no external icon library required.
+ * viewBox, stroke-based), no external icon library required.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

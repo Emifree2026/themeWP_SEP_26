@@ -8,7 +8,7 @@
  * part. The dispatcher in functions.php routes this template when
  * the URL is /knowledge/{slug}/ and the language is English.
  *
- * No slug 404 here — at the moment the only known slug is
+ * No slug 404 here, at the moment the only known slug is
  * `ductulator`, and any other slug will simply render an empty
  * page (the template part will fall back to "No tool found").
  * Future tools add their own slugs here.
@@ -35,7 +35,7 @@ if ( ! in_array( $emifree_requested_slug, $emifree_known_tools, true ) ) {
 }
 
 // Enqueue the per-section script (matches existing pattern used by
-// every template-part — the helper silently no-ops if the file is
+// every template-part, the helper silently no-ops if the file is
 // missing, so this is safe before the script lands).
 emifree_enqueue_section_script( 'ductulator' );
 
@@ -43,7 +43,7 @@ emifree_enqueue_section_script( 'ductulator' );
 // engineering methodology (Darcy-Weisbach / Swamee-Jain / ASHRAE) so
 // the page has a useful snippet in search results.
 emifree_seo_page_with_schema(
-	'Duct Sizing Calculator — Round & Rectangular HVAC Ducts',
+	'Duct Sizing Calculator, Round & Rectangular HVAC Ducts',
 	'Size round or rectangular HVAC ducts from airflow, friction rate, or velocity. Uses Darcy-Weisbach, Swamee-Jain, and ASHRAE equivalent-diameter methods. Imperial and metric.',
 	home_url( '/knowledge/ductulator' ),
 	'emifree-knowledge-ductulator-schema',

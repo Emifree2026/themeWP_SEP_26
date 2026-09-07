@@ -1,6 +1,6 @@
 <?php
 /**
- * Front page — German.
+ * Front page, German.
  *
  * Same section composition as front-page.php but loads the German
  * version of each section template. Each section template calls
@@ -23,7 +23,7 @@
  *  - Inquiry modal overlay (Piece 10, when shipped)
  */
 
-// Landing-page SEO surface — same as front-page.php but with the
+// Landing-page SEO surface, same as front-page.php but with the
 // German strings set. hreflang emits en/de alternates + x-default
 // pointing at /en/ (the canonical default-locale landing). Must
 // run BEFORE get_header() so the wp_head callbacks are registered

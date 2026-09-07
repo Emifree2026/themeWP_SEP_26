@@ -52,7 +52,7 @@ function emifree_blog_seo() {
 			}
 		}
 		if ( '' === $emifree_date || '' === $emifree_author ) {
-			// Skip entries we can't enrich — keeps the JSON-LD clean
+			// Skip entries we can't enrich, keeps the JSON-LD clean
 			// (better to omit than to emit a malformed BlogPosting).
 			continue;
 		}
@@ -73,7 +73,7 @@ function emifree_blog_seo() {
 	}
 
 	emifree_seo_page_with_schema(
-		'Emifree Engineering Blog — Industrial Air Filtration Insights',
+		'Emifree Engineering Blog, Industrial Air Filtration Insights',
 		'Technical guides and field insights on industrial oil mist filtration, CNC air quality, mechanical vs electrostatic separation, and EU regulatory compliance. From the Emifree engineering team.',
 		home_url( '/blog' ),
 		'emifree-blog-schema',

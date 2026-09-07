@@ -10,11 +10,11 @@
  *    falls back to the legacy PHP-array (emifree_blog_posts()).
  *  - 404s if neither resolves (with WP's normal 404 template lookup
  *    as a courtesy).
- *  - Registers per-post SEO + JSON-LD BlogPosting schema — CPT
+ *  - Registers per-post SEO + JSON-LD BlogPosting schema, CPT
  *    entries use emifree_seo_blog_post_from_cpt() (adds og:image +
  *    inLanguage + hreflang); legacy posts use emifree_seo_blog_post().
  *  - Computes the "Read next" suggestion (any post that isn't the
- *    current one — legacy posts only; CPT-driven pages show the same
+ *    current one, legacy posts only; CPT-driven pages show the same
  *    fallback until emifree_get_all_blog_posts_merged() is wired).
  *  - Renders the template part inside get_header() / get_footer().
  */
@@ -29,7 +29,7 @@ $emifree_current_post   = null;
 
 // CPT-first lookup. If a published blog_post matches the slug, prefer
 // it over the legacy PHP-array (because the CPT entry represents an
-// editorial update — the array is frozen at deploy time). Language
+// editorial update, the array is frozen at deploy time). Language
 // meta is checked so an EN request doesn't accidentally pick up a
 // DE sibling when they share a slug.
 if ( $emifree_requested_slug ) {

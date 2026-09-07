@@ -1,6 +1,6 @@
 <?php
 /**
- * Default page template — fallback for any page that doesn't match a
+ * Default page template, fallback for any page that doesn't match a
  * more specific template (page-{slug}.php).
  *
  * In practice, every page we ship uses a page-{slug}.php shim that

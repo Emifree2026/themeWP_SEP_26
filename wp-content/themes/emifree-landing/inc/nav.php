@@ -1,6 +1,6 @@
 <?php
 /**
- * Nav data — single source of truth for header nav links.
+ * Nav data, single source of truth for header nav links.
  *
  * Each link is a full path + fragment (e.g. `/#applications`) so the
  * browser navigates to the homepage and lets the inline fragment
@@ -17,15 +17,15 @@
  * who selects German stays on German after clicking any nav item.
  * The active-language detection uses the request path (not the
  * emifree_lang cookie) because the path is the source of truth for
- * which template was actually rendered — the cookie can be stale.
+ * which template was actually rendered, the cookie can be stale.
  *
  * hrefs are built with home_url() so the home subpath is encoded
- * automatically — on a root install '/de/#applications' resolves to
+ * automatically, on a root install '/de/#applications' resolves to
  * 'https://example.com/de/#applications', on a subpath install
  * '/wordpress/de/#applications' resolves to
  * 'https://example.com/wordpress/de/#applications'. The header.js
  * smooth-scroll handler intercepts `a[href^="/#"]` and `a[href^="/"]`
- * uniformly — the same-path check covers both the root and subpath
+ * uniformly, the same-path check covers both the root and subpath
  * install shapes via pathnames parsed after the subpath is stripped.
  *
  * When a target section hasn't shipped yet the link still points home
@@ -38,11 +38,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! function_exists( 'emifree_nav_items' ) ) :
 	function emifree_nav_items() {
-		// Path-based detection — emifree_get_lang() reads a cookie which
+		// Path-based detection, emifree_get_lang() reads a cookie which
 		// can be stale or absent; the request URI is the actual ground
 		// truth for which page is being rendered. Strip the home subpath
 		// first so '/wordpress/de/impressum/' becomes '/de/impressum/'
-		// before the prefix check — mirrors the normalization in
+		// before the prefix check, mirrors the normalization in
 		// emifree_get_lang() and inc/footer.php.
 		$emifree_uri  = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '';
 		$emifree_uri  = (string) parse_url( $emifree_uri, PHP_URL_PATH );
@@ -64,7 +64,7 @@ if ( ! function_exists( 'emifree_nav_items' ) ) :
 
 		return array(
 			// /en/#anchor (not bare /#anchor) so the in-page link stays on
-			// /en/ — otherwise the click navigates to / which the
+			// /en/, otherwise the click navigates to / which the
 			// emifree_maybe_redirect_home_to_de() handler 301s to /de/,
 			// silently flipping EN users to German mid-click.
 			array( 'label' => 'Products',     'href' => home_url( '/en/#products' ) ),

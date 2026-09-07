@@ -1,6 +1,6 @@
 <?php
 /**
- * Products section — Mechanical / Electrostatic / Dust tabs with image
+ * Products section, Mechanical / Electrostatic / Dust tabs with image
  * gallery, specs table, features grid, applications, and a per-product
  * inquiry CTA. Mirrors src/components/Products.jsx from the React app.
  *
@@ -40,14 +40,14 @@ emifree_enqueue_section_script( 'products' );
 					class="emifree-product-tab px-8 py-4 rounded-full font-semibold transition-all duration-300 flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 <?php echo $emifree_first ? 'bg-blue-700 text-white shadow-lg' : 'bg-white text-zinc-600 hover:bg-slate-100 hover:text-blue-700 border border-slate-200'; ?>"
 				>
 					<?php
-					// Tiny inline SVG glyph per tab — purely decorative, the
+					// Tiny inline SVG glyph per tab, purely decorative, the
 					// accessible name comes from the button text below.
 					$emifree_tab_icons = array(
 						'mechanical'    => '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>',
 						'electrostatic' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>',
 						'dust'          => '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>',
 					);
-					echo $emifree_tab_icons[ $emifree_key ]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled.
+					echo $emifree_tab_icons[ $emifree_key ]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled.
 					?>
 					<?php echo esc_html( $emifree_product['name'] ); ?>
 				</button>
@@ -72,7 +72,7 @@ emifree_enqueue_section_script( 'products' );
 							<?php $emifree_img_index = 0; foreach ( $emifree_product['images'] as $emifree_img ) : ?>
 								<img
 									src="<?php echo esc_url( get_template_directory_uri() . '/assets/products/' . $emifree_img ); ?>"
-									alt="<?php echo esc_attr( $emifree_product['name'] ); ?> — view <?php echo esc_attr( $emifree_img_index + 1 ); ?>"
+									alt="<?php echo esc_attr( $emifree_product['name'] ); ?>, view <?php echo esc_attr( $emifree_img_index + 1 ); ?>"
 									class="absolute inset-0 w-full h-full object-contain p-6 <?php echo 0 === $emifree_img_index ? '' : 'hidden'; ?>"
 									data-emifree-image="<?php echo esc_attr( $emifree_img_index ); ?>"
 									loading="lazy"
@@ -141,7 +141,7 @@ emifree_enqueue_section_script( 'products' );
 									<div class="flex items-start gap-3">
 										<div class="p-2 bg-blue-100 rounded-lg">
 											<svg class="w-5 h-5" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-												<?php echo $emifree_icons[ $emifree_feature['icon'] ]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled. ?>
+												<?php echo $emifree_icons[ $emifree_feature['icon'] ]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
 											</svg>
 										</div>
 										<div>
@@ -157,7 +157,7 @@ emifree_enqueue_section_script( 'products' );
 							<?php endforeach; ?>
 						</div>
 
-						<!-- Inquiry CTA — opens the inquiry modal (Piece 10).
+						<!-- Inquiry CTA, opens the inquiry modal (Piece 10).
 						     data-emifree-inquiry-label carries the human-readable
 						     product name into products.js so the contact form can
 						     be pre-filled with a sentence like

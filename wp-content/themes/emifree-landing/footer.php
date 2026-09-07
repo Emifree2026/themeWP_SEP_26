@@ -1,6 +1,6 @@
 <?php
 /**
- * Footer — full markup mirroring src/components/Footer.jsx post-cleanup.
+ * Footer, full markup mirroring src/components/Footer.jsx post-cleanup.
  *
  * - Newsletter signup (visual + form structure; real AJAX wiring lands
  *   with the Contact section in Piece 9. For now the form's onsubmit

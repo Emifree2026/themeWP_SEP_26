@@ -1,6 +1,6 @@
 <?php
 /**
- * Legal page content — Impressum, Privacy Policy, General Terms.
+ * Legal page content, Impressum, Privacy Policy, General Terms.
  *
  * Each function returns a PHP array with the page's:
  *   - title (for <title> and OG)
@@ -41,7 +41,7 @@ function emifree_legal_page_en( $slug ) {
 		case 'impressum':
 			return array(
 				'title'       => 'Impressum · Emifree GmbH',
-				'description' => 'Legal notice for Emifree GmbH, Berlin — Managing Director Ingo Wagner, HRB 133977 B, VAT DE 815286735.',
+				'description' => 'Legal notice for Emifree GmbH, Berlin, Managing Director Ingo Wagner, HRB 133977 B, VAT DE 815286735.',
 				'url'         => home_url() . '/impressum',
 				'lang'        => 'en',
 				'lang_slug'   => 'impressum',
@@ -53,7 +53,7 @@ function emifree_legal_page_en( $slug ) {
 					'name'          => 'Impressum',
 					'url'           => home_url() . '/impressum',
 					'inLanguage'    => 'en',
-					'description'   => 'Legal notice for Emifree GmbH, Berlin — Managing Director Ingo Wagner, HRB 133977 B, VAT DE 815286735.',
+					'description'   => 'Legal notice for Emifree GmbH, Berlin, Managing Director Ingo Wagner, HRB 133977 B, VAT DE 815286735.',
 					'publisher'     => array(
 						'@type' => 'Organization',
 						'name'  => 'Emifree GmbH',
@@ -64,7 +64,7 @@ function emifree_legal_page_en( $slug ) {
 		case 'privacy':
 			return array(
 				'title'       => 'Privacy Policy · Emifree GmbH',
-				'description' => 'Privacy policy for the Emifree GmbH website — GDPR-compliant notice on data collection, processing, your rights, and the cookies/plugins we use.',
+				'description' => 'Privacy policy for the Emifree GmbH website, GDPR-compliant notice on data collection, processing, your rights, and the cookies/plugins we use.',
 				'url'         => home_url() . '/privacy',
 				'lang'        => 'en',
 				'lang_slug'   => 'privacy',
@@ -76,7 +76,7 @@ function emifree_legal_page_en( $slug ) {
 					'name'          => 'Privacy Policy',
 					'url'           => home_url() . '/privacy',
 					'inLanguage'    => 'en',
-					'description'   => 'Privacy policy for the Emifree GmbH website — GDPR-compliant notice on data collection, processing, your rights, and the cookies/plugins we use.',
+					'description'   => 'Privacy policy for the Emifree GmbH website, GDPR-compliant notice on data collection, processing, your rights, and the cookies/plugins we use.',
 					'publisher'     => array(
 						'@type' => 'Organization',
 						'name'  => 'Emifree GmbH',
@@ -116,7 +116,7 @@ function emifree_legal_page_de( $slug ) {
 		case 'impressum':
 			return array(
 				'title'       => 'Impressum · Emifree GmbH',
-				'description' => 'Rechtliche Hinweise der Emifree GmbH, Berlin — Geschäftsführer Ingo Wagner, HRB 133977 B, USt-IdNr. DE 815286735.',
+				'description' => 'Rechtliche Hinweise der Emifree GmbH, Berlin, Geschäftsführer Ingo Wagner, HRB 133977 B, USt-IdNr. DE 815286735.',
 				'url'         => home_url() . '/de/impressum',
 				'lang'        => 'de',
 				'lang_slug'   => 'impressum',
@@ -128,7 +128,7 @@ function emifree_legal_page_de( $slug ) {
 					'name'          => 'Impressum',
 					'url'           => home_url() . '/de/impressum',
 					'inLanguage'    => 'de',
-					'description'   => 'Rechtliche Hinweise der Emifree GmbH, Berlin — Geschäftsführer Ingo Wagner, HRB 133977 B, USt-IdNr. DE 815286735.',
+					'description'   => 'Rechtliche Hinweise der Emifree GmbH, Berlin, Geschäftsführer Ingo Wagner, HRB 133977 B, USt-IdNr. DE 815286735.',
 					'publisher'     => array(
 						'@type' => 'Organization',
 						'name'  => 'Emifree GmbH',
@@ -139,7 +139,7 @@ function emifree_legal_page_de( $slug ) {
 		case 'datenschutz':
 			return array(
 				'title'       => 'Datenschutzerklärung · Emifree GmbH',
-				'description' => 'Datenschutzerklärung der Emifree GmbH — DSGVO-konforme Hinweise zur Erhebung, Verarbeitung und Speicherung personenbezogener Daten sowie zu Ihren Rechten als betroffene Person.',
+				'description' => 'Datenschutzerklärung der Emifree GmbH, DSGVO-konforme Hinweise zur Erhebung, Verarbeitung und Speicherung personenbezogener Daten sowie zu Ihren Rechten als betroffene Person.',
 				'url'         => home_url() . '/de/datenschutz',
 				'lang'        => 'de',
 				'lang_slug'   => 'datenschutz',
@@ -151,7 +151,7 @@ function emifree_legal_page_de( $slug ) {
 					'name'          => 'Datenschutzerklärung',
 					'url'           => home_url() . '/de/datenschutz',
 					'inLanguage'    => 'de',
-					'description'   => 'Datenschutzerklärung der Emifree GmbH — DSGVO-konforme Hinweise zur Erhebung, Verarbeitung und Speicherung personenbezogener Daten sowie zu Ihren Rechten als betroffene Person.',
+					'description'   => 'Datenschutzerklärung der Emifree GmbH, DSGVO-konforme Hinweise zur Erhebung, Verarbeitung und Speicherung personenbezogener Daten sowie zu Ihren Rechten als betroffene Person.',
 					'publisher'     => array(
 						'@type' => 'Organization',
 						'name'  => 'Emifree GmbH',
@@ -188,7 +188,7 @@ function emifree_legal_page_de( $slug ) {
 
 /**
  * Render the body HTML for a legal page. The actual content is
- * inline below per slug — there's enough shared structure (page
+ * inline below per slug, there's enough shared structure (page
  * header band, semantic article body, back-to-home footer) that
  * this single helper is preferable to three template parts.
  */
@@ -240,7 +240,7 @@ function emifree_render_legal_body( $slug, $lang = 'en' ) {
  * Individual page body renderers.
  *
  * Output is composed via string concatenation (ob_* buffering) so we
- * don't tangle PHP tags inside HTML — cleaner than mixing them.
+ * don't tangle PHP tags inside HTML, cleaner than mixing them.
  * ------------------------------------------------------------------------- */
 
 function emifree_render_impressum_body( $lang = 'en' ): string {
@@ -471,7 +471,7 @@ function emifree_render_terms_body( $lang = 'en' ): string {
 		<p class="text-lg leading-relaxed mb-4">(1) The Seller shall be liable without limitation for intent, gross negligence, and for culpable injury to life, body, or health.</p>
 		<p class="text-lg leading-relaxed mb-4">(2) In cases of ordinary negligent breaches of essential contractual obligations (<em>Kardinalpflichten</em>), the Seller's liability shall be limited to typical, reasonably foreseeable contractual damages. Liability for loss of profit or other consequential financial damages of the customer is excluded in these cases.</p>
 		<p class="text-lg leading-relaxed mb-4">(3) Any further liability of the Seller, regardless of the legal framework, is excluded to the extent permitted by law.</p>
-		<p class="text-lg leading-relaxed mb-6">(4) All claims of the customer — on whatever legal grounds — shall expire 12 months from delivery or formal acceptance of the goods. This does not apply to mandatory statutory limitations or damages resulting from intent or gross negligence.</p>
+		<p class="text-lg leading-relaxed mb-6">(4) All claims of the customer, on whatever legal grounds, shall expire 12 months from delivery or formal acceptance of the goods. This does not apply to mandatory statutory limitations or damages resulting from intent or gross negligence.</p>
 
 		<h2 class="text-2xl font-bold text-zinc-900 mt-10 mb-4">§ 7 Confidentiality</h2>
 		<p class="text-lg leading-relaxed mb-8">
@@ -739,7 +739,7 @@ function emifree_render_agb_de_body( $lang = 'de' ): string {
 		<p class="text-lg leading-relaxed mb-4">(1) Der Verkäufer haftet uneingeschränkt für Vorsatz und grobe Fahrlässigkeit sowie für schuldhaft verursachte Verletzungen des Lebens, des Körpers oder der Gesundheit.</p>
 		<p class="text-lg leading-relaxed mb-4">(2) Bei einfach fahrlässiger Verletzung wesentlicher Vertragspflichten (Kardinalpflichten) ist die Haftung des Verkäufers auf typische, vorhersehbare Vertragsschäden begrenzt. Eine Haftung für entgangenen Gewinn oder sonstige Folgeschäden des Kunden ist in diesen Fällen ausgeschlossen.</p>
 		<p class="text-lg leading-relaxed mb-4">(3) Eine weitergehende Haftung des Verkäufers ist, gleich aus welchem Rechtsgrund, soweit gesetzlich zulässig, ausgeschlossen.</p>
-		<p class="text-lg leading-relaxed mb-6">(4) Alle Ansprüche des Kunden – gleich aus welchem Rechtsgrund – verjähren 12 Monate nach Ablieferung oder Abnahme der Ware. Dies gilt nicht für zwingende gesetzliche Verjährungsfristen sowie für Schäden, die auf Vorsatz oder grober Fahrlässigkeit beruhen.</p>
+		<p class="text-lg leading-relaxed mb-6">(4) Alle Ansprüche des Kunden, gleich aus welchem Rechtsgrund, verjähren 12 Monate nach Ablieferung oder Abnahme der Ware. Dies gilt nicht für zwingende gesetzliche Verjährungsfristen sowie für Schäden, die auf Vorsatz oder grober Fahrlässigkeit beruhen.</p>
 
 		<h2 class="text-2xl font-bold text-zinc-900 mt-10 mb-4">§ 7 Vertraulichkeit</h2>
 		<p class="text-lg leading-relaxed mb-8">

@@ -9,7 +9,7 @@
  * filename + caption).
  *
  * Icons are inline SVG paths from lucide-react (24x24 viewBox,
- * stroke-based) — no external icon library required.
+ * stroke-based), no external icon library required.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

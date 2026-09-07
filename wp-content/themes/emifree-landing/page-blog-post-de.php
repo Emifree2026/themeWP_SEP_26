@@ -29,61 +29,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once get_template_directory() . '/inc/knowledge.php';
 require_once get_template_directory() . '/inc/seo.php';
 
-// Local German posts metadata. Mirrors the shape of
-// emifree_blog_posts() in inc/knowledge.php so the template can
-// read it without a separate data loader.
-$emifree_de_posts = array(
-	'the-strategic-edge-of-clean-air' => array(
-		'id'            => '1',
-		'slug'          => 'the-strategic-edge-of-clean-air',
-		'title'         => 'Der strategische Vorteil sauberer Luft: Warum Hochleistungs-Ölnebelfiltration für die moderne Zerspanung unverzichtbar ist',
-		'excerpt'       => 'Industrielle Ölnebelfiltration ist kein Zubehör, sondern eine strategische Investition in Arbeitssicherheit, Anlagenlebensdauer und Betriebseffizienz in hochpräzisen Fertigungsumgebungen.',
-		'category'      => 'Technischer Leitfaden',
-		'date'          => '2026-06-29',
-		'formatted_date'=> '29. Juni 2026',
-		'read_time'     => '5 Min. Lesezeit',
-		'author'        => 'Victoria Pedroza',
-		'author_role'   => 'Produktmanagerin, Emifree GmbH',
-		'hero_image'    => 'Workers_operating_CNC_machines.jpeg',
-	),
-	'precision-in-every-breath' => array(
-		'id'            => '2',
-		'slug'          => 'precision-in-every-breath',
-		'title'         => 'Präzision in jedem Atemzug: Ein technischer Leitfaden zur industriellen Ölnebelfiltration',
-		'excerpt'       => 'Ein technischer Vergleich mechanischer und elektrostatischer Ölnebelfiltrationstechnologien – und wie die Absaugung direkt an der Quelle Ihre Mitarbeiter, Ihre Maschinen und Ihr Ergebnis schützt.',
-		'category'      => 'Technischer Leitfaden',
-		'date'          => '2026-06-29',
-		'formatted_date'=> '29. Juni 2026',
-		'read_time'     => '7 Min. Lesezeit',
-		'author'        => 'Victoria Pedroza',
-		'author_role'   => 'Produktmanagerin, Emifree GmbH',
-		'hero_image'    => 'CNC_2.jpg',
-	),
-
-	// NOTE: The DE counterparts of the EN "air-pressure-loss" cluster
-	// (was-ist-luftdruckverlust, luftdruckverlust-berechnen,
-	// luftdruckverlust-vs-druckabfall) AND the DE "5 Signs Your CNC
-	// Shop Needs an Oil Mist Collector" post now live in the blog_post
-	// CPT, with slugs mirrored to the EN siblings. The CPT-first
-	// lookup above resolves those requests; this array now only
-	// carries the 2 English-source legacy posts that pre-date the
-	// CPT migration.
-);
+// Legacy DE metadata lives in inc/knowledge.php::emifree_blog_posts_de()
+// so EN + DE metadata share a single source-of-truth file (the EN
+// twin, emifree_blog_posts(), has lived there since the original
+// refactor). Defining the data inline here would mean editing two
+// files every time a legacy DE post's metadata changes.
+$emifree_de_posts = emifree_blog_posts_de();
 
 /**
- * Local DE helpers — kept inside this file (rather than added to a
+ * Local DE helpers, kept inside this file (rather than added to a
  * shared inc/) because we don't want to grow the global function
  * namespace during the i18n refactor. If a future piece needs these
  * from another template, hoist them into inc/.
  */
 function emifree_get_post_by_slug_de( $emifree_slug ) {
-	global $emifree_de_posts;
+	$emifree_de_posts = emifree_blog_posts_de();
 	return isset( $emifree_de_posts[ $emifree_slug ] ) ? $emifree_de_posts[ $emifree_slug ] : null;
 }
 
 function emifree_get_all_posts_sorted_de() {
-	global $emifree_de_posts;
-	$emifree_posts = $emifree_de_posts;
+	$emifree_posts = emifree_blog_posts_de();
 	uasort(
 		$emifree_posts,
 		static function ( $emifree_a, $emifree_b ) {
@@ -178,6 +143,20 @@ if ( $emifree_is_cpt ) {
 	if ( ! empty( $emifree_current_post['hero_image'] ) ) {
 		$emifree_image_url = get_template_directory_uri() . '/assets/images/blog/' . $emifree_current_post['hero_image'];
 	}
+
+	// Resolve the EN sibling so hreflang pairs this DE post with its
+	// English version. CPT entries use emifree_translation_of (handled
+	// by emifree_seo_blog_post_from_cpt); legacy DE posts look up the
+	// EN sibling via slug, Emifree's content pipeline uses the same
+	// slug across languages for legacy posts.
+	$emifree_en_url      = '';
+	$emifree_cpt_sibling = function_exists( 'emifree_query_cpt_blog_post_by_slug' )
+		? emifree_query_cpt_blog_post_by_slug( $emifree_current_post['slug'], 'en' )
+		: null;
+	if ( $emifree_cpt_sibling ) {
+		$emifree_en_url = home_url( '/blog/' . $emifree_cpt_sibling->post_name );
+	}
+
 	emifree_register_blog_post_schema(
 		array(
 			'title'         => $emifree_current_post['title'],
@@ -190,11 +169,14 @@ if ( $emifree_is_cpt ) {
 			'image_url'     => $emifree_image_url,
 			'lang'          => 'de-DE',
 			'schema_id'     => 'emifree-blogpost-schema-de',
-			// Legacy DE posts have no emifree_translation_of pointer
-			// — skip hreflang entirely so the legacy rendering stays
-			// byte-equivalent to today's output.
-			'hreflang_self' => null,
-			'hreflang_alt'  => null,
+			'hreflang_self' => array(
+				'lang' => 'de',
+				'href' => $emifree_url,
+			),
+			'hreflang_alt'  => $emifree_en_url ? array(
+				'lang' => 'en',
+				'href' => $emifree_en_url,
+			) : null,
 		)
 	);
 }

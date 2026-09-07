@@ -33,7 +33,7 @@ return array(
 </h2>
 <p class="text-lg text-zinc-700 leading-relaxed mb-6">
 	Industrielle Prozesse mit wasserbasierten Emulsionen oder unverdünnten Ölen erzeugen
-	gefährlichen Nebel, der – wenn er nicht erfasst wird – in den Atembereich der Mitarbeitenden
+	gefährlichen Nebel, der, wenn er nicht erfasst wird, in den Atembereich der Mitarbeitenden
 	gelangt. Eine langfristige Exposition gegenüber diesen Partikeln kann zu ernsthaften
 	Atemwegserkrankungen und chronischen Leiden führen.
 </p>
@@ -70,7 +70,7 @@ return array(
 	Die lösungsorientierte Technologie von EMIFree
 </h2>
 <p class="text-lg text-zinc-700 leading-relaxed mb-4">
-	Jede Produktionsumgebung stellt individuelle Anforderungen – deshalb bietet EMIFree ein
+	Jede Produktionsumgebung stellt individuelle Anforderungen, deshalb bietet EMIFree ein
 	vielseitiges Portfolio für maximale Effizienz bei der <strong>Ölnebelabscheidung</strong>:
 </p>
 <ol class="list-decimal pl-6 mb-6 space-y-3 text-lg text-zinc-700">

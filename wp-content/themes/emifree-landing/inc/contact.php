@@ -10,7 +10,7 @@
  *    via emifree_contact_recipient_email().
  *
  * Icons are inline SVG paths from lucide-react (24x24 viewBox,
- * stroke-based) — no external icon library required.
+ * stroke-based), no external icon library required.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -61,7 +61,7 @@ if ( ! function_exists( 'emifree_contact_recipient_email' ) ) :
 	/**
 	 * The address that the contact-form's wp_mail() delivers to.
 	 *
-	 * This is the inbox that "leads" land in — it is *not* the address
+	 * This is the inbox that "leads" land in, it is *not* the address
 	 * shown to visitors on the page (the Email Us card on each Contact
 	 * section still shows info@emifree.com by design). The default
 	 * here is contact.website@emifree.com so that production form

@@ -1,6 +1,6 @@
 <?php
 /**
- * Blog cards — reusable rendering helpers shared across the Knowledge
+ * Blog cards, reusable rendering helpers shared across the Knowledge
  * section (Piece 8) and the /blog/ index (Piece 15) + the upcoming
  * /blog/{slug}/ single-post pages (Piece 16). Each function expects
  * the post array shape from emifree_blog_posts() in inc/knowledge.php.
@@ -100,13 +100,13 @@ function emifree_featured_blog_card( $emifree_post ) {
 			<div class="flex items-center gap-4 text-sm text-slate-500 mb-3">
 				<span class="inline-flex items-center gap-1">
 					<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-						<?php echo $emifree_icons['calendar']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled. ?>
+						<?php echo $emifree_icons['calendar']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
 					</svg>
 					<?php echo esc_html( $emifree_formatted ); ?>
 				</span>
 				<span class="inline-flex items-center gap-1">
 					<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-						<?php echo $emifree_icons['clock']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled. ?>
+						<?php echo $emifree_icons['clock']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
 					</svg>
 					<?php echo esc_html( $emifree_read_time ); ?>
 				</span>
@@ -123,7 +123,7 @@ function emifree_featured_blog_card( $emifree_post ) {
 			<span class="inline-flex items-center gap-1 text-blue-700 font-medium">
 				Read article
 				<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-					<?php echo $emifree_icons['chevron-right']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled. ?>
+					<?php echo $emifree_icons['chevron-right']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
 				</svg>
 			</span>
 		</div>
@@ -151,7 +151,7 @@ function emifree_blog_card( $emifree_post ) {
 		return;
 	}
 
-	// See note in emifree_featured_blog_card() above — home_url() keeps
+	// See note in emifree_featured_blog_card() above, home_url() keeps
 	// the WP install subpath in the href, which a bare '/blog/...' would
 	// lose on subpath installs like /wordpress/.
 	$emifree_permalink = home_url( '/blog/' . ( is_array( $emifree_post ) ? $emifree_post['slug'] : $emifree_post->post_name ) . '/' );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Analytics helpers — third-party measurement tag emission.
+ * Analytics helpers, third-party measurement tag emission.
  *
  * Each tag is gated on a wp-config.php constant so the same theme
  * ships to staging + production with different IDs, and any tag can
@@ -30,7 +30,7 @@
  *    one file, not two (DB + cache flush).
  *
  * Preconnect hints to googletagmanager.com are emitted unconditionally
- * — they cost ~0ms for browsers that never load gtag, but shave
+ *, they cost ~0ms for browsers that never load gtag, but shave
  * ~100ms off Time-to-Interactive on first paint for the browsers
  * that do. The async gtag.js itself is loaded only when
  * EMIFREE_GA4_ID is set.
@@ -82,13 +82,13 @@ add_action( 'wp_head', 'emifree_analytics_verification_tags', 2 );
  * Emit the Google Analytics 4 (gtag.js) loader + config call.
  *
  * Only fires when EMIFREE_GA4_ID is defined and non-empty. Uses the
- * recommended async loader (the official Google snippet) — non-blocking,
+ * recommended async loader (the official Google snippet), non-blocking,
  * cookieless by default until consent mode is implemented.
  *
  * GDPR note: GA4 in its basic form (no consent mode, no IP
  * anonymization flags) is borderline under strict EU interpretations.
  * If you want a strict posture, wrap the gtag('config', ...) call in
- * a consent-gated JS block — see the README addendum for the
+ * a consent-gated JS block, see the README addendum for the
  * 4-line consent-mode snippet to drop in here.
  */
 function emifree_analytics_ga4() {
@@ -97,7 +97,7 @@ function emifree_analytics_ga4() {
 		return;
 	}
 	?>
-	<!-- Google tag (gtag.js) — measurement ID <?php echo esc_html( $emifree_ga4_id ); ?> -->
+	<!-- Google tag (gtag.js), measurement ID <?php echo esc_html( $emifree_ga4_id ); ?> -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo esc_attr( $emifree_ga4_id ); ?>"></script>
 	<script>
 		window.dataLayer = window.dataLayer || [];

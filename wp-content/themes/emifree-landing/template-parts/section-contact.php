@@ -1,6 +1,6 @@
 <?php
 /**
- * Contact section — 4-field contact form (left) + 3 contact-info
+ * Contact section, 4-field contact form (left) + 3 contact-info
  * cards (right). Mirrors src/components/Contact.jsx from the React
  * app post-cleanup (no KPI strip, "Direction" not "Visit Us").
  *
@@ -59,13 +59,13 @@ $emifree_contact_info   = emifree_contact_info();
 					action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) . '?action=send_contact' ); ?>"
 					novalidate
 				>
-					<?php /* Server-side nonce — duplicated in emifreeContact.nonce for JS */ ?>
+					<?php /* Server-side nonce, duplicated in emifreeContact.nonce for JS */ ?>
 					<input type="hidden" name="emifree_contact_nonce" value="<?php echo esc_attr( wp_create_nonce( 'emifree_contact' ) ); ?>">
 
 					<?php /*
-					 * Antispam — Tier 1:
+					 * Antispam, Tier 1:
 					 *
-					 *   1. Timestamp (emifree_ts) — set to seconds-since-epoch at
+					 *   1. Timestamp (emifree_ts), set to seconds-since-epoch at
 					 *      page render time. JS contact.js also rewrites it on
 					 *      DOMContentLoaded to be more precise, but the SSR
 					 *      value is fine as a fallback for no-JS browsers. The
@@ -74,7 +74,7 @@ $emifree_contact_info   = emifree_contact_info();
 					 *      or > EMIFREE_CONTACT_MAX_SECONDS, killing instant-
 					 *      fire spam and stale-form-replay attacks.
 					 *
-					 *   2. Honeypot (website_url) — visually hidden (off-screen,
+					 *   2. Honeypot (website_url), visually hidden (off-screen,
 					 *      aria-hidden, tabindex -1) so real users never fill it.
 					 *      Volume bots fill every field including this one; the
 					 *      server rejects any submission where it's non-empty.
@@ -93,7 +93,7 @@ $emifree_contact_info   = emifree_contact_info();
 					>
 
 					<?php /*
-					 * Product-of-interest tag — populated by contact.js when
+					 * Product-of-interest tag, populated by contact.js when
 					 * the visitor clicks a product-section "Request Quote"
 					 * CTA. The slug (e.g. "mechanical") is whitelisted
 					 * server-side in emifree_handle_contact_submit(); the
@@ -191,7 +191,7 @@ $emifree_contact_info   = emifree_contact_info();
 							viewBox="0 0 24 24"
 							aria-hidden="true"
 						>
-							<?php echo $emifree_contact_icons['send']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled. ?>
+							<?php echo $emifree_contact_icons['send']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
 						</svg>
 						<svg
 							data-emifree-contact-submit-icon-loading
@@ -204,7 +204,7 @@ $emifree_contact_info   = emifree_contact_info();
 							viewBox="0 0 24 24"
 							aria-hidden="true"
 						>
-							<?php echo $emifree_contact_icons['loader']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled. ?>
+							<?php echo $emifree_contact_icons['loader']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
 						</svg>
 					</button>
 				</form>
@@ -227,7 +227,7 @@ $emifree_contact_info   = emifree_contact_info();
 									viewBox="0 0 24 24"
 									aria-hidden="true"
 								>
-									<?php echo $emifree_contact_icons[ $emifree_info['icon'] ]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — SVG markup, controlled. ?>
+									<?php echo $emifree_contact_icons[ $emifree_info['icon'] ]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
 								</svg>
 							</div>
 							<div>

@@ -42,8 +42,8 @@ return array(
 	When these fluids hit a fast-moving workpiece or tool, they are mechanically broken into
 	microscopic droplets. Simultaneously, the high temperatures at the cutting edge cause a
 	portion of the fluid to evaporate and then condense into fine aerosols. Without a dedicated
-	<strong>oil mist collector</strong>, these particulates — often ranging from sub-micron to
-	10 microns — spread throughout the facility, entering the breathing zones of operators and
+	<strong>oil mist collector</strong>, these particulates, often ranging from sub-micron to
+	10 microns, spread throughout the facility, entering the breathing zones of operators and
 	settling on sensitive equipment.
 </p>
 
@@ -169,7 +169,7 @@ return array(
 <p class="text-lg text-zinc-700 leading-relaxed mb-6">
 	This connectivity enables <strong>real-time monitoring</strong> of pressure drops and
 	filtration efficiency. Instead of changing filters on a fixed schedule, maintenance teams
-	can adopt a <strong>predictive maintenance</strong> strategy — replacing components only
+	can adopt a <strong>predictive maintenance</strong> strategy, replacing components only
 	when needed, thus reducing waste and preventing unscheduled downtime.
 </p>
 

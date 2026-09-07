@@ -10,7 +10,7 @@
  * NOTE on the auto-play carousel: the React version cycles images every
  * 4 seconds. The WordPress version renders all images statically; the
  * tab's per-section JS (assets/js/sections/products.js) handles the
- * active-image indicator click — no auto-play by default, which is the
+ * active-image indicator click, no auto-play by default, which is the
  * better a11y choice for a site where the visitor is likely reading the
  * product specs in parallel.
  */
@@ -91,7 +91,7 @@ if ( ! function_exists( 'emifree_products' ) ) :
 				'name'        => 'Dust Filtration',
 				'tagline'     => 'High-Efficiency Dust Collection for Dry Processes',
 				'short_desc'  => 'Reliable cartridge and baghouse solutions for heavy dust loads from woodworking, metal grinding, and bulk material handling.',
-				'description' => 'Our dust filtration systems are engineered for dry dust applications. Using advanced media technology and pulse-jet cleaning, they deliver consistent airflow and long filter life — even in the most demanding industrial settings.',
+				'description' => 'Our dust filtration systems are engineered for dry dust applications. Using advanced media technology and pulse-jet cleaning, they deliver consistent airflow and long filter life, even in the most demanding industrial settings.',
 				'images'      => array( 'dust_filter-emi.png', 'dust_filter-emi.png', 'dust_filter-emi.png' ),
 				'features'    => array(
 					array( 'icon' => 'box',    'title' => 'Modular Design',           'desc' => 'Scalable cartridge and baghouse configurations to match your airflow and space requirements.' ),

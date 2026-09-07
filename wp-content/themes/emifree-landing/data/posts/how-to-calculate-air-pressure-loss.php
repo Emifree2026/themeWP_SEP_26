@@ -3,7 +3,7 @@
  * Body content for "How to Calculate Air Pressure Loss in a Duct".
  *
  * Worked example targeting the "how to calculate air pressure loss"
- * / "duct pressure drop calculation" query cluster. Mid-funnel —
+ * / "duct pressure drop calculation" query cluster. Mid-funnel ,
  * user already knows the term and wants to see the numbers.
  *
  * Internal links back to the calculator + the pillar article.

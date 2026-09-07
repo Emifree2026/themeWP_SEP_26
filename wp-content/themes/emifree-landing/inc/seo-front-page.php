@@ -1,6 +1,6 @@
 <?php
 /**
- * Emifree Theme — landing-page SEO + JSON-LD.
+ * Emifree Theme, landing-page SEO + JSON-LD.
  *
  * The legal pages and blog posts use emifree_seo_page() /
  * emifree_register_blog_post_schema() from inc/seo.php for their
@@ -32,9 +32,9 @@
  *                                                    default-locale
  *                                                    landing)
  *   - JSON-LD schemas (in this order):
- *       1. Organization   — Emifree as the company
- *       2. WebSite        — search/docs pointer for sitelinks
- *       3. Product ×3     — Mechanical, Electrostatic, Dust filtration
+ *       1. Organization , Emifree as the company
+ *       2. WebSite      , search/docs pointer for sitelinks
+ *       3. Product ×3   , Mechanical, Electrostatic, Dust filtration
  *
  * The schema set follows schema.org guidance for a manufacturer /
  * vendor landing page that ships a small, named product line:
@@ -75,13 +75,24 @@ function emifree_seo_front_page( $emifree_lang = 'en' ) {
 	$emifree_strings = emifree_seo_front_page_strings( $emifree_lang );
 	$emifree_schemas = emifree_seo_front_page_schemas( $emifree_lang );
 
+	// <title>, route through WP's pre_get_document_title filter so
+	// add_theme_support('title-tag') (declared in functions.php) emits
+	// the SEO title in its own <title> tag instead of a competing
+	// first <title> that browsers + Google would prefer. Without this
+	// the home pages rendered two <title> tags per page, with WP's
+	// generic "landing_wp_test" winning the first-position tiebreak
+	// (browsers use the first <title> they encounter).
+	add_filter(
+		'pre_get_document_title',
+		static function () use ( $emifree_strings ) {
+			return $emifree_strings['title'];
+		}
+	);
+
 	add_action(
 		'wp_head',
 		static function () use ( $emifree_lang, $emifree_strings, $emifree_schemas ) {
 			$s = $emifree_strings;
-
-			// <title>
-			echo '<title>' . esc_html( $s['title'] ) . "</title>\n";
 
 			// Description (Google + Bing use this for snippets).
 			echo '<meta name="description" content="' . esc_attr( $s['description'] ) . "\">\n";
@@ -106,7 +117,7 @@ function emifree_seo_front_page( $emifree_lang = 'en' ) {
 			// Canonical.
 			echo '<link rel="canonical" href="' . esc_attr( $s['url'] ) . "\">\n";
 
-			// hreflang — emit self + sibling + x-default. The spec
+			// hreflang, emit self + sibling + x-default. The spec
 			// (Google's "Localized versions" docs) requires all three
 			// on each page; the x-default points at the canonical
 			// default-locale URL, which is /en/ for this site.
@@ -114,7 +125,7 @@ function emifree_seo_front_page( $emifree_lang = 'en' ) {
 			echo '<link rel="alternate" hreflang="' . esc_attr( $s['hreflang_self_lang'] ) . '" href="' . esc_attr( $s['hreflang_self_href'] ) . "\">\n";
 			echo '<link rel="alternate" hreflang="' . esc_attr( $s['hreflang_alt_lang'] ) . '" href="' . esc_attr( $s['hreflang_alt_href'] ) . "\">\n";
 
-			// JSON-LD schemas — one <script id="..."> per schema so
+			// JSON-LD schemas, one <script id="..."> per schema so
 			// the Rich Results Test can target each one individually.
 			// Order is intentional: Organization first so the
 			// validator sees the corporate identity before products
@@ -141,7 +152,7 @@ function emifree_seo_front_page( $emifree_lang = 'en' ) {
  * site picks the right language. Description stays under Google's
  * 160-character snippet cap; title stays under 60 characters.
  *
- * The image is the same on both languages — it's the hero video
+ * The image is the same on both languages, it's the hero video
  * poster (when present) or the company logo (fallback). The
  * company logo URL is subpath-safe via get_template_directory_uri().
  *
@@ -154,11 +165,11 @@ function emifree_seo_front_page_strings( $emifree_lang ) {
 		$emifree_xdef = home_url( '/en/' );
 
 		return array(
-			'title'                 => 'Emifree — Wartungsarme Luftfiltrationslösungen',
+			'title'                 => 'Emifree, Wartungsarme Luftfiltrationslösungen',
 			'description'           => 'Wartungsarme industrielle Luftfiltration für CNC, Schleifen und Metallverarbeitung. Selbstreinigend, ohne Kartuschenwechsel, HEPA-Abscheidung. Vertraut von Mercedes-Benz, BMW und Siemens.',
 			'url'                   => $emifree_url,
 			'image'                 => get_template_directory_uri() . '/assets/emilogo.png',
-			'image_alt'             => 'Emifree — Industrielle Luftfiltration',
+			'image_alt'             => 'Emifree, Industrielle Luftfiltration',
 			'og_locale'             => 'de_DE',
 			'og_locale_alt'         => 'en_US',
 			'hreflang_self_lang'    => 'de',
@@ -174,11 +185,11 @@ function emifree_seo_front_page_strings( $emifree_lang ) {
 	$emifree_xdef = home_url( '/en/' );
 
 	return array(
-		'title'                 => 'Emifree — Low-maintenance Air Filtration Solutions',
+		'title'                 => 'Emifree, Low-maintenance Air Filtration Solutions',
 		'description'           => 'Low-maintenance industrial air filtration for CNC machining, grinding, and metalworking. Self-cleaning, no cartridge exchange, HEPA separation. Trusted by Mercedes-Benz, BMW, and Siemens.',
 		'url'                   => $emifree_url,
 		'image'                 => get_template_directory_uri() . '/assets/emilogo.png',
-		'image_alt'             => 'Emifree — Industrial Air Filtration',
+		'image_alt'             => 'Emifree, Industrial Air Filtration',
 		'og_locale'             => 'en_US',
 		'og_locale_alt'         => 'de_DE',
 		'hreflang_self_lang'    => 'en',
@@ -193,9 +204,9 @@ function emifree_seo_front_page_strings( $emifree_lang ) {
  * JSON-LD schemas for the landing pages.
  *
  * Four schemas, in this order:
- *   1. Organization   — Emifree as the company. @id is a stable
+ *   1. Organization , Emifree as the company. @id is a stable
  *                       URL so Product.brand can reference it.
- *   2. WebSite        — site pointer for sitelinks/search. inLanguage
+ *   2. WebSite      , site pointer for sitelinks/search. inLanguage
  *                       declares EN + DE so the site is eligible for
  *                       EN/DE SERP features.
  *   3. Product (Mechanical Filtration)
@@ -209,7 +220,7 @@ function emifree_seo_front_page_strings( $emifree_lang ) {
  * (DE) so both locales pass the validator.
  *
  * Product images intentionally skip the Coming Soon.webp placeholder
- * the dust card uses — Google's Product validator warns when
+ * the dust card uses, Google's Product validator warns when
  * `image` is missing, but a placeholder image is worse than no image
  * for click-through. The Mechanical and Electrostatic products use
  * their first real product photo from /assets/products/.
@@ -230,7 +241,7 @@ function emifree_seo_front_page_schemas( $emifree_lang ) {
 			'alternateName' => 'Emifree',
 			'url'           => home_url( '/de/' ),
 			'logo'          => $emifree_image,
-			'description'   => 'Emifree entwickelt und fertigt wartungsarme industrielle Luftfiltrationssysteme für Werkzeugmaschinen, Werkstätten und Produktionslinien — mechanisch, elektrostatisch und als Staubfiltration.',
+			'description'   => 'Emifree entwickelt und fertigt wartungsarme industrielle Luftfiltrationssysteme für Werkzeugmaschinen, Werkstätten und Produktionslinien, mechanisch, elektrostatisch und als Staubfiltration.',
 			'email'         => 'info@emifree.com',
 			'telephone'     => '+49-30-76283520',
 			'areaServed'    => array(
@@ -251,19 +262,19 @@ function emifree_seo_front_page_schemas( $emifree_lang ) {
 
 		$emifree_products_data = array(
 			'mechanical' => array(
-				'name'        => 'Mechanische Filtration (Emifree ECO Air Cleaner — Mechanisch)',
+				'name'        => 'Mechanische Filtration (Emifree ECO Air Cleaner, Mechanisch)',
 				'description' => 'Industrietaugliche Ölnebel- und Staubabscheidung mittels Zentrifugalabscheidung. Bis zu 2.750 m³/h Luftleistung, optionaler HEPA-Schwebstoff-Filter, selbstreinigende Sprühdüsen.',
 				'image'       => $emifree_dir . 'fotom1.webp',
 				'sku'         => 'emifree-mechanical',
 			),
 			'electrostatic' => array(
-				'name'        => 'Elektrostatische Filtration (Emifree ECO Air Cleaner — Elektrostatisch)',
+				'name'        => 'Elektrostatische Filtration (Emifree ECO Air Cleaner, Elektrostatisch)',
 				'description' => 'Korona-Entladungstechnologie für Submikron-Partikel, Rauch und industrielle Gerüche. Industrie 4.0-fähig (Siemens Touch-Panel, PROFINET/PROFIBUS).',
 				'image'       => $emifree_dir . 'fotoe1.webp',
 				'sku'         => 'emifree-electrostatic',
 			),
 			'dust' => array(
-				'name'        => 'Staubfiltration (Emifree ECO Air Cleaner — Staub)',
+				'name'        => 'Staubfiltration (Emifree ECO Air Cleaner, Staub)',
 				'description' => 'Hocheffiziente Staubabscheidung für trockene Prozesse. Patronen- und Schlauchfilterkonfigurationen, Jet-Pulse-Abreinigung, optionaler ATEX-Explosionsschutz.',
 				'image'       => $emifree_dir . 'Coming Soon.webp',
 				'sku'         => 'emifree-dust',
@@ -277,7 +288,7 @@ function emifree_seo_front_page_schemas( $emifree_lang ) {
 			'alternateName' => 'Emifree',
 			'url'           => home_url( '/en/' ),
 			'logo'          => $emifree_image,
-			'description'   => 'Emifree designs and manufactures low-maintenance industrial air filtration systems for machine tools, workshops, and production lines — mechanical, electrostatic, and dust filtration.',
+			'description'   => 'Emifree designs and manufactures low-maintenance industrial air filtration systems for machine tools, workshops, and production lines, mechanical, electrostatic, and dust filtration.',
 			'email'         => 'info@emifree.com',
 			'telephone'     => '+49-30-76283520',
 			'areaServed'    => array(
@@ -298,19 +309,19 @@ function emifree_seo_front_page_schemas( $emifree_lang ) {
 
 		$emifree_products_data = array(
 			'mechanical' => array(
-				'name'        => 'Mechanical Filtration (Emifree ECO Air Cleaner — Mechanical)',
+				'name'        => 'Mechanical Filtration (Emifree ECO Air Cleaner, Mechanical)',
 				'description' => 'Industrial-strength oil mist and dust extraction using centrifugal separation. Up to 2,750 m³/hr airflow, optional HEPA post-filter, self-cleaning spray nozzles.',
 				'image'       => $emifree_dir . 'fotom1.webp',
 				'sku'         => 'emifree-mechanical',
 			),
 			'electrostatic' => array(
-				'name'        => 'Electrostatic Filtration (Emifree ECO Air Cleaner — Electrostatic)',
+				'name'        => 'Electrostatic Filtration (Emifree ECO Air Cleaner, Electrostatic)',
 				'description' => 'Corona-discharge technology for sub-micron particles, smoke, and industrial odors. Industry 4.0 ready with Siemens Touch-Panel and PROFINET/PROFIBUS connectivity.',
 				'image'       => $emifree_dir . 'fotoe1.webp',
 				'sku'         => 'emifree-electrostatic',
 			),
 			'dust' => array(
-				'name'        => 'Dust Filtration (Emifree ECO Air Cleaner — Dust)',
+				'name'        => 'Dust Filtration (Emifree ECO Air Cleaner, Dust)',
 				'description' => 'High-efficiency dust collection for dry processes. Cartridge and baghouse configurations, pulse-jet cleaning, optional ATEX explosion protection.',
 				'image'       => $emifree_dir . 'Coming Soon.webp',
 				'sku'         => 'emifree-dust',

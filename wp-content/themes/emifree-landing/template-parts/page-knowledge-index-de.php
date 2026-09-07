@@ -1,6 +1,6 @@
 <?php
 /**
- * Knowledge hub index (DE) — /de/wissen/.
+ * Knowledge hub index (DE), /de/wissen/.
  *
  * Hard-separated German equivalent of page-knowledge-index.php.
  * Same tool list, German labels.

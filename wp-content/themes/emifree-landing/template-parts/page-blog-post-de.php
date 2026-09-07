@@ -1,6 +1,6 @@
 <?php
 /**
- * Single blog post (German) — /de/blog/{slug}/.
+ * Single blog post (German), /de/blog/{slug}/.
  *
  * Hard-coded translation of template-parts/page-blog-post.php.
  *
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 // $emifree_next_post, and $emifree_is_cpt BEFORE require_once-ing
 // this template part. We trust those values here so the CPT-first
 // lookup happens once per request, in one place. CRITICAL: do NOT
-// overwrite $emifree_current_post when the shim has set it — CPT
+// overwrite $emifree_current_post when the shim has set it, CPT
 // slugs aren't in the legacy DE array, so a legacy lookup would
 // null-out the variable and trigger the "Artikel nicht gefunden"
 // branch below.
 $emifree_requested_slug = get_query_var( 'emifree_blog_slug' );
 
 if ( ! isset( $emifree_current_post ) || ! $emifree_current_post ) {
-	// Defensive fallback path — only reached when this template part
+	// Defensive fallback path, only reached when this template part
 	// is rendered outside of page-blog-post-de.php.
 	if ( $emifree_requested_slug && function_exists( 'emifree_get_post_by_slug_de' ) ) {
 		$emifree_current_post = emifree_get_post_by_slug_de( $emifree_requested_slug );
@@ -55,7 +55,7 @@ if ( ! $emifree_current_post ) {
 	return;
 }
 
-// "Read next" — only fill in here when the shim didn't already
+// "Read next", only fill in here when the shim didn't already
 // provide it. The shim wires $emifree_next_post from either the
 // merged DE feed (CPT path) or emifree_get_all_posts_sorted_de()
 // (legacy path).
@@ -71,7 +71,7 @@ if ( ! isset( $emifree_next_post ) || ! $emifree_next_post ) {
 	}
 }
 
-// Body HTML — CPT-driven posts use the Gutenberg content;
+// Body HTML, CPT-driven posts use the Gutenberg content;
 // legacy DE posts load from data/posts/{slug}-de.php, falling back
 // to the English body file when the DE version is missing.
 $emifree_is_cpt  = ! empty( $emifree_is_cpt );
@@ -158,10 +158,10 @@ if ( $emifree_is_cpt ) {
 		<div class="prose text-zinc-700">
 			<?php
 			if ( $emifree_is_cpt ) {
-				// Gutenberg content — already sanitized through 'the_content' filter chain.
-				echo $emifree_body_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — sanitized via the_content filter.
+				// Gutenberg content, already sanitized through 'the_content' filter chain.
+				echo $emifree_body_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, sanitized via the_content filter.
 			} else {
-				echo wp_kses_post( $emifree_body_html ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — sanitized via wp_kses_post.
+				echo wp_kses_post( $emifree_body_html ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, sanitized via wp_kses_post.
 			}
 			?>
 		</div>

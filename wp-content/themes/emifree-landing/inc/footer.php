@@ -1,6 +1,6 @@
 <?php
 /**
- * Footer link data + helpers — single source of truth for the Footer.
+ * Footer link data + helpers, single source of truth for the Footer.
  *
  * Mirrors src/components/Footer.jsx post-cleanup state. Three columns:
  * Company (Blog, Contact), Resources (Case Studies), Legal (Impressum,
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! function_exists( 'emifree_footer_links' ) ) :
 	function emifree_footer_links() {
-		// Path-based detection (same reasoning as inc/nav.php — the
+		// Path-based detection (same reasoning as inc/nav.php, the
 		// request URI is the source of truth for which page was rendered,
 		// not the cookie which can be stale).
 		$emifree_uri = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '';
@@ -49,11 +49,15 @@ if ( ! function_exists( 'emifree_footer_links' ) ) :
 					// after clicking a footer link.
 					array( 'name' => 'Kanalrechner',                'href' => home_url( '/de/wissen/ductulator/' ) ),
 					array( 'name' => 'Luftdruckverlust-Rechner',    'href' => home_url( '/de/luftdruckverlust-rechner/' ) ),
-					// About / Downloads are in-page tabs on the Wissen section
-					// of the homepage (/de/#knowledge), so they share the same
-					// anchor — the user picks the tab once the section is open.
-					array( 'name' => 'Über uns',                    'href' => home_url( '/de/#knowledge' ) ),
-					array( 'name' => 'Downloads',                   'href' => home_url( '/de/#knowledge' ) ),
+					// About / Downloads now have their own crawlable
+					// sub-pages (built in the September 2026 Knowledge
+					// subsection URL refactor, see page-knowledge-*.php).
+					// Earlier versions pointed these at the in-page
+					// /#knowledge anchor, which (a) didn't navigate when
+					// JS was off and (b) sent users to the homepage's
+					// tab section instead of the dedicated sub-page.
+					array( 'name' => 'Über uns',                    'href' => home_url( '/de/wissen/ueber-uns/' ) ),
+					array( 'name' => 'Downloads',                   'href' => home_url( '/de/wissen/downloads/' ) ),
 				),
 				'Legal'      => array(
 					array( 'name_en' => 'Imprint',              'name_de' => 'Impressum',            'href_en' => home_url( '/impressum/' ),     'href_de' => home_url( '/de/impressum/' ) ),
@@ -65,7 +69,7 @@ if ( ! function_exists( 'emifree_footer_links' ) ) :
 
 		return array(
 			'Company'   => array(
-				// See note above — home_url() preserves the WP install
+				// See note above, home_url() preserves the WP install
 				// subpath on subpath installs.
 				array( 'name' => 'Blog',    'href' => home_url( '/blog/' ) ),
 				array( 'name' => 'Contact', 'href' => home_url( '/#contact' ) ),
@@ -78,12 +82,15 @@ if ( ! function_exists( 'emifree_footer_links' ) ) :
 				// to the actual hub or any individual tool.
 				array( 'name' => 'Duct Sizing Calculator',     'href' => home_url( '/en/knowledge/ductulator/' ) ),
 				array( 'name' => 'Air Pressure Loss Calculator', 'href' => home_url( '/air-pressure-loss-calculator/' ) ),
-				// About / Downloads are in-page tabs on the Knowledge
-				// section of the homepage (/#knowledge), so they share
-				// the same anchor — the user picks the tab once the
-				// section is open.
-				array( 'name' => 'About Us',                   'href' => home_url( '/#knowledge' ) ),
-				array( 'name' => 'Downloads',                  'href' => home_url( '/#knowledge' ) ),
+				// About / Downloads now have their own crawlable
+				// sub-pages (built in the September 2026 Knowledge
+				// subsection URL refactor, see page-knowledge-*.php).
+				// Earlier versions pointed these at the in-page
+				// /#knowledge anchor, which (a) didn't navigate when
+				// JS was off and (b) sent users to the homepage's
+				// tab section instead of the dedicated sub-page.
+				array( 'name' => 'About Us',                   'href' => home_url( '/en/knowledge/about/' ) ),
+				array( 'name' => 'Downloads',                  'href' => home_url( '/en/knowledge/downloads/' ) ),
 			),
 			    'Legal'     => array(
 				    array( 'name_en' => 'Imprint',              'name_de' => 'Impressum',            'href_en' => home_url( '/impressum/' ),     'href_de' => home_url( '/de/impressum/' ) ),
@@ -102,7 +109,7 @@ if ( ! function_exists( 'emifree_social_links' ) ) :
 				'href' => 'https://www.linkedin.com/company/emifree',
 				'svg'  => 'M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.28 2.38 4.28 5.47v6.27zM5.34 7.43a2.06 2.06 0 110-4.12 2.06 2.06 0 010 4.12zM7.12 20.45H3.56V9h3.56v11.45z',
 			),
-			// YouTube — stroke-based outline: rounded-rect screen frame
+			// YouTube, stroke-based outline: rounded-rect screen frame
 			// + play-triangle. Single <path d="..."> with two subpaths,
 			// matching the LinkedIn / Email convention (fill="none",
 			// stroke="currentColor", stroke-width=2, viewBox 0 0 24 24

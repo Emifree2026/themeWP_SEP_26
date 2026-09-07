@@ -1,6 +1,6 @@
 <?php
 /**
- * Single blog post — /blog/{slug}/.
+ * Single blog post, /blog/{slug}/.
  *
  * Mirrors src/pages/BlogPost.jsx from the React app. The rendered
  * body comes from data/posts/{slug}.php via emifree_get_post_body_html()
@@ -41,7 +41,7 @@ if ( ! isset( $emifree_current_post ) || ! $emifree_current_post ) {
 }
 
 if ( ! $emifree_current_post ) {
-	// Defensive fallback — the shim should have already 404'd.
+	// Defensive fallback, the shim should have already 404'd.
 	?>
 	<div class="min-h-screen bg-white">
 		<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
@@ -56,7 +56,7 @@ if ( ! $emifree_current_post ) {
 	return;
 }
 
-// "Read next" — any post that isn't the current one.
+// "Read next", any post that isn't the current one.
 $emifree_next_post = null;
 foreach ( emifree_get_all_posts_sorted() as $emifree_candidate_slug => $emifree_candidate ) {
 	if ( $emifree_candidate_slug !== $emifree_current_post['slug'] ) {
@@ -140,10 +140,10 @@ $emifree_body_html = ! empty( $emifree_is_cpt )
 		<div class="prose text-zinc-700">
 			<?php
 			if ( ! empty( $emifree_is_cpt ) ) {
-				// Gutenberg content — already sanitized through 'the_content' filter chain.
-				echo $emifree_body_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — sanitized via the_content filter.
+				// Gutenberg content, already sanitized through 'the_content' filter chain.
+				echo $emifree_body_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, sanitized via the_content filter.
 			} else {
-				echo wp_kses_post( $emifree_body_html ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — sanitized via wp_kses_post.
+				echo wp_kses_post( $emifree_body_html ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, sanitized via wp_kses_post.
 			}
 			?>
 		</div>

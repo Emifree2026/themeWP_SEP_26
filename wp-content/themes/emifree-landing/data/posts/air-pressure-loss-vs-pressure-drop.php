@@ -4,7 +4,7 @@
  *
  * Terminology / disambiguation article for users searching either
  * term. Targets the query cluster "air pressure loss", "air
- * pressure drop", "static pressure loss" — clarifies that all
+ * pressure drop", "static pressure loss", clarifies that all
  * three terms describe the same quantity.
  *
  * Internal links to calculator + both sibling posts.
