@@ -884,10 +884,19 @@ function emifree_legacy_redirect_map() {
 		'/language/de/technologie/'  => '/de/#technology',
 		'/language/de/kontakt/'      => '/de/#contact',
 		'/language/de/karriere/'     => '/de/#contact',
-		// NOTE: /de/impressum/, /de/datenschutz/, /de/agb/ are already
-		// the canonical URLs of the new site. They were removed from
-		// the map because every entry where source == destination is a
-		// self-redirect loop (ERR_TOO_MANY_REDIRECTS).
+		// --- Old WPML German legal pages → new canonicals ---
+		// The new site serves the German legal pages at /de/impressum/,
+		// /de/datenschutz/, /de/agb/. /language/de/impressum/ etc. are
+		// the OLD WPML-style URLs Google indexed, NOT canonical here.
+		// The previous "skip" rationale (source == destination) applied
+		// to /de/impressum/ itself, NOT to /language/de/impressum/ —
+		// without an explicit map entry the WPML catch-all below routes
+		// every /language/de/<anything>/ to /de/ (homepage), which is
+		// why Impressum-titled Google results were landing on the home.
+		// These need exact-path entries to win before the catch-all.
+		'/language/de/impressum/'    => '/de/impressum/',
+		'/language/de/datenschutz/'  => '/de/datenschutz/',
+		'/language/de/agb/'          => '/de/agb/',
 		// English WPML home + section landing slugs.
 		'/language/en/'              => '/en/',
 		'/language/en/startseite/'   => '/en/',
