@@ -63,7 +63,7 @@ $emifree_products = array(
 		'tagline'     => 'Hocheffiziente Staubabscheidung für Trockenprozesse',
 		'short_desc'  => 'Zuverlässige Patronen- und Schlauchfilterlösungen für hohe Staubbelastungen aus Holzbearbeitung, Metallschleifen und Schüttgutumschlag.',
 		'description' => 'Unsere Staubfiltrationssysteme sind für den Einsatz bei trockenem Staub konzipiert. Dank fortschrittlicher Filtermedientechnologie und Druckluft-Abreinigung sorgen sie für gleichbleibende Luftleistung und eine lange Filterlebensdauer, selbst in den anspruchsvollsten industriellen Umgebungen.',
-		'images'      => array( 'dust1.webp', 'dust_filter-emi.png', 'Coming Soon.webp' ),
+		'images'      => array( 'dust_filter-emi.png' ),
 		'features'    => array(
 			array( 'icon' => 'box',    'title' => 'Modulares Design',         'desc' => 'Skalierbare Patronen- und Schlauchfilterkonfigurationen, angepasst an Luftleistungs- und Platzanforderungen.' ),
 			array( 'icon' => 'gauge',  'title' => 'Druckluft-Abreinigung',    'desc' => 'Die automatische Druckluftreinigung hält den Druckverlust niedrig und verlängert die Filterlebensdauer.' ),
