@@ -83,6 +83,12 @@
         // reducer row carries a second (outlet) diameter so the
         // downstream rows step down.
         return (
+            // p-3 on mobile (16px), p-3 on sm+ keeps the parent calculator
+            // card's p-6 from squeezing the section card. The
+            // bg-slate-50 card is itself nested inside the white
+            // parent, so the 16px padding on mobile already eats ~32px
+            // from the viewport width before the row controls are
+            // measured — making the row tight but not overflowing.
             '<div class="pd-quick-section border border-slate-200 rounded-lg p-3 bg-slate-50" data-section-idx="' + idx + '">' +
             '<div class="flex items-center justify-between mb-2">' +
                 '<span class="text-xs font-bold text-zinc-700 uppercase tracking-wider">Section ' + idx + '</span>' +
@@ -130,14 +136,28 @@
         // diameter. The outlet list is updated dynamically when the
         // user changes the section diameter.
         return (
-            '<div class="flex items-center gap-1" data-pd-quick-row="' + sectionIdx + '-' + rowIdx + '">' +
-                '<select name="pd-quick-comp-' + sectionIdx + '-' + rowIdx + '" class="flex-1 rounded border border-slate-300 px-2 py-1 text-sm">' +
+            // Mobile responsiveness: the row contains four controls
+            // (component select, outlet select, qty input, × button).
+            // On narrow viewports (≤ ~480px) all four on one line would
+            // overflow horizontally because the parent section card
+            // already eats most of the viewport width with its
+            // padding + border + the grid that surrounds it. Wrap the
+            // controls and let the component select take a full row on
+            // mobile (full-width, no shrinking), then the secondary
+            // controls (outlet + qty + ×) flow onto the next row, all
+            // right-aligned. min-w-0 on the component select prevents
+            // the default flex shrink-to-content from forcing
+            // horizontal overflow when the component label is long
+            // (e.g. "Straight tube 0.5 m"). md:flex-nowrap restores
+            // the single-row desktop layout above the breakpoint.
+            '<div class="flex flex-wrap items-center gap-1 md:flex-nowrap" data-pd-quick-row="' + sectionIdx + '-' + rowIdx + '">' +
+                '<select name="pd-quick-comp-' + sectionIdx + '-' + rowIdx + '" class="w-full min-w-0 md:flex-1 rounded border border-slate-300 px-2 py-1 text-sm">' +
                     opts +
                 '</select>' +
                 // Outlet-diameter selector — shown only for the reducer
                 // type. The class is toggled visible via a row change
                 // handler.
-                '<select name="pd-quick-outlet-' + sectionIdx + '-' + rowIdx + '" data-pd-quick-outlet class="w-24 rounded border border-slate-300 px-1 py-1 text-sm hidden" title="Outlet diameter (mm)">' +
+                '<select name="pd-quick-outlet-' + sectionIdx + '-' + rowIdx + '" data-pd-quick-outlet class="w-full md:w-24 rounded border border-slate-300 px-1 py-1 text-sm hidden" title="Outlet diameter (mm)">' +
                     '<option value="80">80</option>' +
                     '<option value="100">100</option>' +
                     '<option value="125">125</option>' +
@@ -146,8 +166,8 @@
                     '<option value="250">250</option>' +
                     '<option value="300" selected>300</option>' +
                 '</select>' +
-                '<input type="number" name="pd-quick-qty-' + sectionIdx + '-' + rowIdx + '" min="1" step="1" value="1" class="w-14 rounded border border-slate-300 px-1 py-1 text-sm text-center" inputmode="numeric" title="Quantity">' +
-                '<button type="button" data-pd-quick-remove-row="' + sectionIdx + '-' + rowIdx + '" class="text-slate-400 hover:text-red-600 px-1" title="Remove">&times;</button>' +
+                '<input type="number" name="pd-quick-qty-' + sectionIdx + '-' + rowIdx + '" min="1" step="1" value="1" class="w-full md:w-14 rounded border border-slate-300 px-1 py-1 text-sm text-center" inputmode="numeric" title="Quantity">' +
+                '<button type="button" data-pd-quick-remove-row="' + sectionIdx + '-' + rowIdx + '" class="self-end md:self-auto text-slate-400 hover:text-red-600 px-2 py-1" title="Remove">&times;</button>' +
             '</div>'
         );
     }
