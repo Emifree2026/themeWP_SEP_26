@@ -1,34 +1,24 @@
 <?php
 /**
- * Page template: /knowledge/
- * Renders the Knowledge hub (English).
+ * Page template stub: /knowledge/
  *
- * Mirrors page-blog.php's per-page SEO pattern. No JS behaviors.
+ * Earlier this rendered the standalone Knowledge hub index, but the
+ * landing page now keeps a single hub — the Resources & Knowledge
+ * section on the homepage (`#knowledge`). Any bookmark, share, or
+ * legacy link to /en/knowledge/ therefore 301s to the homepage anchor
+ * so visitors land on the same Resources & Knowledge section they
+ * would have reached by clicking the Knowledge nav item from any
+ * other page.
+ *
+ * The /en/knowledge/<sub>/ URLs (insights, about, downloads, tools,
+ * ductulator, etc.) are handled by their own page-knowledge-*.php
+ * templates and remain live — this only redirects the bare /en/knowledge/
+ * landing URL.
  */
 
-require_once get_template_directory() . '/inc/i18n.php';
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-emifree_seo_page_with_schema(
-	'Knowledge, Engineering Tools & References',
-	'HVAC duct design tools, sizing references, and engineering guides for industrial air filtration and ventilation systems.',
-	home_url( '/knowledge' ),
-	'emifree-knowledge-schema',
-	array(
-		'@context'    => 'https://schema.org',
-		'@type'       => 'CollectionPage',
-		'name'        => 'Emifree Knowledge',
-		'description' => 'Engineering tools, references, and field guides for HVAC duct design and air filtration.',
-		'url'         => home_url( '/knowledge' ),
-		'publisher'   => array(
-			'@type' => 'Organization',
-			'name'  => 'Emifree GmbH',
-			'url'   => home_url(),
-		),
-	)
-);
-
-get_header();
-
-require_once get_template_directory() . '/template-parts/page-knowledge-index.php';
-
-get_footer();
+wp_redirect( home_url( '/en/#knowledge' ), 301 );
+exit;

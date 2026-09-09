@@ -71,7 +71,14 @@
 		} );
 	};
 	window.addEventListener( 'scroll', emifreeOnScroll, { passive: true } );
-	emifreeOnScroll();
+	// Don't run synchronously — the initial markup already emits the
+	// unscrolled state (`bg-white`), so a sync emifreeOnScroll() at
+	// scrollY=0 is a no-op classList-wise but still burns a synchronous
+	// task in the page-load critical path. Defer to the next frame so
+	// the browser paints the unscrolled state once and any class
+	// adjustments (page-reload mid-scroll with scrollY > 20) land in
+	// their own paint, not the first one.
+	requestAnimationFrame( emifreeOnScroll );
 
 	// ---- Mobile menu toggle ----
 	const emifreeMobileBtn   = document.getElementById( 'emifree-mobile-menu-btn' );
@@ -79,14 +86,26 @@
 	const emifreeIconOpen    = document.getElementById( 'emifree-mobile-menu-icon-open' );
 	const emifreeIconClose   = document.getElementById( 'emifree-mobile-menu-icon-close' );
 
+	// Single helper for "close the mobile menu", shared by the trigger
+	// button's close branch, the Escape handler, the outside-click
+	// handler, and the delegated click handler that catches nav-link
+	// clicks. Centralizing the four touch-points removes the per-element
+	// forEach that previously attached one click listener per anchor
+	// inside the menu — relevant for INP because that forEach sat in the
+	// same long task as module-load work and the menu typically holds
+	// 6-10 anchors.
+	function emifreeCloseMobileMenu() {
+		emifreeMobileMenu.classList.add( 'hidden' );
+		emifreeMobileBtn.setAttribute( 'aria-expanded', 'false' );
+		if ( emifreeIconOpen )  emifreeIconOpen.classList.remove( 'hidden' );
+		if ( emifreeIconClose ) emifreeIconClose.classList.add( 'hidden' );
+	}
+
 	if ( emifreeMobileBtn && emifreeMobileMenu ) {
 		emifreeMobileBtn.addEventListener( 'click', () => {
 			const emifreeIsOpen = ! emifreeMobileMenu.classList.contains( 'hidden' );
 			if ( emifreeIsOpen ) {
-				emifreeMobileMenu.classList.add( 'hidden' );
-				emifreeMobileBtn.setAttribute( 'aria-expanded', 'false' );
-				if ( emifreeIconOpen )  emifreeIconOpen.classList.remove( 'hidden' );
-				if ( emifreeIconClose ) emifreeIconClose.classList.add( 'hidden' );
+				emifreeCloseMobileMenu();
 			} else {
 				emifreeMobileMenu.classList.remove( 'hidden' );
 				emifreeMobileBtn.setAttribute( 'aria-expanded', 'true' );
@@ -95,24 +114,10 @@
 			}
 		} );
 
-		// Close mobile menu when a nav link is clicked. The selector covers
-		// three href shapes the theme emits:
-		//   - "#anchor"            bare fragment (not currently used in
-		//                          mobile nav, but harmless to handle)
-		//   - "/de/#anchor"        DE absolute path with fragment
-		//   - "/#anchor"           EN absolute path with fragment
-		// The smooth-scroll handler below decides whether to intercept
-		// the navigation; this handler just guarantees the menu closes
-		// (otherwise the document outside-click handler races the link
-		// click and the menu can stay open on slow mobile networks).
-		emifreeMobileMenu.querySelectorAll( 'a[href^="#"], a[href^="/#"], a[href^="/de/#"]' ).forEach( ( anchor ) => {
-			anchor.addEventListener( 'click', () => {
-				emifreeMobileMenu.classList.add( 'hidden' );
-				emifreeMobileBtn.setAttribute( 'aria-expanded', 'false' );
-				if ( emifreeIconOpen )  emifreeIconOpen.classList.remove( 'hidden' );
-				if ( emifreeIconClose ) emifreeIconClose.classList.add( 'hidden' );
-			} );
-		} );
+		// (Per-element forEach that attached a click listener to every
+		// anchor inside the menu is gone — the delegated click handler
+		// at the bottom of the file fires emifreeCloseMobileMenu when
+		// any matching anchor inside the menu is clicked.)
 
 		// Escape key — close the menu if it's open, return focus to trigger.
 		document.addEventListener( 'keydown', ( e ) => {
@@ -122,10 +127,7 @@
 			if ( emifreeMobileMenu.classList.contains( 'hidden' ) ) {
 				return;
 			}
-			emifreeMobileMenu.classList.add( 'hidden' );
-			emifreeMobileBtn.setAttribute( 'aria-expanded', 'false' );
-			if ( emifreeIconOpen )  emifreeIconOpen.classList.remove( 'hidden' );
-			if ( emifreeIconClose ) emifreeIconClose.classList.add( 'hidden' );
+			emifreeCloseMobileMenu();
 			emifreeMobileBtn.focus();
 		} );
 
@@ -142,10 +144,7 @@
 			if ( emifreeMobileMenu.contains( e.target ) ) {
 				return;
 			}
-			emifreeMobileMenu.classList.add( 'hidden' );
-			emifreeMobileBtn.setAttribute( 'aria-expanded', 'false' );
-			if ( emifreeIconOpen )  emifreeIconOpen.classList.remove( 'hidden' );
-			if ( emifreeIconClose ) emifreeIconClose.classList.add( 'hidden' );
+			emifreeCloseMobileMenu();
 		} );
 	}
 
@@ -205,7 +204,16 @@
 					? emifreeUriLang.toUpperCase()
 					: code;
 
-				if ( emifreeLangLabel ) {
+				if ( emifreeLangLabel && emifreeLangLabel.textContent !== emifreeChipCode ) {
+					// Skip the write when the text matches what's already
+					// there. The server-side `emifree_get_lang()` in
+					// header.php renders the label with the URI-derived
+					// code on first paint, and idle-callback re-applies
+					// the same value when the stored pref agrees — that
+					// write would re-trigger style invalidation for the
+					// surrounding nav even though the value didn't
+					// change. Only write when it's a genuine update
+					// (different stored pref than the URI rendered).
 					emifreeLangLabel.textContent = emifreeChipCode;
 				}
 				// Update footer links and mobile pills using the stored
@@ -230,8 +238,26 @@
 		}
 	}
 
-	// Apply stored language immediately on load
-	emifreeApplyStoredLang();
+	// Apply stored language during idle time so the initial paint and
+	// hero-video bootstrap aren't contended with localStorage reads,
+	// document.cookie parsing, and a DOM update across every
+	// `.emifree-mobile-lang` pill. The chip inside the URL-anchored
+	// pages (e.g. /en/, /de/) is already correct (the server rendered
+	// the right code), so deferring does not change the visible first
+	// paint for users navigating via the normal locale-prefixed URLs.
+	const emifreeScheduleLangApply = ( callback ) => {
+		if ( typeof window.requestIdleCallback === 'function' ) {
+			window.requestIdleCallback( callback, { timeout: 2000 } );
+		} else {
+			// Safari/old browsers — defer to the next animation frame
+			// and then again to idle time so we still escape the initial
+			// paint's critical-path long task.
+			requestAnimationFrame( function () {
+				requestAnimationFrame( callback );
+			} );
+		}
+	};
+	emifreeScheduleLangApply( emifreeApplyStoredLang );
 
 	if ( emifreeLangBtn && emifreeLangMenu ) {
 		emifreeLangBtn.addEventListener( 'click', ( e ) => {
@@ -526,41 +552,66 @@
 	// already on the same path; otherwise let the browser navigate.
 	// The same-path check covers both / and /de/ so a click on
 	// /de/#products from /de/ still scrolls in place (no full reload).
-	document.querySelectorAll( 'a[href^="#"], a[href^="/#"], a[href^="/de/#"], a[href^="/en/#"]' ).forEach( ( anchor ) => {
-		anchor.addEventListener( 'click', function ( e ) {
-			const emifreeHref = this.getAttribute( 'href' );
-			if ( ! emifreeHref || emifreeHref === '#' ) {
+	// Delegate smooth-scroll + mobile-menu-close to a single document-level
+	// listener. The previous forEach attached one listener per matching
+	// anchor — 12+ listeners on the homepage alone, and each `addEventListener`
+	// sat inside the same long task as module load. A single delegated
+	// listener walks the DOM once on click (via .closest()) and runs the
+	// same handler, with the mobile-menu close folded in so we don't need
+	// a second per-anchor forEach just to flip `aria-expanded`.
+	document.addEventListener( 'click', function ( e ) {
+		const emifreeAnchor = e.target.closest(
+			'a[href^="#"], a[href^="/#"], a[href^="/de/#"], a[href^="/en/#"], a[href*="emifree.com/"][href*="#"]'
+		);
+		if ( ! emifreeAnchor ) {
+			return;
+		}
+		const emifreeHref = emifreeAnchor.getAttribute( 'href' );
+		if ( ! emifreeHref || emifreeHref === '#' ) {
+			return;
+		}
+		// Strip leading slashes AND any /en/ or /de/ prefix so we end
+		// up with just the fragment. /en/#applications → #applications,
+		// /de/#products → #products, /#contact → #contact.
+		let emifreeFragment = emifreeHref.replace( /^\/+/, '' ).replace( /^(en|de)\//, '' );
+		if ( ! emifreeFragment.startsWith( '#' ) ) {
+			return;
+		}
+		// For absolute-path anchors (e.g. /de/#products, /en/#applications),
+		// only smooth-scroll if we're already on the same page. If we are
+		// not, let the browser do a full navigation to the path + fragment.
+		// The same-path check runs in SITE-RELATIVE space (subpath
+		// stripped) so it works on both root installs and subpath
+		// installs like /wordpress/.
+		if ( emifreeHref.startsWith( '/' ) ) {
+			const emifreePath    = emifreeStripSubpath( window.location.pathname ).replace( /\/$/, '' );
+			let emifreeHrefPath  = emifreeHref.split( '#' )[ 0 ].replace( /\/$/, '' ) || '/';
+			emifreeHrefPath      = emifreeStripSubpath( emifreeHrefPath );
+			const emifreeSamePath = emifreePath === emifreeHrefPath;
+			if ( ! emifreeSamePath ) {
 				return;
 			}
-			// Strip leading slashes AND any /en/ or /de/ prefix so we end
-			// up with just the fragment. /en/#applications → #applications,
-			// /de/#products → #products, /#contact → #contact.
-			let emifreeFragment = emifreeHref.replace( /^\/+/, '' ).replace( /^(en|de)\//, '' );
-			if ( ! emifreeFragment.startsWith( '#' ) ) {
-				return;
-			}
-			// For absolute-path anchors (e.g. /de/#products, /en/#applications),
-			// only smooth-scroll if we're already on the same page. If we are
-			// not, let the browser do a full navigation to the path + fragment.
-			// The same-path check runs in SITE-RELATIVE space (subpath
-			// stripped) so it works on both root installs and subpath
-			// installs like /wordpress/.
-			if ( emifreeHref.startsWith( '/' ) ) {
-				const emifreePath    = emifreeStripSubpath( window.location.pathname ).replace( /\/$/, '' );
-				let emifreeHrefPath  = emifreeHref.split( '#' )[ 0 ].replace( /\/$/, '' ) || '/';
-				emifreeHrefPath      = emifreeStripSubpath( emifreeHrefPath );
-				const emifreeSamePath = emifreePath === emifreeHrefPath;
-				if ( ! emifreeSamePath ) {
-					return;
-				}
-			}
-			const emifreeTarget = document.querySelector( emifreeFragment );
-			if ( emifreeTarget ) {
-				e.preventDefault();
-				const emifreeOffset = ( emifreeHeader ? emifreeHeader.offsetHeight : 64 ) + 8;
-				const emifreeTop = emifreeTarget.getBoundingClientRect().top + window.pageYOffset - emifreeOffset;
-				window.scrollTo( { top: emifreeTop, behavior: 'smooth' } );
-			}
-		} );
+		}
+		const emifreeTarget = document.querySelector( emifreeFragment );
+		if ( emifreeTarget ) {
+			e.preventDefault();
+			const emifreeOffset = ( emifreeHeader ? emifreeHeader.offsetHeight : 64 ) + 8;
+			const emifreeTop = emifreeTarget.getBoundingClientRect().top + window.pageYOffset - emifreeOffset;
+			window.scrollTo( { top: emifreeTop, behavior: 'smooth' } );
+		}
+		// Close the mobile menu on the same event. Only fires when the
+		// anchor is inside the menu — links in the header (which sit
+		// outside the menu by structure) leave the menu untouched, and
+		// the outside-click handler above already handles true outside
+		// clicks. The mobile menu is null-detected by the existence
+		// check in the IIFE; this branch is inert if the menu isn't
+		// present on the page.
+		if (
+			emifreeMobileBtn && emifreeMobileMenu
+			&& ! emifreeMobileMenu.classList.contains( 'hidden' )
+			&& emifreeMobileMenu.contains( emifreeAnchor )
+		) {
+			emifreeCloseMobileMenu();
+		}
 	} );
 })();

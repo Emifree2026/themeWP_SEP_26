@@ -41,6 +41,14 @@ wp_localize_script( 'emifree-section-pressure-drop', 'EMIFREE_PRESSUREDROP_I18N'
 
 	<div class="bg-slate-50 border-b border-slate-200">
 		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-8">
+			<a href="<?php echo esc_url( home_url( '/de/' ) ); ?>" class="inline-flex items-center gap-2 text-blue-700 hover:text-blue-800 font-medium mb-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded">
+				<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5"></path>
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m12 19-7-7 7-7"></path>
+				</svg>
+				Zurück zur Startseite
+			</a>
+			<br>
 			<a href="<?php echo esc_url( home_url( '/de/wissen/' ) ); ?>" class="inline-flex items-center gap-2 text-blue-700 hover:text-blue-800 font-medium mb-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded">
 				<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5"></path>
@@ -133,7 +141,90 @@ wp_localize_script( 'emifree-section-pressure-drop', 'EMIFREE_PRESSUREDROP_I18N'
 			</div>
 		</div>
 
+		<?php /* Lite-embed des Tutorial-Videos zum Rechner.
+		   Spiegel von page-knowledge-pressure-drop.php (Zeilen 187-249).
+		   Bis zum Klick werden weder YouTube-JS / Cookies noch Tracking-Pixel
+		   geladen — der einzige Netzwerk-Stoß ist das Lazy-Load des Thumbs.
+		   Beim Klick ersetzt der Handler das <a> durch ein <iframe> mit
+		   autoplay=1, damit die Wiedergabe sofort startet.
 
+		   Bewusst direkt unter dem Rechner eingefügt (nicht am Ende der
+		   Seite) — so sieht der Anwender die Werkzeug-Vorschau unmittelbar
+		   nachdem er Werte eingegeben hat. Layout-Reihenfolge des Templates
+		   jetzt identisch zur EN-Seite: Rechner → Video → Methodik → FAQ →
+		   Hinweise. Siehe [[emifree-landing-yt-lite-embed]].
+
+		   - <img loading="lazy"> holt das Thumbnail erst, wenn die Karte
+		     in der Nähe des Viewports liegt.
+		   - maxresdefault.jpg (1280x720) wird bevorzugt; bei Fehler
+		     fällt onerror auf hqdefault.jpg (480x360, immer vorhanden).
+		   - Der <a>-href verweist auf die YouTube-Watch-URL, damit
+		     No-JS-Nutzer (und Rechtsklick → Neuer Tab) das Video trotzdem
+		     öffnen können. */ ?>
+		<section class="mt-10" aria-labelledby="pd-video-de">
+			<div class="bg-white border border-slate-200 rounded-2xl p-6">
+				<div class="flex items-center gap-3 mb-4">
+					<span class="inline-flex w-10 h-10 rounded-full bg-blue-100 text-blue-700 items-center justify-center" aria-hidden="true">
+						<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+					</span>
+					<div>
+						<h2 id="pd-video-de" class="text-lg font-bold text-zinc-900 leading-tight">Video-Anleitung ansehen</h2>
+						<p class="text-sm text-slate-600">Optionaler 3-Minuten-Durchgang durch den Rechner und seine Eingaben.</p>
+					</div>
+				</div>
+
+				<div class="relative w-full overflow-hidden rounded-xl border border-slate-200 bg-slate-900" style="padding-top: 56.25%;">
+					<a href="https://www.youtube.com/watch?v=NJvomqKi0ZI"
+					   class="emifree-yt-lite absolute inset-0 block group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded-xl"
+					   data-yt-id="NJvomqKi0ZI"
+					   data-yt-title="Luftdruckverlust-Rechner Video-Anleitung"
+					   aria-label="Luftdruckverlust-Rechner Video-Anleitung abspielen (YouTube)">
+						<img
+							src="https://img.youtube.com/vi/NJvomqKi0ZI/maxresdefault.jpg"
+							alt=""
+							loading="lazy"
+							decoding="async"
+							class="absolute inset-0 w-full h-full object-cover transition-opacity group-hover:opacity-90"
+							onerror="this.onerror=null;this.src='https://img.youtube.com/vi/NJvomqKi0ZI/hqdefault.jpg';">
+						<span class="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden="true">
+							<span class="inline-flex w-16 h-16 rounded-full bg-red-600 group-hover:bg-red-700 text-white items-center justify-center shadow-lg ring-2 ring-white/20 transition-all group-hover:scale-110">
+								<svg class="w-7 h-7 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+							</span>
+						</span>
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<script>
+		// Lite-embed Click-to-Play. Bis zum Klick werden weder YouTube-JS
+		// noch Cookies noch Tracking-Pixel geladen — nur das Lazy-Thumb.
+		// Beim Klick ersetzt der Handler das <a> durch ein <iframe> mit
+		// autoplay=1, damit die Wiedergabe sofort startet. Spiegel des
+		// EN-Handlers; Selector (.emifree-yt-lite) wirkt deshalb sowohl
+		// auf der EN- als auch auf der DE-Rechnerseite korrekt.
+		document.querySelectorAll( '.emifree-yt-lite' ).forEach( function ( lite ) {
+			lite.addEventListener( 'click', function ( e ) {
+				// Modifier-Klicks (cmd/ctrl/shift/Middle) öffnen wie
+				// gewohnt die YouTube-Watch-URL in einem neuen Tab.
+				if ( e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1 ) {
+					return;
+				}
+				e.preventDefault();
+				const emifreeId    = this.getAttribute( 'data-yt-id' );
+				const emifreeTitle = this.getAttribute( 'data-yt-title' ) || 'YouTube video player';
+				const emifreeIframe = document.createElement( 'iframe' );
+				emifreeIframe.src              = 'https://www.youtube.com/embed/' + encodeURIComponent( emifreeId ) + '?autoplay=1&rel=0';
+				emifreeIframe.title            = emifreeTitle;
+				emifreeIframe.className        = 'absolute inset-0 w-full h-full';
+				emifreeIframe.frameBorder      = '0';
+				emifreeIframe.allow            = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+				emifreeIframe.setAttribute( 'allowfullscreen', '' );
+				emifreeIframe.setAttribute( 'referrerpolicy', 'strict-origin-when-cross-origin' );
+				this.replaceWith( emifreeIframe );
+			} );
+		} );
+		</script>
 
 		<section class="mt-12 prose max-w-none text-zinc-700">
 			<h2 class="text-2xl font-bold text-zinc-900" data-pd-i18n="methodology">Methodik</h2>

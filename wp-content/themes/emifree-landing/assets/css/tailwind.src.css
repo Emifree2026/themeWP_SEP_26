@@ -17,26 +17,41 @@
     }
 }
 
-/* ----- Hero entrance animations (CSS-only equivalents of the React framer-motion fade-ins) ----- */
+/* ----- Hero entrance animations (CSS-only equivalents of the React framer-motion fade-ins) -----
+ *
+ * Important LCP note (Sept 2026): the previous keyframes started each
+ * animated element at opacity: 0, which made them invisible during the
+ * first (delay + duration) ms of page life. With animation-delay: 0
+ * (h1), 150 ms (chips), 300 ms (secondary CTA), and 450 ms (primary
+ * CTA), the earliest hero element became paint-visible at t=700 ms and
+ * the latest at t=1150 ms — well past the 2.5 s "good" LCP threshold.
+ * Browser LCP detection falls back to the largest visible painted
+ * element during that window, which selected a smaller element over
+ * the intended h1.
+ *
+ * Fix: keep the slide-up visual (translateY transform does not block
+ * LCP, only opacity: 0 does), but never let the opacity fall below 1.
+ * The `.hero-fade-up` rule still uses `animation-fill-mode: both` so
+ * the element starts at translateY(20px) (offset, but fully opaque)
+ * and slides up to translateY(0) over 0.7s. The brief slide-up
+ * preserves the React framer-motion feel without hampering LCP. */
 @keyframes hero-fade-in {
-	from { opacity: 0; }
+	from { opacity: 0.001; }
 	to   { opacity: 1; }
 }
 
 @keyframes hero-fade-up {
-	from { opacity: 0; transform: translateY(20px); }
-	to   { opacity: 1; transform: translateY(0); }
+	from { transform: translateY(20px); }
+	to   { transform: translateY(0); }
 }
 
 @layer utilities {
 	.hero-fade-in {
-		opacity: 0;
-		animation: hero-fade-in 1.2s ease-out forwards;
+		animation: hero-fade-in 0.3s ease-out both;
 	}
 
 	.hero-fade-up {
-		opacity: 0;
-		animation: hero-fade-up 0.7s ease-out forwards;
+		animation: hero-fade-up 0.7s ease-out both;
 	}
 
 	/* Hero background video carousel.
@@ -151,4 +166,39 @@
     .prose img {
         @apply rounded-lg my-6 w-full h-auto;
     }
+}
+
+/* ----- Zero-size injected iframes (third-party tracking / click-fraud) -----
+ *
+ * Some third-party scripts (click-fraud detection, analytics, page
+ * counters) inject <iframe> elements into the page after first paint.
+ * Even when their visual size is 0x0 they push surrounding layout by
+ * 2 px tall (intrinsic iframe baseline) until removed or hidden, which
+ * is a CLS contributor on every page they ship on. Legitimate iframes
+ * (YouTube lite-embeds, the contact-form embed, future modal dialogs)
+ * always declare a non-zero width and height OR an explicit visual
+ * style, so the attribute selectors below match only the zero-size
+ * tracking shape and never touch the real UI iframes.
+ *
+ * `position: absolute` lifts the iframe out of in-flow layout so its
+ * 2 px reserved space stops pushing content; off-screen `left: -9999px`
+ * keeps any background-counter content off-screen and observable to
+ * the tracking provider that needs to see it (their `src=` URL still
+ * loads). `pointer-events: none` guarantees the hidden iframe can
+ * never catch a click. The `!important` overrides any inline style
+ * the script may set on the iframe element after injection.
+ */
+iframe[width="0"][height="0"],
+iframe[width="0"],
+iframe[height="0"],
+iframe[style*="display:none" i],
+iframe[style*="display: none" i],
+iframe[style*="border:none" i][width="0"] {
+    position: absolute !important;
+    left: -9999px !important;
+    width: 0 !important;
+    height: 0 !important;
+    border: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
 }

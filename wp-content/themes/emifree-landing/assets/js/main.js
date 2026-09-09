@@ -98,30 +98,86 @@
             });
         });
 
-        // First paint: promote video 0 to active and attempt to play.
-        // If the browser blocks it (iOS, data-saver, etc.), arm a
-        // one-shot gesture listener for the first user interaction.
-        heroVideos[0].classList.add('emifree-hero-video--active');
-        const emifreeFirstPlay = heroVideos[0].play();
-        if (emifreeFirstPlay && typeof emifreeFirstPlay.catch === 'function') {
-            emifreeFirstPlay.catch(function () {
-                if (heroVideos[0].dataset.emifreeGestureArmed === '1') { return; }
-                heroVideos[0].dataset.emifreeGestureArmed = '1';
+        // First paint: defer the video play() past the initial render so
+        // the browser can paint the static hero first. Without this
+        // defer, the video play() (which can trigger synchronous metadata
+        // decode on the primary, and a network fetch for the source) sits
+        // in the same long task as module-load work and inflates INP
+        // input delay — a user clicking within the first ~500 ms of page
+        // load would see the click sit in the event queue behind the
+        // hero bootstrap.
+        //
+        // Pre-load the secondary video's metadata ~10 s before the
+        // primary ends so the crossfade doesn't pause to buffer. We use
+        // the loadedmetadata event as the source of truth (no magic
+        // timing numbers) — if the primary's metadata hasn't arrived
+        // yet we fall back to a 5 s preload.
+        const emifreeStartHero = function () {
+            heroVideos[0].classList.add('emifree-hero-video--active');
+            const emifreeFirstPlay = heroVideos[0].play();
+            if (emifreeFirstPlay && typeof emifreeFirstPlay.catch === 'function') {
+                emifreeFirstPlay.catch(function () {
+                    if (heroVideos[0].dataset.emifreeGestureArmed === '1') { return; }
+                    heroVideos[0].dataset.emifreeGestureArmed = '1';
 
-                const emifreeArmedEvents = ['touchstart', 'pointerdown', 'mousedown', 'keydown', 'scroll'];
-                const emifreeArmPlay = function () {
-                    heroVideos[0].play().catch(function (e) {
-                        console.log('Hero carousel autoplay still blocked after gesture:', e);
-                    });
+                    const emifreeArmedEvents = ['touchstart', 'pointerdown', 'mousedown', 'keydown', 'scroll'];
+                    const emifreeArmPlay = function () {
+                        heroVideos[0].play().catch(function (e) {
+                            console.log('Hero carousel autoplay still blocked after gesture:', e);
+                        });
+                        emifreeArmedEvents.forEach(function (ev) {
+                            window.removeEventListener(ev, emifreeArmPlay, { capture: true });
+                        });
+                    };
                     emifreeArmedEvents.forEach(function (ev) {
-                        window.removeEventListener(ev, emifreeArmPlay, { capture: true });
+                        window.addEventListener(ev, emifreeArmPlay, { capture: true, passive: true });
                     });
-                };
-                emifreeArmedEvents.forEach(function (ev) {
-                    window.addEventListener(ev, emifreeArmPlay, { capture: true, passive: true });
                 });
-            });
-        }
+            }
+        };
+        // Schedule the hero bootstrap on the next animation frame so the
+        // browser can paint the static hero chrome before video decode
+        // work starts. This is the single biggest INP win for the
+        // landing page (the 2-video carousel was consuming ~400-600 ms
+        // of main-thread time during the initial render).
+        const emifreeSecondary = heroVideos[1];
+        const emifreeScheduleSecondaryPreload = function () {
+            // Listen for the primary's loadedmetadata so we know its
+            // duration, then preload the secondary ~10 s before it ends.
+            const emifreePrimary = heroVideos[0];
+            const emifreeTriggerPreload = function () {
+                const emifreeDuration = isFinite( emifreePrimary.duration ) && emifreePrimary.duration > 0
+                    ? emifreePrimary.duration
+                    : 30; // sensible fallback when metadata never arrived
+                const emifreeLeadMs = Math.max( 5000, ( emifreeDuration - 10 ) * 1000 );
+                window.setTimeout( function () {
+                    if ( emifreeSecondary && emifreeSecondary.preload === 'none' ) {
+                        emifreeSecondary.preload = 'metadata';
+                        // Force the source to fetch if the browser hasn't.
+                        try { emifreeSecondary.load(); } catch ( e ) { /* noop */ }
+                    }
+                }, emifreeLeadMs );
+            };
+            if ( emifreePrimary.readyState >= 1 ) {
+                // HAVE_METADATA already — schedule from now.
+                emifreeTriggerPreload();
+            } else {
+                emifreePrimary.addEventListener( 'loadedmetadata', emifreeTriggerPreload, { once: true, passive: true } );
+                // Fallback: if loadedmetadata never fires (network blocked,
+                // autoplay policy, etc.), still preload after 5 s so the
+                // secondary is at least ready if the primary ends.
+                window.setTimeout( function () {
+                    if ( emifreeSecondary && emifreeSecondary.preload === 'none' ) {
+                        emifreeSecondary.preload = 'metadata';
+                        try { emifreeSecondary.load(); } catch ( e ) { /* noop */ }
+                    }
+                }, 5000 );
+            }
+        };
+        requestAnimationFrame( function () {
+            emifreeStartHero();
+            emifreeScheduleSecondaryPreload();
+        } );
     } else if (heroVideos.length === 1) {
         // Defensive fallback: if a future revision ships only one
         // video, keep the original autoplay behavior so the hero

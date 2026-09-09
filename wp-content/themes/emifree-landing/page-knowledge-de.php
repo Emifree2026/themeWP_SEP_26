@@ -1,36 +1,20 @@
 <?php
 /**
- * Page template: /de/wissen/
- * Renders the Knowledge hub (German).
+ * Page template stub: /de/wissen/
  *
- * Mirrors page-blog-de.php's per-page SEO pattern with German
- * strings + 'inLanguage' => 'de-DE' on the JSON-LD.
+ * Mirror of page-knowledge.php for the German locale. The landing page
+ * keeps a single hub — the Ressourcen & Wissen section on the
+ * homepage (`#knowledge`) — so any direct visit to /de/wissen/ 301s
+ * to that section.
+ *
+ * The /de/wissen/<sub>/ URLs (insights, about, downloads, tools,
+ * ductulator, etc.) are handled by their own page-knowledge-*-de.php
+ * templates and remain live.
  */
 
-require_once get_template_directory() . '/inc/i18n.php';
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-emifree_seo_page_with_schema(
-	'Wissen, Technische Werkzeuge & Referenzen',
-	'HLK-Kanalauslegungswerkzeuge, Dimensionierungsreferenzen und technische Anleitungen für industrielle Luftfiltration und Lüftung.',
-	home_url( '/de/wissen' ),
-	'emifree-knowledge-schema-de',
-	array(
-		'@context'    => 'https://schema.org',
-		'@type'       => 'CollectionPage',
-		'name'        => 'Emifree Wissen',
-		'description' => 'Technische Werkzeuge, Referenzen und Praxisanleitungen für HLK-Kanalauslegung und Luftfiltration.',
-		'url'         => home_url( '/de/wissen' ),
-		'inLanguage'  => 'de-DE',
-		'publisher'   => array(
-			'@type' => 'Organization',
-			'name'  => 'Emifree GmbH',
-			'url'   => home_url(),
-		),
-	)
-);
-
-get_header();
-
-require_once get_template_directory() . '/template-parts/page-knowledge-index-de.php';
-
-get_footer();
+wp_redirect( home_url( '/de/#knowledge' ), 301 );
+exit;

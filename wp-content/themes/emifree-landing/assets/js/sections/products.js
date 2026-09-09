@@ -197,13 +197,48 @@
 
 	// ---- Auto-advance: kick off each gallery's interval + wire
 	// mouseenter/mouseleave/focusin/focusout to pause/resume.
+	//
+	// Each gallery's 4 s setInterval is gated by an IntersectionObserver
+	// so the tick doesn't fire while the gallery is off-screen. This
+	// matters for INP because the existing setup started every gallery's
+	// interval at module load (lines ~200), and the tick triggers a
+	// `.click()` on a thumb which runs a nested `forEach` per image +
+	// thumb — pure main-thread work that competes with the user's
+	// interactions elsewhere on the page. Pause the tick when the
+	// gallery leaves the viewport, resume on intersection. The
+	// mouseenter/mouseleave/focusin/focusout pause logic still applies
+	// on top of the viewport gate so hovering a thumb doesn't get
+	// clobbered by an in-flight tick.
 	if ( ! emifreeReducedMotion ) {
-		document.querySelectorAll( '[data-emifree-gallery]' ).forEach( ( emifreeGallery ) => {
-			emifreeStartAuto( emifreeGallery );
-			emifreeGallery.addEventListener( 'mouseenter', () => emifreeStopAuto( emifreeGallery ) );
-			emifreeGallery.addEventListener( 'mouseleave', () => emifreeStartAuto( emifreeGallery ) );
-			emifreeGallery.addEventListener( 'focusin', () => emifreeStopAuto( emifreeGallery ) );
-			emifreeGallery.addEventListener( 'focusout', () => emifreeStartAuto( emifreeGallery ) );
-		} );
+		const emifreeGalleries = document.querySelectorAll( '[data-emifree-gallery]' );
+		if ( emifreeGalleries.length ) {
+			// Per-gallery start/stop on visibility transitions. The
+			// observer fires its callback once for currently-intersecting
+			// targets at attach-time, which means the first gallery
+			// (when the section is in view at module load) starts
+			// immediately and the others wait until scroll/click brings
+			// them in. No setTimeout fallback — a gallery that never
+			// observes will stay paused, which is the correct behavior
+			// (the user can't see it).
+			const emifreeGalleryObserver = new IntersectionObserver(
+				function ( emifreeEntries ) {
+					emifreeEntries.forEach( function ( emifreeEntry ) {
+						if ( emifreeEntry.isIntersecting ) {
+							emifreeStartAuto( emifreeEntry.target );
+						} else {
+							emifreeStopAuto( emifreeEntry.target );
+						}
+					} );
+				},
+				{ threshold: 0.1 }
+			);
+			emifreeGalleries.forEach( function ( emifreeGallery ) {
+				emifreeGallery.addEventListener( 'mouseenter', () => emifreeStopAuto( emifreeGallery ) );
+				emifreeGallery.addEventListener( 'mouseleave', () => emifreeStartAuto( emifreeGallery ) );
+				emifreeGallery.addEventListener( 'focusin', () => emifreeStopAuto( emifreeGallery ) );
+				emifreeGallery.addEventListener( 'focusout', () => emifreeStartAuto( emifreeGallery ) );
+				emifreeGalleryObserver.observe( emifreeGallery );
+			} );
+		}
 	}
 })();

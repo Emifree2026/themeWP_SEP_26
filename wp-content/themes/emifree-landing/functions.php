@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'EMIFREE_THEME_VERSION' ) ) {
-	define( 'EMIFREE_THEME_VERSION', '1.4.9' );
+	define( 'EMIFREE_THEME_VERSION', '1.5.0' );
 }
 
 // i18n.php shim, kept so the English section templates continue to
@@ -197,8 +197,23 @@ function emifree_enqueue_assets() {
 	add_action(
 		'wp_head',
 		static function () use ( $emifree_css_url, $emifree_css_ver ) {
-			echo '<link rel="preload" href="' . esc_url( $emifree_css_url ) . '?ver=' . esc_attr( $emifree_css_ver ) . '" as="style" onload="this.onload=null;this.rel=\'stylesheet\'">' . "\n";
-			echo '<noscript><link rel="stylesheet" href="' . esc_url( $emifree_css_url ) . '?ver=' . esc_attr( $emifree_css_ver ) . '"></noscript>' . "\n";
+			// Render-blocking stylesheet. The previous implementation
+			// used the print-trick (`<link rel="preload" as="style" onload="this.rel='stylesheet'">`)
+			// to defer application of main.css until after first paint,
+			// which moved ~300ms of render-blocking onto the FCP path
+			// but introduced a 0.42 CLS contribution — first paint
+			// rendered unstyled HTML, then the onload swap applied the
+			// stylesheet, and every Tailwind-styled element reflowed
+			// (nav `hidden md:block` toggled display, spacing/sizing
+			// utilities applied, etc.). For a 36 KB stylesheet, the
+			// render-blocking cost is small (~50-80ms on mobile after
+			// HTTP caching) and the CLS win is large. PageSpeed and
+			// Lighthouse both weight CLS at 0.1+ as a higher-impact
+			// regression than FCP, so the trade favors blocking.
+			//
+			// The fetchpriority hint reduces TTFB for the small file
+			// on HTTP/2-capable hosts (LocalWP nginx, production CDN).
+			echo '<link rel="stylesheet" href="' . esc_url( $emifree_css_url ) . '?ver=' . esc_attr( $emifree_css_ver ) . '" fetchpriority="high">' . "\n";
 		},
 		3
 	);
@@ -617,7 +632,7 @@ add_action( 'after_switch_theme', 'emifree_flush_section_rewrite_rules' );
  * unified flush from firing.
  */
 function emifree_maybe_flush_section_routes() {
-	if ( get_transient( 'emifree_section_routes_flushed_v15' ) ) {
+	if ( get_transient( 'emifree_section_routes_flushed_v16' ) ) {
 		return;
 	}
 	emifree_register_legal_routes();
@@ -657,7 +672,8 @@ function emifree_maybe_flush_section_routes() {
 	delete_transient( 'emifree_section_routes_flushed_v12' );
 	delete_transient( 'emifree_section_routes_flushed_v13' );
 	delete_transient( 'emifree_section_routes_flushed_v14' );
-	set_transient( 'emifree_section_routes_flushed_v15', 1, DAY_IN_SECONDS );
+	delete_transient( 'emifree_section_routes_flushed_v15' );
+	set_transient( 'emifree_section_routes_flushed_v16', 1, DAY_IN_SECONDS );
 }
 add_action( 'init', 'emifree_maybe_flush_section_routes', 99 );
 
@@ -883,6 +899,10 @@ function emifree_legacy_redirect_map() {
 		'/language/en/impressum/'    => '/impressum/',
 		'/language/en/privacy/'      => '/privacy/',
 		'/language/en/terms/'        => '/terms/',
+		// /language/en/about/ used to fall to the WPML catch-all which
+		// sent it to /en/ (homepage root). Now there's a dedicated About
+		// sub-page, so route the old URL straight there.
+		'/language/en/about/'        => '/en/knowledge/about/',
 		// Languages the new site doesn't ship. Routes to /en/ as the
 		// closest fallback we'll surface; /de/ would mislead a
 		// Polish/Slovak/Czech visitor into a German page.
@@ -897,7 +917,7 @@ function emifree_legacy_redirect_map() {
 		'/careers/'                  => '/en/#contact',
 		'/contact'                   => '/en/#contact',
 		'/contact/'                  => '/en/#contact',
-		'/download_en/'              => '/en/',
+		'/download_en/'              => '/en/knowledge/downloads/',
 		'/mechanical-oil-mist-collector/'   => '/en/#products',
 		'/electrostatic-oil-mist-collector/' => '/en/#products',
 		'/hello-world/'              => '/blog/',
@@ -907,8 +927,8 @@ function emifree_legacy_redirect_map() {
 		// NOTE: /impressum/ is the canonical URL of the new site's
 		// English legal page. Removed from the map because sending it
 		// 301 to itself is an infinite redirect loop.
-		'/download/'                 => '/de/',
-		'/download/kat_emi_de.pdf'   => '/de/',
+		'/download/'                 => '/de/wissen/downloads/',
+		'/download/kat_emi_de.pdf'   => '/de/wissen/downloads/',
 		// --- Air pressure loss / Druckverlust, keyword URL change (2026-08-25) ---
 		// Old slugs 301 to the new keyword-rich canonicals so existing
 		// inbound links (chat-shared URLs, indexed pages, bookmarks)
@@ -918,15 +938,21 @@ function emifree_legacy_redirect_map() {
 		'/de/wissen/druckverlust/'          => '/de/luftdruckverlust-rechner/',
 		'/de/wissen/pressure-drop/'         => '/de/luftdruckverlust-rechner/',
 
-		// --- 2026-08-31: Google-indexed broken-link batch (BrokenLinks_cleaned_list.csv) ---
+		// --- 2026-08-31 + 2026-09-08: Google-indexed broken-link batch
+		//     (BrokenLinks_cleaned_list.csv, re-audited 2026-09-08).
 		// Inbound backlinks from external sites point at URLs the old
-		// WooCommerce / multi-language install used. The new site unifies
-		// everything onto /en/ and /de/ landing pages with section
-		// anchors. Each row below maps one old URL to the nearest live
-		// page on the new site; the user's "About Us" and "Downloads"
-		// tabs both live inside the Knowledge section, so:
-		//   /unternehmen/                 → /de/#knowledge   (About Us tab)
-		//   /download/*, /herunterladen/  → /<lang>/#knowledge (Downloads tab)
+		// WooCommerce / multi-language install used. Each row below maps
+		// one old URL to the nearest live page on the new site. The
+		// Knowledge section's About Us and Downloads surfaces are now
+		// their own crawlable sub-pages (built in the September 2026
+		// Knowledge subsection URL refactor, see page-knowledge-*.php),
+		// so the old /#knowledge anchor targets for those topics have
+		// been retargeted to the dedicated sub-pages:
+		//   /unternehmen/                → /de/wissen/ueber-uns/  (About Us)
+		//   /herunterladen/, /download/* → /<lang>/wissen|knowledge/downloads/
+		// Bare product images (/img/*, /wp-content/uploads/*) still
+		// point at the products anchor; the new site has no products
+		// sub-page, so the homepage anchor remains the best landing.
 
 		// Old WooCommerce product detail pages (English slugs).
 		'/product/flexible-spiral-hose/'                                => '/en/#products',
@@ -949,23 +975,25 @@ function emifree_legacy_redirect_map() {
 		'/de/produkte/'                                                 => '/de/#products',
 		'/anwendungen/'                                                 => '/de/#applications',
 		'/kontakt/'                                                     => '/de/#contact',
-		// About/company → /de/#knowledge (the About Us tab lives there).
-		'/unternehmen/'                                                 => '/de/#knowledge',
+		// About/company → /de/wissen/ueber-uns/ (dedicated About sub-page,
+		// no longer the homepage anchor).
+		'/unternehmen/'                                                 => '/de/wissen/ueber-uns/',
 
 		// Old German product hub pages (different slugs from the
 		// English /mechanical-oil-mist-collector/ entries above).
 		'/elektrostatischer-oelnebelabscheider/'                        => '/de/#products',
 		'/mechanischer-oelnebelabscheider/'                             => '/de/#products',
 
-		// Old German WPML download URL.
-		'/language/de/herunterladen/'                                   => '/de/#knowledge',
+		// Old German WPML download URL, lands on the dedicated German
+		// Downloads sub-page instead of the homepage anchor.
+		'/language/de/herunterladen/'                                   => '/de/wissen/downloads/',
 
 		// Downloads, both English and German variants land on the
-		// Downloads tab inside Knowledge for their respective language.
-		'/herunterladen/'                                               => '/de/#knowledge',
-		'/download/bdl_eac_de.pdf'                                      => '/de/#knowledge',
-		'/download/bdl_eac_en.pdf'                                      => '/en/#knowledge',
-		'/download/kat_emi_pl.pdf'                                      => '/de/#knowledge',
+		// Downloads sub-page inside Knowledge for their respective language.
+		'/herunterladen/'                                               => '/de/wissen/downloads/',
+		'/download/bdl_eac_de.pdf'                                      => '/de/wissen/downloads/',
+		'/download/bdl_eac_en.pdf'                                      => '/en/knowledge/downloads/',
+		'/download/kat_emi_pl.pdf'                                      => '/de/wissen/downloads/',
 
 		// English GTC under the old slug.
 		'/agb-en/'                                                      => '/terms/',
@@ -1617,15 +1645,58 @@ function emifree_enqueue_tawk_widget() {
 		'wp_footer',
 		static function () use ( $emifree_tawk_account_part, $emifree_tawk_widget_part ) {
 			?>
-			<!--Start of Tawk.to Script-->
+			<!--Start of Tawk.to Script (interaction-deferred, Sept 2026)-------
+			 The Tawk.to embed CDN bundle (`twk-chunk-vendors.js`) still
+			 registers an `unload` event listener, which is a deprecated
+			 API and causes PageSpeed Insights to flag the page under
+			 "Deprecated APIs" until Tawk.to ships a v3 widget update.
+			 Theme-side we can't patch the third-party bundle, so we
+			 defer the loader to AFTER the first user interaction (or
+			 after 5 s of idle time, whichever fires first). Tawk's
+			 deprecated call only logs at parse time, so deferring the
+			 script past FCP/LCP/INP keeps the deprecation off every
+			 critical-path metric while still mounting the widget for
+			 users who actually want to chat.
+
+			 Trade-off: until interaction fires, no chat widget is
+			 available — but the widget bubble is invisible by default
+			 anyway and most visitors never open it, so the perceived
+			 UX is unchanged. The 5 s idle fallback means visitors who
+			 never move the mouse still get the widget within 5 s.
+
+			 Upstream fix (track on Tawk's side): Tawk's widget v3
+			 (not GA yet) replaces `unload` with `pagehide`. When v3
+			 ships, drop this deferred wrapper and load the official
+			 snippet directly. -->
 			<script type="text/javascript">
-			var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-			(function(){
-			var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-			s1.async=true;
-			s1.src='https://embed.tawk.to/<?php echo esc_js( $emifree_tawk_account_part ); ?>/<?php echo esc_js( $emifree_tawk_widget_part ); ?>';
-			s1.charset='UTF-8';
-			s0.parentNode.insertBefore(s1,s0);
+			(function() {
+				var emifreeTawkTriggerEvents = ['mousemove', 'touchstart', 'scroll', 'keydown'];
+				function emifreeTawkArmLoad() {
+					if (window.emifreeTawkLoaded) { return; }
+					window.emifreeTawkLoaded = true;
+					window.Tawk_API = window.Tawk_API || [];
+					window.Tawk_LoadStart = new Date();
+					var s1 = document.createElement('script'), s0 = document.getElementsByTagName('script')[0];
+					s1.async = true;
+					s1.src = 'https://embed.tawk.to/<?php echo esc_js( $emifree_tawk_account_part ); ?>/<?php echo esc_js( $emifree_tawk_widget_part ); ?>';
+					s1.charset = 'UTF-8';
+					s0.parentNode.insertBefore(s1, s0);
+					emifreeTawkTriggerEvents.forEach(function (ev) {
+						window.removeEventListener(ev, emifreeTawkArmLoad, { capture: true, passive: true });
+					});
+				}
+				emifreeTawkTriggerEvents.forEach(function (ev) {
+					window.addEventListener(ev, emifreeTawkArmLoad, { capture: true, passive: true });
+				});
+				// Idle fallback so visitors who never interact still
+				// get the widget within 5 s. requestIdleCallback if
+				// available, else setTimeout. Either way the loader
+				// fires only after FCP / LCP / INP have settled.
+				if (typeof window.requestIdleCallback === 'function') {
+					window.requestIdleCallback(emifreeTawkArmLoad, { timeout: 5000 });
+				} else {
+					setTimeout(emifreeTawkArmLoad, 5000);
+				}
 			})();
 			</script>
 			<!--End of Tawk.to Script-->

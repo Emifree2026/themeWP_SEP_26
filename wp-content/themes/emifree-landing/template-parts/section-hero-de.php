@@ -15,6 +15,34 @@
 
 <section id="hero" class="relative w-full min-h-[100dvh] flex flex-col overflow-hidden bg-[#0a0a0a]">
 
+	<?php /* ----- Critical inline CSS for the hero (LCP-friendly) -----
+	   The h1 headline is the intended LCP element. WindPress + main.css
+	   paint the Tailwind utility classes (text-4xl/text-5xl/text-6xl,
+	   font-bold, leading-tight, etc.) at runtime, which means until
+	   that injection completes the h1 renders at the browser's default
+	   sizing — small enough that a smaller element (like the secondary
+	   CTA link) becomes the LCP candidate instead.
+
+	   This inline block forces the h1 to its visually-correct size
+	   from the first paint, regardless of what utility-CSS runtime is
+	   or isn't loaded. `!important` overrides any Tailwind utility that
+	   arrives later, so the h1 stays the same size after WindPress
+	   injects (no layout-shift-from-utility-injection later). The block
+	   only emits on hero pages (this template part is only included
+	   from front-page-de.php), so the FCP cost is ~280 bytes of inline
+	   CSS on those routes. Mirrors section-hero.php's inline block. */ ?>
+	<style>
+		#hero > div > h1 {
+			font-size: clamp(2.25rem, 6vw, 3.75rem) !important;
+			line-height: 1.15 !important;
+			font-weight: 700 !important;
+			color: #fff !important;
+			letter-spacing: -0.02em !important;
+			margin: 0 0 1.5rem 0 !important;
+			opacity: 1 !important;
+		}
+	</style>
+
 	<!-- Background videos, two-up carousel (mirrors EN). Two videos
 	     play alternately: when the active one ends, JS cross-fades to
 	     the other and lets it play through; on its end, back to the
@@ -52,7 +80,7 @@
 			muted
 			playsinline
 			webkit-playsinline
-			preload="metadata"
+			preload="none"
 			class="emifree-hero-video absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 z-0"
 		>
 			<source src="<?php echo esc_url( get_template_directory_uri() . '/assets/videos/Landing Video_2.1.mp4' ); ?>" type="video/mp4">
