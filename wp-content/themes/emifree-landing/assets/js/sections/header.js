@@ -560,27 +560,56 @@
 	// same handler, with the mobile-menu close folded in so we don't need
 	// a second per-anchor forEach just to flip `aria-expanded`.
 
-	// WordPress wraps the live-preview UI in an iframe whose URL points
-	// at /wp-admin/customize.php, NOT at the rendered page. The same-path
-	// check below uses window.location.pathname, which would be the
-	// wrapper's path, so absolute-path anchors (/#contact, /de/#products,
-	// …) would always look "off-page" and the handler would return,
-	// letting the browser navigate the iframe off its customizer URL and
-	// break the live preview. Detect any preview frame and skip the
-	// same-path short-circuit there; in-page anchor scrolls are then
-	// driven by the existence check on document.querySelector() below.
+	// WordPress wraps the live-preview UI in an iframe whose URL has
+	// preview markers (and whose window.location.pathname is the
+	// rendered page, not /wp-admin/customize.php — that's the parent,
+	// not the iframe). The same-path check below uses pathname to
+	// decide whether to scroll in place vs. let the browser navigate
+	// cross-page, and several older preview URL patterns (only
+	// ?preview=1, etc.) used a hash instead of query string. The
+	// detection below covers every URL shape WP actually uses across
+	// versions 4.x–6.x, and also catches iframe / admin contexts as a
+	// belt-and-suspenders net.
 	function emifreeIsPreviewFrame() {
 		try {
-			const q = window.location.search || '';
-			// WP customizer iframe: ?wp_customize=on&theme=...&url=...
-			// WP customizer (older): ?customize_theme=...
-			// Customizer autosave / changeset: ?customize_changeset_uuid=...
-			// Customizer in legacy form: ?customize_autosaved=...
-			// Post/template preview: ?preview=true&preview_id=...&preview_nonce=...
-			return /(?:^|[?&])(?:wp_customize|customize_theme|customize_changeset_uuid|customize_autosaved|preview(?:=|_id))=/.test( q );
+			const search = window.location.search || '';
+			const hash   = window.location.hash || '';
+			const path   = window.location.pathname || '';
+			// Query-string markers used by WP preview iframes across
+			// versions: query them as one combined string so a marker
+			// written into either side (rare; some legacy customizer
+			// previews put ?wp_customize on the hash) is still caught.
+			//   wp_preview_theme          (5.5+ theme preview iframe)
+			//   wp_customize              (customizer legacy)
+			//   customize                 (older customizer generic)
+			//   customize_theme           (customizer older form)
+			//   customize_changeset_uuid  (customizer changeset flow)
+			//   customize_autosaved       (autosaved draft flow)
+			//   preview / preview_id      (post + template preview)
+			const combined = search + ( search || hash ? '#' : '' ) + hash.replace( /^#/, '' );
+			if (/(?:^|[&#?])(?:wp_preview_theme|wp_customize|customize(?:_theme|_changeset_uuid|_autosaved|)|preview(?:=|_id))=/.test( combined )) {
+				return true;
+			}
+			// Customizer / theme-preview admin pages the parent loader
+			// uses. JS running in any of these is in a preview context
+			// even if the iframe URL markers above were stripped on the
+			// way in (some WP plugins rewrite preview URLs to clean up
+			// tracking params).
+			if (/\/wp-admin\/(?:customize|theme-install|theme-preview)\.php/.test( path )) {
+				return true;
+			}
+			// Any iframe context at all — the only legitimate reason for
+			// this theme to be framed is the WP customizer preview.
+			// Cross-origin parents throw on .parent access; swallow.
+			try {
+				if ( window.parent && window.parent !== window ) {
+					return true;
+				}
+			} catch ( crossErr ) { /* cross-origin: treat as not previewed */ }
 		} catch ( err ) {
 			return false;
 		}
+		return false;
 	}
 	const emifreeIsPreview = emifreeIsPreviewFrame();
 
@@ -608,7 +637,9 @@
 		// The same-path check runs in SITE-RELATIVE space (subpath
 		// stripped) so it works on both root installs and subpath
 		// installs like /wordpress/. SKIP entirely inside WP preview
-		// iframes — see emifreeIsPreviewFrame() above.
+		// iframes — see emifreeIsPreviewFrame() above — because some
+		// preview URLs report a wrapper-style pathname that never
+		// matches a canonical /, /en/, or /de/ path.
 		if ( emifreeHref.startsWith( '/' ) && ! emifreeIsPreview ) {
 			const emifreePath    = emifreeStripSubpath( window.location.pathname ).replace( /\/$/, '' );
 			let emifreeHrefPath  = emifreeHref.split( '#' )[ 0 ].replace( /\/$/, '' ) || '/';
@@ -624,6 +655,26 @@
 			const emifreeOffset = ( emifreeHeader ? emifreeHeader.offsetHeight : 64 ) + 8;
 			const emifreeTop = emifreeTarget.getBoundingClientRect().top + window.pageYOffset - emifreeOffset;
 			window.scrollTo( { top: emifreeTop, behavior: 'smooth' } );
+			// Inside the WP customizer preview iframe, syncing the
+			// fragment is what keeps the parent's URL bar and preview
+			// state in lockstep with the iframe's scroll position. We
+			// can't update history (the parent owns that), so post a
+			// message that the WP customizer's previewer picks up via
+			// its own listener. Falls back silently if no parent is
+			// listening (e.g. on the live site) — no UX cost.
+			if ( emifreeIsPreview ) {
+				try {
+					window.parent.postMessage(
+						JSON.stringify( {
+							type: 'emifree-preview-scroll',
+							href: emifreeHref,
+							fragment: emifreeFragment,
+							path: window.location.pathname,
+						} ),
+						'*'
+					);
+				} catch ( msgErr ) { /* cross-origin parent: skip */ }
+			}
 		}
 		// Close the mobile menu on the same event. Only fires when the
 		// anchor is inside the menu — links in the header (which sit

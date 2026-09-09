@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'EMIFREE_THEME_VERSION' ) ) {
-	define( 'EMIFREE_THEME_VERSION', '1.5.1' );
+	define( 'EMIFREE_THEME_VERSION', '1.5.2' );
 }
 
 // i18n.php shim, kept so the English section templates continue to
