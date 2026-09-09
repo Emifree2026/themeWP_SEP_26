@@ -884,6 +884,18 @@ function emifree_legacy_redirect_map() {
 		'/language/de/technologie/'  => '/de/#technology',
 		'/language/de/kontakt/'      => '/de/#contact',
 		'/language/de/karriere/'     => '/de/#contact',
+		// /language/de/unternehmen/ (= 'company') is the old WPML
+		// slug for the About Us landing. The bare /unternehmen/ entry
+		// below (in the broken-links-batch block) was added later but
+		// its WPML-style twin was missed, so the WPML catch-all
+		// swallowed it to /de/. Google still has the German title
+		// 'Unternehmen' attached to that URL, and visitors land on
+		// the homepage instead of the dedicated About sub-page.
+		'/language/de/unternehmen/'  => '/de/wissen/ueber-uns/',
+		// /language/de/ueber-uns/ (ASCII-safe variant, same meaning)
+		// is the DE twin of the EN /language/en/about/ entry above
+		// and follows the same redirect-to-dedicated-sub-page pattern.
+		'/language/de/ueber-uns/'    => '/de/wissen/ueber-uns/',
 		// --- Old WPML German legal pages → new canonicals ---
 		// The new site serves the German legal pages at /de/impressum/,
 		// /de/datenschutz/, /de/agb/. /language/de/impressum/ etc. are
