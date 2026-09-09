@@ -921,6 +921,14 @@ function emifree_legacy_redirect_map() {
 		'/mechanical-oil-mist-collector/'   => '/en/#products',
 		'/electrostatic-oil-mist-collector/' => '/en/#products',
 		'/hello-world/'              => '/blog/',
+		// /about/ (no language prefix) was indexed by Google from the
+		// old WPML install. The new site serves About Us at
+		// /en/knowledge/about/ (dedicated sub-page, not the homepage
+		// anchor). 301 there so the index entry collapses to the live
+		// page and any future crawl of /about/ resolves cleanly. Bare
+		// /about without trailing slash is normalized to /about/ by the
+		// lookup at the top of emifree_maybe_redirect_legacy_url().
+		'/about/'                    => '/en/knowledge/about/',
 		// --- Old bare-slug German paths ---
 		'/karriere/'                 => '/de/#contact',
 		'/startseite/'               => '/de/',
