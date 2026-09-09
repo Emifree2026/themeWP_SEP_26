@@ -559,6 +559,31 @@
 	// listener walks the DOM once on click (via .closest()) and runs the
 	// same handler, with the mobile-menu close folded in so we don't need
 	// a second per-anchor forEach just to flip `aria-expanded`.
+
+	// WordPress wraps the live-preview UI in an iframe whose URL points
+	// at /wp-admin/customize.php, NOT at the rendered page. The same-path
+	// check below uses window.location.pathname, which would be the
+	// wrapper's path, so absolute-path anchors (/#contact, /de/#products,
+	// …) would always look "off-page" and the handler would return,
+	// letting the browser navigate the iframe off its customizer URL and
+	// break the live preview. Detect any preview frame and skip the
+	// same-path short-circuit there; in-page anchor scrolls are then
+	// driven by the existence check on document.querySelector() below.
+	function emifreeIsPreviewFrame() {
+		try {
+			const q = window.location.search || '';
+			// WP customizer iframe: ?wp_customize=on&theme=...&url=...
+			// WP customizer (older): ?customize_theme=...
+			// Customizer autosave / changeset: ?customize_changeset_uuid=...
+			// Customizer in legacy form: ?customize_autosaved=...
+			// Post/template preview: ?preview=true&preview_id=...&preview_nonce=...
+			return /(?:^|[?&])(?:wp_customize|customize_theme|customize_changeset_uuid|customize_autosaved|preview(?:=|_id))=/.test( q );
+		} catch ( err ) {
+			return false;
+		}
+	}
+	const emifreeIsPreview = emifreeIsPreviewFrame();
+
 	document.addEventListener( 'click', function ( e ) {
 		const emifreeAnchor = e.target.closest(
 			'a[href^="#"], a[href^="/#"], a[href^="/de/#"], a[href^="/en/#"], a[href*="emifree.com/"][href*="#"]'
@@ -582,8 +607,9 @@
 		// not, let the browser do a full navigation to the path + fragment.
 		// The same-path check runs in SITE-RELATIVE space (subpath
 		// stripped) so it works on both root installs and subpath
-		// installs like /wordpress/.
-		if ( emifreeHref.startsWith( '/' ) ) {
+		// installs like /wordpress/. SKIP entirely inside WP preview
+		// iframes — see emifreeIsPreviewFrame() above.
+		if ( emifreeHref.startsWith( '/' ) && ! emifreeIsPreview ) {
 			const emifreePath    = emifreeStripSubpath( window.location.pathname ).replace( /\/$/, '' );
 			let emifreeHrefPath  = emifreeHref.split( '#' )[ 0 ].replace( /\/$/, '' ) || '/';
 			emifreeHrefPath      = emifreeStripSubpath( emifreeHrefPath );
