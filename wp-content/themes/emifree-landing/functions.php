@@ -915,10 +915,40 @@ function emifree_legacy_redirect_map() {
 		// Languages the new site doesn't ship. Routes to /en/ as the
 		// closest fallback we'll surface; /de/ would mislead a
 		// Polish/Slovak/Czech visitor into a German page.
+		// Polish WPML home + section landing slugs. Each entry below
+		// was observed as a Google-indexed URL with the Polish title
+		// still attached (Google caches the old title through its
+		// translate proxy, e.g. emifree-com.translate.goog, even after
+		// the underlying URL is replaced). Routing each section to
+		// the matching EN anchor keeps the visitor in the same topic
+		// instead of dumping them on the homepage.
 		'/language/pl/'              => '/en/',
-		'/language/pl/pobierz/'      => '/en/',
+		'/language/pl/start/'        => '/en/',
+		'/language/pl/produkty/'     => '/en/#products',
+		'/language/pl/zastosowania/' => '/en/#applications',
+		'/language/pl/wiedza/'       => '/en/#knowledge',
+		'/language/pl/technologia/'  => '/en/#technology',
+		'/language/pl/kontakt/'      => '/en/#contact',
+		'/language/pl/kariera/'      => '/en/#contact',
+		'/language/pl/pobierz/'      => '/en/knowledge/downloads/',
+		// Bare /pl/<slug>/ forms (no /language/ prefix), same Polish
+		// WPML slugs that Google indexed without the language root.
+		'/pl/'                       => '/en/',
+		'/pl/zastosowania/'          => '/en/#applications',
+		'/pl/produkty/'              => '/en/#products',
+		'/pl/kontakt/'               => '/en/#contact',
+		'/pl/pobierz/'               => '/en/knowledge/downloads/',
+		// Slovak and Czech, same fallback pattern. No section-level
+		// entries have been indexed so far, only the language root
+		// and one Czech home variant.
 		'/language/sk/'              => '/en/',
+		'/language/sk/produkty/'     => '/en/#products',
+		'/language/sk/aplikacie/'    => '/en/#applications',
+		'/language/sk/kontakt/'      => '/en/#contact',
 		'/language/cz/'              => '/en/',
+		'/language/cz/produkty/'     => '/en/#products',
+		'/language/cz/aplikace/'     => '/en/#applications',
+		'/language/cz/kontakt/'      => '/en/#contact',
 		'/language/cz/domovska-stranka/' => '/en/',
 		// --- Old bare-slug English paths (WPML default language) ---
 		'/products/'                 => '/en/#products',
