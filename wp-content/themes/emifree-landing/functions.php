@@ -1016,6 +1016,29 @@ function emifree_legacy_redirect_map() {
 		'/product/flexibler-spiralschlauch/'                            => '/de/#products',
 		'/product/vibrationsdaempfer/'                                  => '/de/#products',
 
+		// Old WooCommerce + WPML product detail pages, Czech + Polish
+		// WPML-translated slugs. Google still indexes these with the
+		// Czech / Polish title (e.g. 'Mechanický separátor olejové
+		// mlhy', 'Elektrostatyczny separator mgły olejowej') even
+		// though the underlying URL no longer resolves. Without an
+		// exact-path entry here the WPML catch-all sends them to /en/,
+		// which is why the visitor lands on the homepage instead of
+		// anywhere product-related. Map the two product lines that
+		// were indexed (mechanical + electrostatic) for both languages,
+		// plus the bare /language/<code>/product/ root in case Google
+		// indexed it as a category landing.
+		'/language/cs/produkty/mechanicky-separator-olejove-mlhy/'      => '/en/#products',
+		'/language/cs/produkty/elektrostaticky-separator-olejove-mlhy/'  => '/en/#products',
+		'/language/pl/produkty/mechaniczny-separator-mgly-olejowej/'    => '/en/#products',
+		'/language/pl/produkty/elektrostatyczny-separator-mgly-olejowej/' => '/en/#products',
+		// Belt-and-suspenders: the bare /product/<slug>/ forms indexed
+		// under Czech + Polish slugs (in case Google indexed the
+		// translated slug without the /language/<code>/ root).
+		'/product/mechanicky-separator-olejove-mlhy/'                   => '/en/#products',
+		'/product/elektrostaticky-separator-olejove-mlhy/'              => '/en/#products',
+		'/product/mechaniczny-separator-mgly-olejowej/'                 => '/en/#products',
+		'/product/elektrostatyczny-separator-mgly-olejowej/'            => '/en/#products',
+
 		// Old German bare-section paths.
 		'/produkte/'                                                    => '/de/#products',
 		'/produkte/mechanical/'                                         => '/de/#products',
