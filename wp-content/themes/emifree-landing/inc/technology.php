@@ -26,6 +26,34 @@ if ( ! function_exists( 'emifree_technology_icons' ) ) :
 	}
 endif;
 
+if ( ! function_exists( 'emifree_tech_image_dimensions' ) ) :
+	/**
+	 * Map of step image filename → intrinsic [width, height] in pixels.
+	 *
+	 * Read from the actual files in assets/tech/ via the `file(1)`
+	 * command. Used by the section templates to emit width/height
+	 * attributes + an inline aspect-ratio style on each <img>, so
+	 * lazy-loaded step images reserve their box at first paint and
+	 * don't trigger CLS when they decode.
+	 *
+	 * Keep in sync if step images change. A missing key falls back to
+	 * a 16:9 reserve (most current assets are 1376×768 = 16:9).
+	 *
+	 * @return array<string, array{0:int,1:int}>
+	 */
+	function emifree_tech_image_dimensions() {
+		return array(
+			'Step1.1_ECOAIR.jpg'  => array( 892, 683 ),
+			'Step2.1_ECOAIR.webp' => array( 1360, 752 ),
+			'Step3_clean.webp'    => array( 1024, 1024 ),
+			'Step 1.webp'         => array( 1376, 768 ),
+			'Step 2.webp'         => array( 1376, 768 ),
+			'Step 3.webp'         => array( 1376, 768 ),
+			'Step 4.webp'         => array( 1376, 768 ),
+		);
+	}
+endif;
+
 if ( ! function_exists( 'emifree_technologies' ) ) :
 	function emifree_technologies() {
 		return array(

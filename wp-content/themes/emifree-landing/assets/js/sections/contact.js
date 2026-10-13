@@ -33,6 +33,51 @@
         return;
     }
 
+    // ----- URL-param prefill (?quote=<slug>#contact) -----
+    //
+    // Product landing pages (e.g. /en/products/mechanical/) link to
+    // /en/?quote=mechanical#contact so the contact form arrives
+    // pre-populated with a trackable source-of-quotation line. The
+    // slug is whitelisted server-side (emifree_handle_contact_submit
+    // accepts only 'mechanical', 'electrostatic', 'dust'); we look up
+    // the localized label + message in emifreeContact.prefillMessages
+    // and dispatch the same emifree:prefill-contact event the
+    // home-page product CTAs fire. This lets the product pages
+    // reuse all the prefill mechanics (slug → hidden inputs, message
+    // prefix, cursor placement, idempotency on re-click) without
+    // duplicating any DOM logic.
+    //
+    // The listener we register below fires synchronously when we
+    // dispatch the event here on DOMContentLoaded, so the textarea is
+    // already filled by the time the browser scrolls #contact into
+    // view. The prefillPrefix legacy field on window.emifreeProducts
+    // (a different shape) is not used here — this is a single,
+    // explicit message per slug/language.
+    if (window.emifreeContact && window.emifreeContact.prefillMessages) {
+        try {
+            const emifreeUrl = new URL(window.location.href);
+            const emifreeSlug = emifreeUrl.searchParams.get('quote');
+            if (emifreeSlug && window.emifreeContact.prefillMessages[emifreeSlug]) {
+                const emifreeLang = (document.documentElement.getAttribute('lang') || 'en').toLowerCase().split('-')[0];
+                const emifreeEntry = window.emifreeContact.prefillMessages[emifreeSlug][emifreeLang] || window.emifreeContact.prefillMessages[emifreeSlug].en;
+                if (emifreeEntry && emifreeEntry.label && emifreeEntry.message) {
+                    const emifreeEvent = new CustomEvent('emifree:prefill-contact', {
+                        detail: {
+                            slug:    emifreeSlug,
+                            label:   emifreeEntry.label,
+                            message: emifreeEntry.message + '\n\n',
+                        },
+                    });
+                    window.dispatchEvent(emifreeEvent);
+                }
+            }
+        } catch (_) {
+            // URL constructor / searchParams not available in very
+            // old browsers — the contact form falls back to empty
+            // defaults, which is the same behavior as no ?quote= param.
+        }
+    }
+
     const emifreeResult = document.getElementById('emifree-contact-result');
     const emifreeSubmit = document.getElementById('emifree-contact-submit');
     const emifreeSubmitLabel = emifreeSubmit ? emifreeSubmit.querySelector('[data-emifree-contact-submit-label]') : null;

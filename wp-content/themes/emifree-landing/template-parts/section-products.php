@@ -1,23 +1,51 @@
 <?php
 /**
- * Products section, Mechanical / Electrostatic / Dust tabs with image
- * gallery, specs table, features grid, applications, and a per-product
- * inquiry CTA. Mirrors src/components/Products.jsx from the React app.
+ * Products section — image-backed category card grid.
  *
- * Tab switching + active-image cycling inside a tab is handled by
- * assets/js/sections/products.js, which is enqueued in functions.php
- * when this section template is loaded.
+ * Three full-bleed image cards (Mechanical / Electrostatic / Dust) on
+ * a responsive grid (1 col mobile, 2 col tablet, 3 col desktop).
+ * Each card is a real <a href> so search engines and keyboard users
+ * can reach the category page. The "Learn more" CTA + darker gradient
+ * overlay are revealed on hover and on keyboard focus; a visible
+ * focus ring makes the card discoverable for keyboard users.
+ *
+ * No JavaScript dependency — replaces the prior tabbed view
+ * (assets/js/sections/products.js) which is no longer enqueued.
  */
 
 require_once get_template_directory() . '/inc/i18n.php';
 emifree_require_section_data( 'products' );
-emifree_enqueue_section_script( 'products' );
+
+// One entry per category. Image filename is hardcoded (not pulled from
+// the data array's images list) because the user picked a specific
+// photo per card; this decouples the choice from data-array order.
+$emifree_card_uri = get_template_directory_uri() . '/assets/products/';
+$emifree_cards    = array(
+	'mechanical'    => array(
+		'title'      => 'Mechanical Filtration',
+		'url'        => home_url( '/en/products/mechanical/' ),
+		'image'      => 'fotom1.webp',
+		'aria_label' => 'Mechanical Filtration — view category',
+	),
+	'electrostatic' => array(
+		'title'      => 'Electrostatic Filtration',
+		'url'        => home_url( '/products/electrostatic/' ),
+		'image'      => 'fotoe2.webp',
+		'aria_label' => 'Electrostatic Filtration — view category',
+	),
+	'dust'          => array(
+		'title'      => 'Dust Filtration',
+		'url'        => home_url( '/products/dust/' ),
+		'image'      => 'dust_filter-emi.png',
+		'aria_label' => 'Dust Filtration — view category',
+	),
+);
 ?>
 
 <section id="products" class="py-12 md:py-24 bg-slate-50">
 	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-		<div class="text-center mb-16">
+		<div class="text-center mb-12">
 			<h2 class="text-4xl md:text-5xl font-bold text-zinc-900 mb-6">
 				Industrial Air Filtration Product Range
 			</h2>
@@ -27,160 +55,42 @@ emifree_enqueue_section_script( 'products' );
 			</p>
 		</div>
 
-		<!-- Tabs (Mechanical / Electrostatic / Dust) -->
-		<div class="flex flex-wrap justify-center gap-4 mb-12" role="tablist" aria-label="Product lines">
-			<?php $emifree_first = true; foreach ( emifree_products() as $emifree_key => $emifree_product ) : ?>
-				<button
-					type="button"
-					role="tab"
-					id="emifree-tab-<?php echo esc_attr( $emifree_key ); ?>"
-					aria-selected="<?php echo $emifree_first ? 'true' : 'false'; ?>"
-					aria-controls="emifree-panel-<?php echo esc_attr( $emifree_key ); ?>"
-					data-emifree-tab="<?php echo esc_attr( $emifree_key ); ?>"
-					class="emifree-product-tab px-8 py-4 rounded-full font-semibold transition-all duration-300 flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 <?php echo $emifree_first ? 'bg-blue-700 text-white shadow-lg' : 'bg-white text-zinc-600 hover:bg-slate-100 hover:text-blue-700 border border-slate-200'; ?>"
+		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+			<?php foreach ( $emifree_cards as $emifree_key => $emifree_card ) : ?>
+				<a
+					href="<?php echo esc_url( $emifree_card['url'] ); ?>"
+					class="product-card__link group relative block aspect-[4/5] overflow-hidden rounded-2xl shadow-md bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 transition-all duration-300 hover:-translate-y-2 focus-visible:-translate-y-2 hover:shadow-2xl focus-visible:shadow-2xl"
+					aria-label="<?php echo esc_attr( $emifree_card['aria_label'] ); ?>"
 				>
-					<?php
-					// Tiny inline SVG glyph per tab, purely decorative, the
-					// accessible name comes from the button text below.
-					$emifree_tab_icons = array(
-						'mechanical'    => '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>',
-						'electrostatic' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>',
-						'dust'          => '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>',
-					);
-					echo $emifree_tab_icons[ $emifree_key ]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled.
-					?>
-					<?php echo esc_html( $emifree_product['name'] ); ?>
-				</button>
-			<?php $emifree_first = false; endforeach; ?>
-		</div>
-
-		<!-- Panels -->
-		<?php $emifree_first = true; foreach ( emifree_products() as $emifree_key => $emifree_product ) : ?>
-			<div
-				role="tabpanel"
-				id="emifree-panel-<?php echo esc_attr( $emifree_key ); ?>"
-				aria-labelledby="emifree-tab-<?php echo esc_attr( $emifree_key ); ?>"
-				data-emifree-panel="<?php echo esc_attr( $emifree_key ); ?>"
-				class="<?php echo $emifree_first ? '' : 'hidden'; ?> emifree-product-panel"
-			>
-
-				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-
-					<!-- Image Gallery (left column) -->
-					<div class="space-y-4" data-emifree-gallery="<?php echo esc_attr( $emifree_key ); ?>">
-						<div class="relative bg-white rounded-2xl overflow-hidden shadow-lg aspect-[4/3] flex items-center justify-center">
-							<?php $emifree_img_index = 0; foreach ( $emifree_product['images'] as $emifree_img ) : ?>
-								<img
-									src="<?php echo esc_url( get_template_directory_uri() . '/assets/products/' . $emifree_img ); ?>"
-									alt="<?php echo esc_attr( $emifree_product['name'] ); ?>, view <?php echo esc_attr( $emifree_img_index + 1 ); ?>"
-									class="absolute inset-0 w-full h-full object-contain p-6 <?php echo 0 === $emifree_img_index ? '' : 'hidden'; ?>"
-									data-emifree-image="<?php echo esc_attr( $emifree_img_index ); ?>"
-									loading="lazy"
-									decoding="async"
-								>
-							<?php $emifree_img_index++; endforeach; ?>
+					<div class="flex flex-col h-full">
+						<div class="relative flex-1 overflow-hidden">
+							<img
+								src="<?php echo esc_url( $emifree_card_uri . $emifree_card['image'] ); ?>"
+								alt=""
+								class="absolute inset-0 w-full h-full object-contain p-6 transition-transform duration-500 ease-out group-hover:scale-105 group-focus-visible:scale-105"
+								loading="lazy" decoding="async"
+								width="800" height="1000"
+							>
 						</div>
-
-						<!-- Thumbnails -->
-						<div class="flex gap-4 justify-center">
-							<?php $emifree_img_index = 0; foreach ( $emifree_product['images'] as $emifree_img ) : ?>
-								<button
-									type="button"
-									data-emifree-thumb="<?php echo esc_attr( $emifree_img_index ); ?>"
-									class="emifree-product-thumb relative rounded-xl overflow-hidden shadow-md transition-all duration-300 flex-shrink-0 <?php echo 0 === $emifree_img_index ? 'ring-2 ring-blue-700 ring-offset-2 scale-105' : 'opacity-70 hover:opacity-100'; ?>"
-									aria-label="View image <?php echo esc_attr( $emifree_img_index + 1 ); ?>"
-								>
-									<div class="w-28 h-28 bg-white p-2">
-										<img
-											src="<?php echo esc_url( get_template_directory_uri() . '/assets/products/' . $emifree_img ); ?>"
-											alt=""
-											class="w-full h-full object-contain"
-											loading="lazy"
-											decoding="async"
-										>
-									</div>
-								</button>
-							<?php $emifree_img_index++; endforeach; ?>
-						</div>
-					</div>
-
-					<!-- Product info (right column) -->
-					<div class="space-y-6">
-						<div>
-							<h3 class="text-3xl font-bold text-zinc-900 mb-2">
-								<?php echo esc_html( $emifree_product['tagline'] ); ?>
+						<div class="bg-gradient-to-b from-blue-600 to-blue-800 text-white p-6 transition-all duration-300 group-hover:from-blue-700 group-hover:to-blue-900 group-focus-visible:from-blue-700 group-focus-visible:to-blue-900">
+							<h3 class="text-2xl font-bold mb-2 drop-shadow-md">
+								<?php echo esc_html( $emifree_card['title'] ); ?>
 							</h3>
-							<p class="text-lg text-zinc-600">
-								<?php echo esc_html( $emifree_product['short_desc'] ); ?>
-							</p>
+							<span
+								class="product-card__cta inline-flex items-center gap-2 text-sm font-semibold md:opacity-0 md:-translate-y-2 transition-all duration-300 md:group-hover:opacity-100 md:group-hover:translate-y-0 md:group-focus-visible:opacity-100 md:group-focus-visible:translate-y-0"
+								aria-hidden="true"
+							>
+								Learn more
+								<svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 group-focus-visible:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+									<path d="M5 12h14"></path>
+									<path d="m12 5 7 7-7 7"></path>
+								</svg>
+							</span>
 						</div>
-
-						<p class="text-zinc-600 leading-relaxed">
-							<?php echo esc_html( $emifree_product['description'] ); ?>
-						</p>
-
-						<!-- Applications -->
-						<div>
-							<h4 class="font-semibold text-zinc-900 mb-3">Applications:</h4>
-							<div class="flex flex-wrap gap-2">
-								<?php foreach ( $emifree_product['applications'] as $emifree_app ) : ?>
-									<span class="px-4 py-2 bg-cyan-50 text-cyan-700 text-sm font-medium rounded-full">
-										<?php echo esc_html( $emifree_app ); ?>
-									</span>
-								<?php endforeach; ?>
-							</div>
-						</div>
-
-						<!-- Features (4-tile grid) -->
-						<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-							<?php
-							$emifree_icons = emifree_product_icons();
-							foreach ( $emifree_product['features'] as $emifree_feature ) :
-								?>
-								<div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
-									<div class="flex items-start gap-3">
-										<div class="p-2 bg-blue-100 rounded-lg">
-											<svg class="w-5 h-5" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-												<?php echo $emifree_icons[ $emifree_feature['icon'] ]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SVG markup, controlled. ?>
-											</svg>
-										</div>
-										<div>
-											<h5 class="font-semibold text-zinc-900 text-sm">
-												<?php echo esc_html( $emifree_feature['title'] ); ?>
-											</h5>
-											<p class="text-zinc-500 text-xs mt-1">
-												<?php echo esc_html( $emifree_feature['desc'] ); ?>
-											</p>
-										</div>
-									</div>
-								</div>
-							<?php endforeach; ?>
-						</div>
-
-						<!-- Inquiry CTA, opens the inquiry modal (Piece 10).
-						     data-emifree-inquiry-label carries the human-readable
-						     product name into products.js so the contact form can
-						     be pre-filled with a sentence like
-						     "I would like a quote for Mechanical Filtration.\n\n"
-						     when this button is clicked. The label travels
-						     client→server via hidden inputs so the recipient
-						     email's subject line can include the product name. -->
-						<button
-							type="button"
-							data-emifree-inquiry="<?php echo esc_attr( $emifree_key ); ?>"
-							data-emifree-inquiry-label="<?php echo esc_attr( $emifree_product['name'] ); ?>"
-							class="emifree-open-inquiry w-full text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-							style="background: linear-gradient(90deg, #1d4ed8 0%, #06b6d4 100%); box-shadow: 0 10px 25px rgba(6, 182, 212, 0.25);"
-						>
-							<?php echo esc_html( $emifree_product['cta'] ); ?>
-							<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 18l6-6-6-6"></path>
-							</svg>
-						</button>
 					</div>
-				</div>
-			</div>
-		<?php $emifree_first = false; endforeach; ?>
+				</a>
+			<?php endforeach; ?>
+		</div>
 
 	</div>
 </section>

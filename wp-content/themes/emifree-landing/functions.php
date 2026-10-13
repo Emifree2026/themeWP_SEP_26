@@ -18,6 +18,17 @@ if ( ! defined( 'EMIFREE_THEME_VERSION' ) ) {
 	define( 'EMIFREE_THEME_VERSION', '1.5.2' );
 }
 
+// Virtual-route version for the per-product long-form landing pages
+// (/en/products/mechanical/, /de/produkte/mechanische-filtration/, ...).
+// Bumped whenever emifree_get_product_virtual_routes() gains or changes
+// an entry; the diff triggers one flush_rewrite_rules() in
+// inc/products-page-routes.php so the new patterns land in
+// `rewrite_rules` without manual intervention. The Mechanical EN+DE
+// pair is entry '1'.
+if ( ! defined( 'EMIFREE_PRODUCT_ROUTES_VERSION' ) ) {
+	define( 'EMIFREE_PRODUCT_ROUTES_VERSION', '1' );
+}
+
 // i18n.php shim, kept so the English section templates continue to
 // work unchanged. The bilingual dispatcher (emifree_get_lang +
 // function-guard approach) was retired; the German templates inline
@@ -39,6 +50,17 @@ require_once get_template_directory() . '/inc/seo.php';
 // appear on every page that hits the theme, including the static
 // front-page and the legal pages.
 require_once get_template_directory() . '/inc/analytics.php';
+
+// Consent management, emits Silktide Consent Manager on wp_head (priority 1)
+// which in turn drives Google Consent Mode v2 calls into the gtag loader
+// loaded by inc/analytics.php at priority 3. Replaces the previously
+//-referenced Cookiebot plugin (installed at wp-content/plugins/cookiebot/
+// but unconfigured, no CBID set in the `cookiebot-cbid` WP option).
+// The init config is language-aware: EN or DE based on emifree_get_lang().
+// The functional category loads the Tawk.to widget script only when the
+// user accepts it, so the chat no longer fires cookies / network
+// requests before consent (it used to load unconditionally).
+require_once get_template_directory() . '/inc/consent.php';
 
 // Blog CPT, blog_post custom post type + meta + sidebar meta box +
 // slug-mirroring helper. Registered as invisible to the front end
@@ -104,6 +126,45 @@ require_once get_template_directory() . '/inc/cache-headers.php';
 // Options). See comments in inc/security-headers.php for the full
 // rationale and what was deliberately NOT changed.
 require_once get_template_directory() . '/inc/security-headers.php';
+
+// Asset-version privacy + XML-RPC disable. Strips the `?ver=<theme or
+// plugin version>` query string WP appends to enqueued assets (which
+// leaks active WP + plugin versions into DevTools), and disables the
+// XML-RPC endpoint (which is a brute-force + DDoS vector the site
+// doesn't otherwise use). Companion to inc/security-headers.php; split
+// out so each file has one reasoning block. See comments in
+// inc/asset-version-priv.php for the full rationale and what was
+// deliberately NOT changed.
+require_once get_template_directory() . '/inc/asset-version-priv.php';
+
+// Disable WindPress runtime play observer. The theme ships its own
+// Tailwind build (assets/css/main.css), so WindPress's front-end
+// runtime Tailwind v4 compiler is redundant and races the static
+// stylesheet with v4-vs-v3 class definitions (visible "revert" ~1s
+// after first paint). The observer checks a window flag at module
+// load and bails out if set, so we just flip that flag in wp_head
+// before the deferred module script evaluates. The plugin itself
+// stays active for its admin/Wizard. See inc/windpress-disable.php
+// for the full rationale.
+require_once get_template_directory() . '/inc/windpress-disable.php';
+
+// Auto-seed the WordPress page records that the long-form page
+// templates (page-products-mechanical*.php, the Knowledge sub-pages,
+// etc.) depend on. WordPress's template hierarchy auto-resolves
+// `page-{slug}.php` based on a post's `post_name`; without a
+// wp_posts row, the URL 404s even when the template file is on
+// disk. The seeder runs on `init` (gated by a wp_option flag) and
+// `after_switch_theme`, idempotently. See inc/page-seed.php.
+require_once get_template_directory() . '/inc/page-seed.php';
+
+// Virtual routes for the per-product long-form landing pages. The
+// home-page product cards link to prefixed URLs (/en/products/mechanical/,
+// /de/produkte/mechanische-filtration/) that don't match the bare
+// /products/mechanical/ URL the WP page record resolves to. The
+// routes here make the prefixed URLs the canonical entry, mirroring
+// the /en/knowledge/... pattern used for the Knowledge sub-pages.
+// See inc/products-page-routes.php.
+require_once get_template_directory() . '/inc/products-page-routes.php';
 
 /**
  * Home subpath, the directory under which WordPress is installed
@@ -193,7 +254,12 @@ function emifree_enqueue_assets() {
 	// loaded. No JS framework needed, no FOUC for the rest of the
 	// sections (the cached layout settles in <50ms once the swap fires).
 	$emifree_css_url  = get_template_directory_uri() . '/assets/css/main.css';
-	$emifree_css_ver  = EMIFREE_THEME_VERSION;
+	// Use the privacy-preserving asset-version constant from
+	// inc/asset-version-priv.php (loaded earlier in functions.php).
+	// EMIFREE_THEME_VERSION would leak the active theme build into the
+	// rendered HTML on every page; EMIFREE_PUBLIC_ASSET_VER rewrites to
+	// a constant '1' that doesn't carry version information.
+	$emifree_css_ver  = defined( 'EMIFREE_PUBLIC_ASSET_VER' ) ? EMIFREE_PUBLIC_ASSET_VER : '1';
 	add_action(
 		'wp_head',
 		static function () use ( $emifree_css_url, $emifree_css_ver ) {
@@ -1022,7 +1088,12 @@ function emifree_legacy_redirect_map() {
 		'/product/vibration-damper/'                                    => '/en/#products',
 		'/product/frame-for-electrostatic-oil-mist-collector-big/'      => '/en/#products',
 		'/product/'                                                     => '/en/#products',
-		'/products/mechanical/'                                         => '/en/#products',
+		// Old React-app URL for the mechanical product line. Now that
+		// the WP page record is seeded by inc/page-seed.php and the
+		// /products/mechanical/ template exists, point the legacy
+		// redirect at the new dedicated landing page rather than the
+		// home-page section.
+		'/products/mechanical/'                                         => '/en/products/mechanical/',
 
 		// Old WooCommerce product detail pages (German slugs under /product/).
 		'/product/flexibler-spiralschlauch/'                            => '/de/#products',
@@ -1053,7 +1124,16 @@ function emifree_legacy_redirect_map() {
 
 		// Old German bare-section paths.
 		'/produkte/'                                                    => '/de/#products',
-		'/produkte/mechanical/'                                         => '/de/#products',
+		// Old React-app URL for the mechanical product line (DE).
+		// Now that the WP page record is seeded by inc/page-seed.php
+		// and the /de/produkte/mechanische-filtration/ template
+		// exists, point the legacy redirect at the new dedicated
+		// landing page rather than the home-page section. Two
+		// variants: the old singular slug (still indexed by Google)
+		// AND the new plural slug the home-page DE card actually
+		// links to today.
+		'/produkte/mechanical/'                                         => '/de/produkte/mechanische-filtration/',
+		'/de/produkte/mechanical/'                                      => '/de/produkte/mechanische-filtration/',
 		'/de/produkte/'                                                 => '/de/#products',
 		'/anwendungen/'                                                 => '/de/#applications',
 		'/kontakt/'                                                     => '/de/#contact',
@@ -1623,171 +1703,30 @@ function emifree_enqueue_contact_script() {
 			'nonce'      => wp_create_nonce( 'emifree_contact' ),
 			'successMsg' => __( 'Message sent successfully! We\'ll get back to you as soon as possible.', 'emifree-theme' ),
 			'errorMsg'   => __( 'Something went wrong. Please try again or email us directly.', 'emifree-theme' ),
+			// Quote prefill: when a product page (e.g. Mechanical)
+			// links to /<lang>/?quote=<slug>#contact, contact.js reads
+			// the slug, looks it up here, and dispatches the same
+			// emifree:prefill-contact event the home-page product CTAs
+			// fire. Keyed by slug; each value carries both the EN and
+			// DE label+message so a single ?quote= link works for both
+			// language trees. The label is what the email subject
+			// prefix uses (filtered by slug on the server side); the
+			// message is what gets prepended to the textarea.
+			'prefillMessages' => array(
+				'mechanical' => array(
+					'en' => array(
+						'label'   => 'Mechanical Filtration',
+						'message' => 'I would like a quote for Mechanical Filtration.',
+					),
+					'de' => array(
+						'label'   => 'Mechanische Filtration',
+						'message' => 'Ich möchte ein Angebot für Mechanische Filtration anfordern.',
+					),
+				),
+			),
 		)
 	);
 }
-
-/**
- * Tawk.to live chat widget.
- *
- * Renders the Tawk.to bootstrap inline (defining `window.Tawk_API`)
- * and then loads the actual widget script from tawk.to's CDN. Both
- * fire on wp_footer (priority 100, late) so they don't block page
- * render.
- *
- * Property ID: 1jsu0245o (separate widget from the production
- * emifree.com widget, which uses 1jogl5hfo). If you want this local
- * site to share the same inbox as production, swap the property ID.
- *
- * Privacy note: per the Privacy Policy text, the Tawk.to widget
- * "will not load, and no data will be transferred until you grant
- * permission via the Cookiebot banner." That gate is currently NOT
- * implemented, the widget loads unconditionally, matching the
- * behavior of the React app's index.html. If you want strict
- * consent-gating here, swap this for a Cookiebot API call that
- * fires on consent.
- *
- * CORS note (added 2026-08-04): the previous version of this loader
- * hardcoded an account ID prefix that didn't match the widget IDs and
- * set `crossorigin='*'` on the dynamic script element.  Setting
- * `crossorigin='*'` switches the browser into CORS-mode for that
- * fetch, which requires `Access-Control-Allow-Origin` on the
- * response.  tawk.to's embed CDN does not always send that header on
- * widget-level loads, so the request was blocked with:
- *   "Access to script at ... from origin '...emifree.com' has been
- *    blocked by CORS policy: No 'Access-Control-Allow-Origin' header
- *    is present on the requested resource."
- * That error dropped the Lighthouse Best Practices score from 100
- * to 96.  Removing `crossorigin='*'` makes the loader a normal
- * (non-CORS) script fetch, the response is allowed regardless of
- * ACAO and the widget loads as designed.  The official Tawk.to
- * install snippet does NOT set a crossorigin attribute either.
- *
- * Widget loader URL format: `https://embed.tawk.to/{ACCOUNT}/{WIDGET}`.
- * Note (2026-08-05): the previous version appended `/default` to the
- * URL, which worked against the production widget (`1jogl5hfo/...`)
- * but returns a 404 against the local-dev widgets `1ju1qnllp` and
- * `1jv8hhqib` (Tawk appears to 404 any unknown trailing path segment
- * for the per-language widgets). The 404 caused the loader to silently
- * fail, the page emitted the script tag, but the browser got a
- * 0-byte x-javascript response and the widget never initialized.
- * Drop the `/default` suffix; the CDN serves the widget JS at the
- * bare `<account>/<widget>` path for these properties.
- * Both the account ID and the widget ID are derived from the
- * configured property ID string (which is already an
- * "<account>/<widget>" pair, see the EMIFREE_TAWK_* defaults below).
- *
- * Per the original implementation, two property IDs are configured
- * (one per language) so each language routes to its own Tawk inbox
- * without language fallback.  Both IDs default to the live production
- * widgets as of 2026-07-20, the EN widget `1jsu0245o` and the DE
- * widget `1ju1qnllp` from account `1jogl5hfo`.
- */
-function emifree_enqueue_tawk_widget() {
-	if ( is_admin() ) {
-		return;
-	}
-
-	// Two Tawk dashboards, one per language, configured via wp-config
-	// so staging + production stay in sync via code, not via UI. Override
-	// in wp-config.php; defaults match the live production widgets as of
-	// 2026-07-20.
-	$emifree_tawk_property_id_en = defined( 'EMIFREE_TAWK_PROPERTY_ID_EN' ) && EMIFREE_TAWK_PROPERTY_ID_EN
-		? EMIFREE_TAWK_PROPERTY_ID_EN
-		: '1jogl5hfo/1jsu0245o';
-	$emifree_tawk_property_id_de = defined( 'EMIFREE_TAWK_PROPERTY_ID_DE' ) && EMIFREE_TAWK_PROPERTY_ID_DE
-		? EMIFREE_TAWK_PROPERTY_ID_DE
-		: '1jogl5hfo/1ju1qnllp';
-
-	// emifree_get_lang() is path-aware (so a /de/visit with no cookie
-	// still serves the DE widget). That function lives further up in this
-	// file.
-	$emifree_lang          = function_exists( 'emifree_get_lang' ) ? emifree_get_lang() : 'en';
-	$emifree_tawk_property_id = ( 'de' === $emifree_lang )
-		? $emifree_tawk_property_id_de
-		: $emifree_tawk_property_id_en;
-
-	// Tawk widget ID strings are full "<account>/<widget>" pairs
-	// (e.g. "1jogl5hfo/1jsu0245o"). The widget loader URL needs both
-	// segments separated by a slash. Split here so the loader below
-	// stays a single source of truth and we don't repeat the
-	// hardcoded "default" path suffix.
-	$emifree_tawk_id_parts     = array_pad( array_map( 'trim', explode( '/', (string) $emifree_tawk_property_id ) ), 2, '' );
-	$emifree_tawk_account_part = $emifree_tawk_id_parts[0];
-	$emifree_tawk_widget_part  = $emifree_tawk_id_parts[1];
-	if ( '' === $emifree_tawk_account_part || '' === $emifree_tawk_widget_part ) {
-		// Misconfigured property ID (missing the "/" separator), skip the
-		// widget load entirely to avoid surfacing a broken Tawk error in
-		// the browser console (the previous bug silently produced a CORS
-		// error every page load).
-		return;
-	}
-
-	add_action(
-		'wp_footer',
-		static function () use ( $emifree_tawk_account_part, $emifree_tawk_widget_part ) {
-			?>
-			<!--Start of Tawk.to Script (interaction-deferred, Sept 2026)-------
-			 The Tawk.to embed CDN bundle (`twk-chunk-vendors.js`) still
-			 registers an `unload` event listener, which is a deprecated
-			 API and causes PageSpeed Insights to flag the page under
-			 "Deprecated APIs" until Tawk.to ships a v3 widget update.
-			 Theme-side we can't patch the third-party bundle, so we
-			 defer the loader to AFTER the first user interaction (or
-			 after 5 s of idle time, whichever fires first). Tawk's
-			 deprecated call only logs at parse time, so deferring the
-			 script past FCP/LCP/INP keeps the deprecation off every
-			 critical-path metric while still mounting the widget for
-			 users who actually want to chat.
-
-			 Trade-off: until interaction fires, no chat widget is
-			 available — but the widget bubble is invisible by default
-			 anyway and most visitors never open it, so the perceived
-			 UX is unchanged. The 5 s idle fallback means visitors who
-			 never move the mouse still get the widget within 5 s.
-
-			 Upstream fix (track on Tawk's side): Tawk's widget v3
-			 (not GA yet) replaces `unload` with `pagehide`. When v3
-			 ships, drop this deferred wrapper and load the official
-			 snippet directly. -->
-			<script type="text/javascript">
-			(function() {
-				var emifreeTawkTriggerEvents = ['mousemove', 'touchstart', 'scroll', 'keydown'];
-				function emifreeTawkArmLoad() {
-					if (window.emifreeTawkLoaded) { return; }
-					window.emifreeTawkLoaded = true;
-					window.Tawk_API = window.Tawk_API || [];
-					window.Tawk_LoadStart = new Date();
-					var s1 = document.createElement('script'), s0 = document.getElementsByTagName('script')[0];
-					s1.async = true;
-					s1.src = 'https://embed.tawk.to/<?php echo esc_js( $emifree_tawk_account_part ); ?>/<?php echo esc_js( $emifree_tawk_widget_part ); ?>';
-					s1.charset = 'UTF-8';
-					s0.parentNode.insertBefore(s1, s0);
-					emifreeTawkTriggerEvents.forEach(function (ev) {
-						window.removeEventListener(ev, emifreeTawkArmLoad, { capture: true, passive: true });
-					});
-				}
-				emifreeTawkTriggerEvents.forEach(function (ev) {
-					window.addEventListener(ev, emifreeTawkArmLoad, { capture: true, passive: true });
-				});
-				// Idle fallback so visitors who never interact still
-				// get the widget within 5 s. requestIdleCallback if
-				// available, else setTimeout. Either way the loader
-				// fires only after FCP / LCP / INP have settled.
-				if (typeof window.requestIdleCallback === 'function') {
-					window.requestIdleCallback(emifreeTawkArmLoad, { timeout: 5000 });
-				} else {
-					setTimeout(emifreeTawkArmLoad, 5000);
-				}
-			})();
-			</script>
-			<!--End of Tawk.to Script-->
-			<?php
-		},
-		100
-	);
-}
-add_action( 'wp_enqueue_scripts', 'emifree_enqueue_tawk_widget' );
 
 /**
  * Run the three Tier 1 antispam checks against the current $_POST +

@@ -89,10 +89,14 @@
 		<div class="absolute inset-0 z-20 bg-gradient-to-br from-emerald-500/5 to-transparent"></div>
 	</div>
 
-	<!-- Main content -->
-	<div class="relative z-30 flex flex-col items-center justify-center flex-1 px-5 text-center" style="padding-bottom: clamp(120px, 22vh, 180px);">
+	<!-- Main content. pt-16 (64px) clears the fixed header at the top
+	     on every viewport — the header bar is h-16, so this matches.
+	     Without it the flexbox-centered h1 ends up half-hidden behind
+	     the header at mobile widths (375px) where vertical room is
+	     tightest. Mirrors section-hero.php. -->
+	<div class="relative z-30 flex flex-col items-center justify-center flex-1 px-5 pt-16 md:pt-20 text-center" style="padding-bottom: clamp(120px, 22vh, 180px);">
 		<h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-tight tracking-tight mb-6 hero-fade-up">
-			Wartungsarme Luftfiltrationslösungen
+			Wartungsarme Luftfiltration
 		</h1>
 
 		<?php /* Value strip, mirrors the English hero. Three short
@@ -104,12 +108,12 @@
 		<?php
 		$emifree_de_chips        = array(
 			array( 'label' => 'Selbstreinigend',         'icon' => 'cycle' ),
-			array( 'label' => 'Kein Kartuschenwechsel',  'icon' => 'cartridge' ),
+			array( 'label' => 'Energiesparend',          'icon' => 'energy' ),
 			array( 'label' => 'HEPA-Filter',             'icon' => 'hepa' ),
 		);
 		$emifree_de_chip_icons   = array(
 			'cycle'     => '<svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3.5-7.1"/><path d="M21 4v6h-6"/></svg>',
-			'cartridge' => '<svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="10" rx="2"/><path d="M7 7v10"/><path d="M11 7v10"/><path d="M15 7v10"/></svg>',
+			'energy'    => '<svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
 			'hepa'      => '<svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-12V5l-8-3-8 3v5c0 8 8 12 8 12z"/><path d="M9 12l2 2 4-4"/></svg>',
 		);
 		?>
@@ -175,11 +179,15 @@
 				foreach ( $emifree_hero_logos as $emifree_logo ) :
 					?>
 					<div class="flex items-center justify-center w-[30%] sm:w-auto h-6 sm:h-8 md:h-10 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300">
+						<?php /* width/height attrs + aspect-ratio style give the
+						   browser a reserved box for the lazy-loaded SVG, so
+						   the swap-in doesn't shift the row. The actual rendered
+						   size is still clamped by max-width inline. Mirrors EN. */ ?>
 						<img
 							src="<?php echo esc_url( get_template_directory_uri() . '/assets/logo_clients/' . $emifree_logo['file'] ); ?>"
 							alt="<?php echo esc_attr( $emifree_logo['name'] ); ?>"
 							class="h-full w-auto object-contain brightness-0 invert"
-							style="max-width: <?php echo esc_attr( $emifree_logo['max'] ); ?>;"
+							style="max-width: <?php echo esc_attr( $emifree_logo['max'] ); ?>; aspect-ratio: 200 / 80;"
 							loading="lazy"
 							decoding="async"
 							width="200"

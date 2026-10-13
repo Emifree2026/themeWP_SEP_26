@@ -82,14 +82,23 @@ add_action( 'wp_head', 'emifree_analytics_verification_tags', 2 );
  * Emit the Google Analytics 4 (gtag.js) loader + config call.
  *
  * Only fires when EMIFREE_GA4_ID is defined and non-empty. Uses the
- * recommended async loader (the official Google snippet), non-blocking,
- * cookieless by default until consent mode is implemented.
+ * recommended async loader (the official Google snippet), non-blocking.
  *
- * GDPR note: GA4 in its basic form (no consent mode, no IP
- * anonymization flags) is borderline under strict EU interpretations.
- * If you want a strict posture, wrap the gtag('config', ...) call in
- * a consent-gated JS block, see the README addendum for the
- * 4-line consent-mode snippet to drop in here.
+ * Consent Mode v2: this function publishes a `gtag('consent', 'default',
+ * …)` call BEFORE the `gtag('config', …)` call, with every storage
+ * signal set to 'denied'. The Silktide Consent Manager loader (emitted
+ * at wp_head priority 1 by inc/consent.php) watches for these signals
+ * and re-publishes `gtag('consent', 'update', …)` whenever the user
+ * grants/revokes a category in the banner or preferences modal. The
+ * 'wait_for_update: 500' delay tells gtag not to fire any
+ * measurement pings until either (a) the user makes a choice, or (b)
+ * 500 ms elapse — whichever comes first. The 500 ms fallback still
+ * captures cookieless pings even if Silktide is blocked.
+ *
+ * Hooked at wp_head priority 3 so it runs AFTER the Silktide loader
+ * (priority 1) — order matters: the default-consent call must hit
+ * dataLayer before the config call so gtag honours the initial
+ * denied-by-default state on its very first measurement ping.
  */
 function emifree_analytics_ga4() {
 	$emifree_ga4_id = defined( 'EMIFREE_GA4_ID' ) ? trim( (string) EMIFREE_GA4_ID ) : '';
@@ -102,6 +111,14 @@ function emifree_analytics_ga4() {
 	<script>
 		window.dataLayer = window.dataLayer || [];
 		function gtag(){dataLayer.push(arguments);}
+		gtag('consent', 'default', {
+			ad_storage: 'denied',
+			ad_user_data: 'denied',
+			ad_personalization: 'denied',
+			analytics_storage: 'denied',
+			functionality_storage: 'denied',
+			wait_for_update: 500
+		});
 		gtag('js', new Date());
 		gtag('config', '<?php echo esc_js( $emifree_ga4_id ); ?>');
 	</script>

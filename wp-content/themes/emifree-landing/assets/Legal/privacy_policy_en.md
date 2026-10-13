@@ -32,21 +32,20 @@ Under applicable statutory provisions, you have the following rights regarding y
 
 ## 3. Consent Management and Plugins
 
-### Cookiebot
-We use the consent management tool "Cookiebot" operated by Usercentrics A/S (Havnegade 39, 1058 Copenhagen, Denmark).
-* **Purpose:** Cookiebot is used to obtain your consent for storing certain cookies on your terminal device and to document this in accordance with data protection regulations.
+### Silktide Consent Manager
+We use the consent management tool "Silktide Consent Manager" operated by Silktide Ltd (First Floor, 3 Chapel Street, Marlow, Buckinghamshire, SL7 1HN, United Kingdom).
+* **Purpose:** Silktide Consent Manager is used to obtain your consent for storing certain cookies on your terminal device and to document this in accordance with data protection regulations. It also propagates your choices to Google Consent Mode v2 so that Google Analytics 4 only sets cookies when you have accepted the "Analytics" category.
 * **Legal Basis:** Processing is carried out to fulfill a legal obligation pursuant to Art. 6 (1)(c) GDPR in conjunction with § 25 (1) TDDDG.
-* **Data Stored:** When you enter our website, a Cookiebot cookie ("CookieConsent") is stored in your browser, recording your preferences or withdrawal of consent. This data is retained until you delete the cookie or the purpose for data storage no longer applies.
-* **Automated Cookie Declaration:**
-    *(Please embed the automatic Cookiebot script into your CMS here to dynamically output the automated cookie categorization table)*
+* **Data Stored:** When you enter our website, a Silktide cookie ("silktide_consent") is stored in your browser, recording your preferences or withdrawal of consent. This data is retained until you delete the cookie or the purpose for data storage no longer applies.
+* **Third-Country Transfer:** Silktide processes data on servers in the United Kingdom. The European Commission has recognized the UK as providing an adequate level of data protection, so no additional safeguards (such as SCCs) are required for this transfer.
 
 ### Tawk.to (Live Chat)
 We use live chat software provided by tawk.to inc. (101 Hunter Avenue, Suite 102, Cary, NC 27511, USA).
 * **Purpose:** The live chat enables fast, direct communication with our B2B clients and prospects.
-* **Legal Basis:** Tawk.to is utilized exclusively on the basis of your explicit consent pursuant to Art. 6 (1)(a) GDPR. The chat widget will not load, and no data will be transferred until you grant permission via the Cookiebot banner.
+* **Legal Basis:** Tawk.to is utilized exclusively on the basis of your explicit consent pursuant to Art. 6 (1)(a) GDPR. The chat widget will not load, and no data will be transferred until you grant permission via the Silktide consent banner (Analytics category, which also unlocks Google Analytics 4).
 * **Data Processed:** Utilizing the chat processes technical infrastructure details (IP address, browser type, operating system, geographic region, visit duration) as well as any chat contents entered by you (e.g., name, email address, messages).
 * **Third-Country Transfer:** Data is transferred to tawk.to servers in the USA. Because tawk.to processes data outside the EU, Standard Contractual Clauses (SCCs) have been implemented to guarantee an appropriate level of data protection.
-* **Withdrawal:** You can adjust or withdraw your consent at any time via the Cookiebot settings link on our website.
+* **Withdrawal:** You can adjust or withdraw your consent at any time via the "Cookie settings" link in the footer of our website.
 
 ### Google Analytics
 We use Google Analytics, a web analytics service provided by Google Ireland Limited (Gordon House, Barrow Street, Dublin 4, Ireland).

@@ -10,8 +10,8 @@
  *   - schema (the per-page JSON-LD WebPage data)
  *
  * Content mirrors src/pages/{Impressum,Privacy,Terms}.jsx from the
- * React app. Privacy page intentionally has NO Cookiebot callout
- * (the React external edit removed it; preserving that state here).
+ * React app. Privacy page documents the Silktide Consent Manager
+ * (the active consent tool), Tawk.to, and Google Analytics.
  *
  * Templates (template-parts/page-impressum.php, etc.) call
  * emifree_legal_page( 'impressum' ), emifree_seo_page(),
@@ -367,14 +367,15 @@ function emifree_render_privacy_body( $lang = 'en' ): string {
 
 		<h2 class="text-2xl font-bold text-zinc-900 mt-12 mb-4">3. Consent Management and Plugins</h2>
 
-		<h3 class="text-xl font-semibold text-zinc-900 mt-8 mb-3">Cookiebot</h3>
+		<h3 class="text-xl font-semibold text-zinc-900 mt-8 mb-3">Silktide Consent Manager</h3>
 		<p class="text-lg leading-relaxed mb-6">
-			We use the consent management tool "Cookiebot" operated by Usercentrics A/S (Havnegade 39, 1058 Copenhagen, Denmark).
+			We use the consent management tool "Silktide Consent Manager" operated by Silktide Ltd (First Floor, 3 Chapel Street, Marlow, Buckinghamshire, SL7 1HN, United Kingdom).
 		</p>
 		<ul class="text-lg leading-relaxed mb-6 space-y-3 list-disc pl-6">
-			<li><strong>Purpose:</strong> Cookiebot is used to obtain your consent for storing certain cookies on your terminal device and to document this in accordance with data protection regulations.</li>
+			<li><strong>Purpose:</strong> Silktide Consent Manager is used to obtain your consent for storing certain cookies on your terminal device and to document this in accordance with data protection regulations. It also propagates your choices to Google Consent Mode v2 so that Google Analytics 4 only sets cookies when you have accepted the "Analytics" category.</li>
 			<li><strong>Legal Basis:</strong> Processing is carried out to fulfill a legal obligation pursuant to Art. 6 (1)(c) GDPR in conjunction with § 25 (1) TDDDG.</li>
-			<li><strong>Data Stored:</strong> When you enter our website, a Cookiebot cookie ("CookieConsent") is stored in your browser, recording your preferences or withdrawal of consent. This data is retained until you delete the cookie or the purpose for data storage no longer applies.</li>
+			<li><strong>Data Stored:</strong> When you enter our website, a Silktide cookie ("silktide_consent") is stored in your browser, recording your preferences or withdrawal of consent. This data is retained until you delete the cookie or the purpose for data storage no longer applies.</li>
+			<li><strong>Third-Country Transfer:</strong> Silktide processes data on servers in the United Kingdom. The European Commission has recognized the UK as providing an adequate level of data protection, so no additional safeguards (such as SCCs) are required for this transfer.</li>
 		</ul>
 
 		<h3 class="text-xl font-semibold text-zinc-900 mt-8 mb-3">Tawk.to (Live Chat)</h3>
@@ -383,10 +384,10 @@ function emifree_render_privacy_body( $lang = 'en' ): string {
 		</p>
 		<ul class="text-lg leading-relaxed mb-6 space-y-3 list-disc pl-6">
 			<li><strong>Purpose:</strong> The live chat enables fast, direct communication with our B2B clients and prospects.</li>
-			<li><strong>Legal Basis:</strong> Tawk.to is utilized exclusively on the basis of your explicit consent pursuant to Art. 6 (1)(a) GDPR. The chat widget will not load, and no data will be transferred until you grant permission via the Cookiebot banner.</li>
+			<li><strong>Legal Basis:</strong> Tawk.to is utilized exclusively on the basis of your explicit consent pursuant to Art. 6 (1)(a) GDPR. The chat widget will not load, and no data will be transferred until you grant permission via the Silktide consent banner (Analytics category, which also unlocks Google Analytics 4).</li>
 			<li><strong>Data Processed:</strong> Utilizing the chat processes technical infrastructure details (IP address, browser type, operating system, geographic region, visit duration) as well as any chat contents entered by you (e.g., name, email address, messages).</li>
 			<li><strong>Third-Country Transfer:</strong> Data is transferred to tawk.to servers in the USA. Because tawk.to processes data outside the EU, Standard Contractual Clauses (SCCs) have been implemented to guarantee an appropriate level of data protection.</li>
-			<li><strong>Withdrawal:</strong> You can adjust or withdraw your consent at any time via the Cookiebot settings link on our website.</li>
+			<li><strong>Withdrawal:</strong> You can adjust or withdraw your consent at any time via the "Cookie settings" link in the footer of our website.</li>
 		</ul>
 
 		<h3 class="text-xl font-semibold text-zinc-900 mt-8 mb-3">Google Analytics</h3>
@@ -635,14 +636,15 @@ function emifree_render_datenschutz_de_body( $lang = 'de' ): string {
 
 		<h2 class="text-2xl font-bold text-zinc-900 mt-12 mb-4">3. Einwilligungsmanagement und Plugins</h2>
 
-		<h3 class="text-xl font-semibold text-zinc-900 mt-8 mb-3">Cookiebot</h3>
+		<h3 class="text-xl font-semibold text-zinc-900 mt-8 mb-3">Silktide Consent Manager</h3>
 		<p class="text-lg leading-relaxed mb-6">
-			Wir verwenden das Einwilligungsmanagement-Tool „Cookiebot" der Usercentrics A/S (Havnegade 39, 1058 Kopenhagen, Dänemark).
+			Wir verwenden das Einwilligungsmanagement-Tool „Silktide Consent Manager" der Silktide Ltd (First Floor, 3 Chapel Street, Marlow, Buckinghamshire, SL7 1HN, Vereinigtes Königreich).
 		</p>
 		<ul class="text-lg leading-relaxed mb-6 space-y-3 list-disc pl-6">
-			<li><strong>Zweck:</strong> Cookiebot wird verwendet, um Ihre Einwilligung zur Speicherung bestimmter Cookies auf Ihrem Endgerät einzuholen und diese gemäß den Datenschutzbestimmungen zu dokumentieren.</li>
+			<li><strong>Zweck:</strong> Der Silktide Consent Manager wird verwendet, um Ihre Einwilligung zur Speicherung bestimmter Cookies auf Ihrem Endgerät einzuholen und diese gemäß den Datenschutzbestimmungen zu dokumentieren. Er überträgt Ihre Auswahl zusätzlich an Google Consent Mode v2, sodass Google Analytics 4 erst dann Cookies setzt, wenn Sie der Kategorie „Analyse" zugestimmt haben.</li>
 			<li><strong>Rechtsgrundlage:</strong> Die Verarbeitung erfolgt zur Erfüllung einer rechtlichen Verpflichtung gemäß Art. 6 Abs. 1 Buchstabe c DSGVO in Verbindung mit § 25 Abs. 1 TDDDG.</li>
-			<li><strong>Gespeicherte Daten:</strong> Beim Aufruf unserer Website wird ein Cookiebot-Cookie („CookieConsent") in Ihrem Browser gespeichert, das Ihre Einwilligung oder deren Widerruf dokumentiert. Diese Daten werden gespeichert, bis Sie das Cookie löschen oder der Zweck der Datenspeicherung entfällt.</li>
+			<li><strong>Gespeicherte Daten:</strong> Beim Aufruf unserer Website wird ein Silktide-Cookie („silktide_consent") in Ihrem Browser gespeichert, das Ihre Einwilligung oder deren Widerruf dokumentiert. Diese Daten werden gespeichert, bis Sie das Cookie löschen oder der Zweck der Datenspeicherung entfällt.</li>
+			<li><strong>Drittlandtransfer:</strong> Silktide verarbeitet die Daten auf Servern im Vereinigten Königreich. Die Europäische Kommission hat das Vereinigte Königreich als Land mit angemessenem Datenschutzniveau anerkannt, sodass für diese Übermittlung keine zusätzlichen Garantien (wie z. B. Standardvertragsklauseln) erforderlich sind.</li>
 		</ul>
 
 		<h3 class="text-xl font-semibold text-zinc-900 mt-8 mb-3">Tawk.to (Live-Chat)</h3>
@@ -651,10 +653,10 @@ function emifree_render_datenschutz_de_body( $lang = 'de' ): string {
 		</p>
 		<ul class="text-lg leading-relaxed mb-6 space-y-3 list-disc pl-6">
 			<li><strong>Zweck:</strong> Der Live-Chat ermöglicht eine schnelle, direkte Kommunikation mit unseren B2B-Kunden und Interessenten.</li>
-			<li><strong>Rechtsgrundlage:</strong> Tawk.to wird ausschließlich auf Grundlage Ihrer ausdrücklichen Einwilligung gemäß Art. 6 Abs. 1 Buchstabe a DSGVO verwendet. Das Chat-Widget wird erst geladen und es werden keine Daten übertragen, wenn Sie Ihre Einwilligung über das Cookiebot-Banner erteilt haben.</li>
+			<li><strong>Rechtsgrundlage:</strong> Tawk.to wird ausschließlich auf Grundlage Ihrer ausdrücklichen Einwilligung gemäß Art. 6 Abs. 1 Buchstabe a DSGVO verwendet. Das Chat-Widget wird erst geladen und es werden keine Daten übertragen, wenn Sie Ihre Einwilligung über das Silktide-Banner (Kategorie Analyse, die gleichzeitig Google Analytics 4 freischaltet) erteilt haben.</li>
 			<li><strong>Verarbeitete Daten:</strong> Bei der Nutzung des Chats werden technische Infrastrukturdaten (IP-Adresse, Browsertyp, Betriebssystem, geografische Region, Besuchsdauer) sowie die von Ihnen eingegebenen Chat-Inhalte (z. B. Name, E-Mail-Adresse, Nachrichten) verarbeitet.</li>
 			<li><strong>Drittlandtransfer:</strong> Die Daten werden an Server von tawk.to in den USA übertragen. Da tawk.to Daten außerhalb der EU verarbeitet, wurden Standardvertragsklauseln (SCC) implementiert, um ein angemessenes Datenschutzniveau zu gewährleisten.</li>
-			<li><strong>Widerruf:</strong> Sie können Ihre Einwilligung jederzeit über den Cookiebot-Einstellungslink auf unserer Website anpassen oder widerrufen.</li>
+			<li><strong>Widerruf:</strong> Sie können Ihre Einwilligung jederzeit über den Link „Cookie-Einstellungen" im Footer unserer Website anpassen oder widerrufen.</li>
 		</ul>
 
 		<h3 class="text-xl font-semibold text-zinc-900 mt-8 mb-3">Google Analytics</h3>

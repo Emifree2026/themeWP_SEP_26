@@ -18,6 +18,7 @@ emifree_enqueue_section_script( 'technology' );
 $emifree_tech_uri = get_template_directory_uri() . '/assets/tech/';
 $emifree_tech_icons = emifree_technology_icons();
 $emifree_technologies = emifree_technologies();
+$emifree_tech_dims = function_exists( 'emifree_tech_image_dimensions' ) ? emifree_tech_image_dimensions() : array();
 ?>
 
 <section id="technology" class="py-12 md:py-24 bg-slate-50 md:bg-gradient-to-br md:from-slate-50 md:via-white md:to-blue-50 scroll-mt-20">
@@ -127,16 +128,28 @@ $emifree_technologies = emifree_technologies();
 						<?php $emifree_step_index++; endforeach; ?>
 					</div>
 
-					<?php /* Step images, only the active one is visible; JS toggles the .hidden class */ ?>
+					<?php /* Step images, only the active one is visible; JS toggles the .hidden class.
+					   width/height + aspect-ratio give the browser a reserved box for the
+					   lazy-loaded image so it doesn't shift the layout when it decodes.
+					   object-contain keeps the actual image scaled inside the fixed-height
+					   parent (h-48 md:h-80). The dimensions lookup is keyed by file; if
+					   a file is missing from the table it falls back to 16:9 (1376×768). */ ?>
 					<div class="rounded-2xl overflow-hidden bg-slate-100 h-48 md:h-80 flex items-center justify-center p-4">
-						<?php $emifree_step_index = 0; foreach ( $emifree_t['steps'] as $emifree_step ) : ?>
+						<?php $emifree_step_index = 0; foreach ( $emifree_t['steps'] as $emifree_step ) :
+							$emifree_dims = isset( $emifree_tech_dims[ $emifree_step['image'] ] ) ? $emifree_tech_dims[ $emifree_step['image'] ] : array( 1376, 768 );
+							$emifree_w = (int) $emifree_dims[0];
+							$emifree_h = (int) $emifree_dims[1];
+							?>
 							<img
 								src="<?php echo esc_url( $emifree_tech_uri . $emifree_step['image'] ); ?>"
 								alt="<?php echo esc_attr( $emifree_step['title'] ); ?>"
 								data-emifree-image="<?php echo esc_attr( $emifree_step_index ); ?>"
 								class="max-w-full max-h-full w-auto h-auto object-contain <?php echo $emifree_initial === $emifree_step_index ? '' : 'hidden'; ?>"
+								style="aspect-ratio: <?php echo esc_attr( $emifree_w . ' / ' . $emifree_h ); ?>;"
 								loading="lazy"
 								decoding="async"
+								width="<?php echo esc_attr( $emifree_w ); ?>"
+								height="<?php echo esc_attr( $emifree_h ); ?>"
 							>
 						<?php $emifree_step_index++; endforeach; ?>
 					</div>

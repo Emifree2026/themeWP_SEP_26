@@ -407,6 +407,49 @@
 					|| '/de/luftdruckverlust-rechner/' === emifreeCurSite ) {
 					return emifreeApplySubpath( '/air-pressure-loss-calculator/' );
 				}
+				// Products hub remap — the per-product landing pages
+				// also have asymmetric stems (products vs produkte) AND
+				// asymmetric slugs (mechanical vs mechanische-filtration).
+				// Without this remap, toggling the switcher on
+				// /en/products/mechanical/ → /de would land on
+				// /de/en/products/mechanical/ (404), and toggling on
+				// /de/produkte/mechanische-filtration/ → /en would
+				// land on /produkte/mechanische-filtration/ (404,
+				// no /en/ prefix).
+				//
+				// The map is bidirectional: looking up the current
+				// slug returns the opposite-language counterpart, and
+				// the surrounding hub-stem remap below places it
+				// under the right language's hub. Electrostatic and
+				// Dust can be added here when those pages ship — for
+				// now only mechanical is live (the other two product
+				// cards on the home page still link to bare
+				// /products/{slug}/ URLs that 404).
+				const emifreeProductSlugMap = {
+					// DE → EN
+					'mechanische-filtration': 'mechanical',
+					// EN → DE
+					'mechanical': 'mechanische-filtration',
+				};
+				function emifreeMapProductSlug( slug ) {
+					return Object.prototype.hasOwnProperty.call( emifreeProductSlugMap, slug )
+						? emifreeProductSlugMap[ slug ]
+						: slug;
+				}
+				if ( emifreeCurSite.startsWith( '/en/products' ) ) {
+					const emifreeSlug = emifreeMatchHubSlug( emifreeCurSite, '/en/products' );
+					if ( null !== emifreeSlug ) {
+						const emifreeMapped = emifreeMapProductSlug( emifreeSlug );
+						return emifreeApplySubpath( '/de/produkte' + ( emifreeMapped ? '/' + emifreeMapped : '' ) + '/' );
+					}
+				}
+				if ( emifreeCurSite.startsWith( '/de/produkte' ) ) {
+					const emifreeSlug = emifreeMatchHubSlug( emifreeCurSite, '/de/produkte' );
+					if ( null !== emifreeSlug ) {
+						const emifreeMapped = emifreeMapProductSlug( emifreeSlug );
+						return emifreeApplySubpath( '/en/products' + ( emifreeMapped ? '/' + emifreeMapped : '' ) + '/' );
+					}
+				}
 				if ( 'de' === emifreeLangLower ) {
 					if ( emifreeCurSite.startsWith( '/de' ) ) {
 						return emifreeApplySubpath( emifreeCurSite );

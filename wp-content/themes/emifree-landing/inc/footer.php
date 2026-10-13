@@ -63,6 +63,24 @@ if ( ! function_exists( 'emifree_footer_links' ) ) :
 					array( 'name_en' => 'Imprint',              'name_de' => 'Impressum',            'href_en' => home_url( '/impressum/' ),     'href_de' => home_url( '/de/impressum/' ) ),
 					array( 'name_en' => 'Privacy Policy',       'name_de' => 'Datenschutz',          'href_en' => home_url( '/privacy/' ),       'href_de' => home_url( '/de/datenschutz/' ) ),
 					array( 'name_en' => 'General Terms (GTC)',  'name_de' => 'AGB',                  'href_en' => home_url( '/terms/' ),         'href_de' => home_url( '/de/agb/' ) ),
+					// Opens the Silktide preferences modal (added with the
+					// Cookiebot → Silktide swap, see inc/consent.php). href_* is
+					// '#' so a noscript user still gets a clickable target; the
+					// JS onclick cancels navigation and shows the modal instead.
+					//
+					// Silktide v2.0.1 public API: window.silktideConsentManager
+					//   exposes init / update / getInstance / resetConsent only.
+					//   showPreferences() was assumed in the original writeup
+					//   but is not part of the published surface, so the click
+					//   silently no-op'd. The supported way to reopen the
+					//   preferences modal is getInstance().toggleModal(true).
+					array(
+						'name_en' => 'Cookie settings',
+						'name_de' => 'Cookie-Einstellungen',
+						'href_en' => '#',
+						'href_de' => '#',
+						'onclick' => "if (window.silktideConsentManager && typeof window.silktideConsentManager.getInstance === 'function') { var inst = window.silktideConsentManager.getInstance(); if (inst && typeof inst.toggleModal === 'function') { inst.toggleModal(true); } } return false;",
+					),
 				),
 			);
 		}
@@ -96,6 +114,24 @@ if ( ! function_exists( 'emifree_footer_links' ) ) :
 				    array( 'name_en' => 'Imprint',              'name_de' => 'Impressum',            'href_en' => home_url( '/impressum/' ),     'href_de' => home_url( '/de/impressum/' ) ),
 				    array( 'name_en' => 'Privacy Policy',       'name_de' => 'Datenschutz',          'href_en' => home_url( '/privacy/' ),       'href_de' => home_url( '/de/datenschutz/' ) ),
 				    array( 'name_en' => 'General Terms (GTC)',  'name_de' => 'AGB',                  'href_en' => home_url( '/terms/' ),         'href_de' => home_url( '/de/agb/' ) ),
+				    // Opens the Silktide preferences modal (added with the
+				    // Cookiebot → Silktide swap, see inc/consent.php). href_* is
+				    // '#' so a noscript user still gets a clickable target; the
+				    // JS onclick cancels navigation and shows the modal instead.
+				    //
+				    // Silktide v2.0.1 public API: window.silktideConsentManager
+				    //   exposes init / update / getInstance / resetConsent only.
+				    //   showPreferences() was assumed in the original writeup
+				    //   but is not part of the published surface, so the click
+				    //   silently no-op'd. The supported way to reopen the
+				    //   preferences modal is getInstance().toggleModal(true).
+				    array(
+					    'name_en' => 'Cookie settings',
+					    'name_de' => 'Cookie-Einstellungen',
+					    'href_en' => '#',
+					    'href_de' => '#',
+					    'onclick' => "if (window.silktideConsentManager && typeof window.silktideConsentManager.getInstance === 'function') { var inst = window.silktideConsentManager.getInstance(); if (inst && typeof inst.toggleModal === 'function') { inst.toggleModal(true); } } return false;",
+				    ),
 			    ),
 		);
 	}

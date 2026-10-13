@@ -52,19 +52,17 @@ Gemäß den geltenden gesetzlichen Bestimmungen haben Sie jederzeit folgende Rec
 
 \## 3. Einwilligungsmanagement und Plugins
 
-\### Cookiebot
+\### Silktide Consent Manager
 
-Wir nutzen das Einwilligungsmanagement-Tool „Cookiebot“, das von Usercentrics A/S (Havnegade 39, 1058 Kopenhagen, Dänemark) betrieben wird.
+Wir nutzen das Einwilligungsmanagement-Tool „Silktide Consent Manager“, das von Silktide Ltd (First Floor, 3 Chapel Street, Marlow, Buckinghamshire, SL7 1HN, Vereinigtes Königreich) betrieben wird.
 
-\* \*\*Zweck:\*\* Cookiebot wird verwendet, um Ihre Einwilligung zur Speicherung bestimmter Cookies auf Ihrem Endgerät einzuholen und dies gemäß den datenschutzrechtlichen Bestimmungen zu dokumentieren.
+\* \*\*Zweck:\*\* Der Silktide Consent Manager wird verwendet, um Ihre Einwilligung zur Speicherung bestimmter Cookies auf Ihrem Endgerät einzuholen und diese gemäß den Datenschutzbestimmungen zu dokumentieren. Er überträgt Ihre Auswahl zusätzlich an Google Consent Mode v2, sodass Google Analytics 4 erst dann Cookies setzt, wenn Sie der Kategorie „Analyse" zugestimmt haben.
 
 \* \*\*Rechtsgrundlage:\*\* Die Verarbeitung erfolgt zur Erfüllung einer rechtlichen Verpflichtung gemäß Art. 6 Abs. 1 lit. c DSGVO in Verbindung mit § 25 Abs. 1 TDDDG.
 
-\* \*\*Gespeicherte Daten:\*\* Wenn Sie unsere Website aufrufen, wird ein Cookiebot-Cookie („CookieConsent“) in Ihrem Browser gespeichert, das Ihre Präferenzen oder den Widerruf Ihrer Einwilligung erfasst. Diese Daten werden so lange gespeichert, bis Sie das Cookie löschen oder der Zweck der Datenspeicherung entfällt.
+\* \*\*Gespeicherte Daten:\*\* Wenn Sie unsere Website aufrufen, wird ein Silktide-Cookie („silktide_consent“) in Ihrem Browser gespeichert, das Ihre Präferenzen oder den Widerruf Ihrer Einwilligung erfasst. Diese Daten werden so lange gespeichert, bis Sie das Cookie löschen oder der Zweck der Datenspeicherung entfällt.
 
-\* \*\*Automatisierte Cookie-Erklärung:\*\*
-
-\*(Bitte binden Sie hier das automatische Cookiebot-Skript in Ihr CMS ein, um die automatisierte Cookie-Kategorisierungstabelle dynamisch auszugeben)\*
+\* \*\*Drittlandtransfer:\*\* Silktide verarbeitet die Daten auf Servern im Vereinigten Königreich. Die Europäische Kommission hat das Vereinigte Königreich als Land mit angemessenem Datenschutzniveau anerkannt, sodass für diese Übermittlung keine zusätzlichen Garantien (wie z. B. Standardvertragsklauseln) erforderlich sind.
 
 \### Tawk.to (Live-Chat)
 
@@ -72,13 +70,13 @@ Wir nutzen eine Live-Chat-Software der Firma tawk.to inc. (101 Hunter Avenue, Su
 
 \* \*\*Zweck:\*\* Der Live-Chat ermöglicht eine schnelle, direkte Kommunikation mit unseren B2B-Kunden und Interessenten.
 
-\* \*\*Rechtsgrundlage:\*\* Die Nutzung von Tawk.to erfolgt ausschließlich auf der Grundlage Ihrer ausdrücklichen Einwilligung gemäß Art. 6 Abs. 1 lit. a DSGVO. Das Chat-Widget wird erst geladen und es werden erst dann Daten übertragen, wenn Sie über das Cookiebot-Banner Ihre Einwilligung erteilt haben.
+\* \*\*Rechtsgrundlage:\*\* Die Nutzung von Tawk.to erfolgt ausschließlich auf der Grundlage Ihrer ausdrücklichen Einwilligung gemäß Art. 6 Abs. 1 lit. a DSGVO. Das Chat-Widget wird erst geladen und es werden erst dann Daten übertragen, wenn Sie über das Silktide-Banner (Kategorie Analyse, die gleichzeitig Google Analytics 4 freischaltet) Ihre Einwilligung erteilt haben.
 
 \* \*\*Verarbeitete Daten:\*\* Bei der Nutzung des Chats werden technische Infrastrukturdaten (IP-Adresse, Browsertyp, Betriebssystem, geografische Region, Besuchsdauer) sowie von Ihnen eingegebene Chat-Inhalte (z. B. Name, E-Mail-Adresse, Nachrichten) verarbeitet.
 
 \* \*\*Datenübermittlung in Drittländer:\*\* Die Daten werden an die Server von tawk.to in den USA übermittelt. Da tawk.to Daten außerhalb der EU verarbeitet, wurden Standardvertragsklauseln (SCCs) implementiert, um ein angemessenes Datenschutzniveau zu gewährleisten.
 
-\* \*\*Widerruf:\*\* Sie können Ihre Einwilligung jederzeit über den Link zu den Cookiebot-Einstellungen auf unserer Website anpassen oder widerrufen.
+\* \*\*Widerruf:\*\* Sie können Ihre Einwilligung jederzeit über den Link „Cookie-Einstellungen" im Footer unserer Website anpassen oder widerrufen.
 
 \### Google Analytics
 

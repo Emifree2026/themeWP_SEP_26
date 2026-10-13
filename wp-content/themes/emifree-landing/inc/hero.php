@@ -46,7 +46,7 @@ function emifree_hero_data() {
 		'headline'              => 'Low maintenance air filtration solutions',
 		'value_strip'           => array(
 			array( 'label' => 'Self-cleaning',       'icon' => 'cycle' ),
-			array( 'label' => 'No cartridge exchange', 'icon' => 'cartridge' ),
+			array( 'label' => 'Energy Saving',        'icon' => 'energy' ),
 			array( 'label' => 'HEPA filter',          'icon' => 'hepa' ),
 		),
 		'primary_cta_label'     => 'Contact Us!',

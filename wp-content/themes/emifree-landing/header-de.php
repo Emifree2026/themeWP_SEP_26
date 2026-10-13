@@ -112,17 +112,29 @@ require_once get_template_directory() . '/inc/nav.php';
 						<?php
 						// First-rollout languages only. ES and FR will return
 						// when i18n routing lands.
+						//
+						// The active option (the one matching the current page's
+						// language via emifree_get_lang()) renders with a solid
+						// blue background + white semibold text so the user
+						// can see at a glance which language the page is in
+						// before they pick the other. Without this, both
+						// options look identical in the dropdown and the user
+						// has to close the menu and read the chip label to
+						// know what's currently active.
 						$emifree_languages = array(
 							array( 'code' => 'EN', 'name' => 'English' ),
 							array( 'code' => 'DE', 'name' => 'Deutsch' ),
 						);
+						$emifree_current_lang = strtolower( emifree_get_lang() );
 						foreach ( $emifree_languages as $emifree_lang ) :
+							$emifree_is_current = ( strtolower( $emifree_lang['code'] ) === $emifree_current_lang );
 							?>
 							<button
 								type="button"
-								class="emifree-lang-option w-full px-4 py-3 text-left text-sm hover:bg-blue-50 transition-colors duration-200 text-zinc-700"
+								class="emifree-lang-option w-full px-4 py-3 text-left text-sm transition-colors duration-200 <?php echo $emifree_is_current ? 'bg-blue-700 text-white font-semibold' : 'text-zinc-700 hover:bg-blue-50'; ?>"
 								data-lang="<?php echo esc_attr( $emifree_lang['code'] ); ?>"
 								role="menuitem"
+								aria-current="<?php echo $emifree_is_current ? 'true' : 'false'; ?>"
 							>
 								<?php echo esc_html( $emifree_lang['name'] ); ?>
 							</button>
@@ -188,7 +200,17 @@ require_once get_template_directory() . '/inc/nav.php';
 						array( 'code' => 'DE', 'label' => 'DE' ),
 					);
 					foreach ( $emifree_mobile_langs as $emifree_ml ) :
-						$emifree_is_active = ( strtolower( substr( get_bloginfo( 'language' ), 0, 2 ) ) === strtolower( $emifree_ml['code'] ) );
+						// Use emifree_get_lang() (URL-based detection)
+						// NOT get_bloginfo( 'language' ) (site-wide WP
+						// default). The site default is always en-US
+						// for this install, so get_bloginfo() would
+						// mark the EN pill as active on every /de/
+						// page — the user reports the wrong pill
+						// selected on DE pages. emifree_get_lang()
+						// reads the /de/ or /en/ URL prefix and
+						// returns 'de' or 'en' to match the rendered
+						// page.
+						$emifree_is_active = ( strtolower( emifree_get_lang() ) === strtolower( $emifree_ml['code'] ) );
 						?>
 						<a
 							href="#"

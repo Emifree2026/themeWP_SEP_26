@@ -14,6 +14,21 @@ emifree_enqueue_section_script( 'technology' );
 
 $emifree_tech_uri = get_template_directory_uri() . '/assets/tech/';
 
+// Intrinsic dimensions per image, mirrors emifree_tech_image_dimensions()
+// in inc/technology.php (the EN template reads from there; this DE
+// template is self-contained and so carries its own copy). Used to
+// emit width/height + aspect-ratio on each <img> so lazy-loaded step
+// images reserve their box and don't trigger CLS. Keyed by filename.
+$emifree_tech_dims = array(
+	'Step1.1_ECOAIR.jpg'  => array( 892, 683 ),
+	'Step2.1_ECOAIR.webp' => array( 1360, 752 ),
+	'Step3_clean.webp'    => array( 1024, 1024 ),
+	'Step 1.webp'         => array( 1376, 768 ),
+	'Step 2.webp'         => array( 1376, 768 ),
+	'Step 3.webp'         => array( 1376, 768 ),
+	'Step 4.webp'         => array( 1376, 768 ),
+);
+
 $emifree_tech_icons = array(
 	'check'      => '<path d="M21.801 10A10 10 0 1 1 17 3.335"></path><path d="m9 11 3 3L22 4"></path>',
 	'move-right' => '<path d="M18 8L22 12L18 16"></path><path d="M2 12H22"></path>',
@@ -206,15 +221,25 @@ $emifree_technologies = array(
 						<?php $emifree_step_index++; endforeach; ?>
 					</div>
 
+					<?php /* Step images. width/height + aspect-ratio reserve a
+					   box for the lazy-loaded image so it doesn't shift the
+					   layout when it decodes. Mirrors the EN template. */ ?>
 					<div class="rounded-2xl overflow-hidden bg-slate-100 h-48 md:h-80 flex items-center justify-center p-4">
-						<?php $emifree_step_index = 0; foreach ( $emifree_t['steps'] as $emifree_step ) : ?>
+						<?php $emifree_step_index = 0; foreach ( $emifree_t['steps'] as $emifree_step ) :
+							$emifree_dims = isset( $emifree_tech_dims[ $emifree_step['image'] ] ) ? $emifree_tech_dims[ $emifree_step['image'] ] : array( 1376, 768 );
+							$emifree_w = (int) $emifree_dims[0];
+							$emifree_h = (int) $emifree_dims[1];
+							?>
 							<img
 								src="<?php echo esc_url( $emifree_tech_uri . $emifree_step['image'] ); ?>"
 								alt="<?php echo esc_attr( $emifree_step['title'] ); ?>"
 								data-emifree-image="<?php echo esc_attr( $emifree_step_index ); ?>"
 								class="max-w-full max-h-full w-auto h-auto object-contain <?php echo $emifree_initial === $emifree_step_index ? '' : 'hidden'; ?>"
+								style="aspect-ratio: <?php echo esc_attr( $emifree_w . ' / ' . $emifree_h ); ?>;"
 								loading="lazy"
 								decoding="async"
+								width="<?php echo esc_attr( $emifree_w ); ?>"
+								height="<?php echo esc_attr( $emifree_h ); ?>"
 							>
 						<?php $emifree_step_index++; endforeach; ?>
 					</div>

@@ -165,7 +165,7 @@ function emifree_seo_front_page_strings( $emifree_lang ) {
 		$emifree_xdef = home_url( '/en/' );
 
 		return array(
-			'title'                 => 'Emifree, Wartungsarme Luftfiltrationslösungen',
+			'title'                 => 'Emifree, Wartungsarme Luftfiltrations',
 			'description'           => 'Wartungsarme industrielle Luftfiltration für CNC, Schleifen und Metallverarbeitung. Selbstreinigend, ohne Kartuschenwechsel, HEPA-Abscheidung. Vertraut von Mercedes-Benz, BMW und Siemens.',
 			'url'                   => $emifree_url,
 			'image'                 => get_template_directory_uri() . '/assets/emilogo.png',

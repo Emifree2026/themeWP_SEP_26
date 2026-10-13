@@ -15,6 +15,27 @@
         overflow-x: hidden;
         -webkit-text-size-adjust: 100%;
     }
+
+    /* Smooth in-page anchor jumps. The product page's floating
+     * "Back to top" button is an <a href="#hero">, and the
+     * existing section anchor links (Knowledge cross-links, the
+     * hero → #contact CTA) all benefit from a smooth scroll
+     * rather than an instant jump. `scroll-behavior: smooth` on
+     * `html` is the standard, well-supported place for this; it
+     * doesn't conflict with the JS scroll-positioning elsewhere
+     * on the page (which uses instant scrollTo() under user
+     * control). */
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* Respect user motion preferences: turn the smooth scroll
+     * off for visitors who've asked the OS to reduce motion. */
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
+        }
+    }
 }
 
 /* ----- Hero entrance animations (CSS-only equivalents of the React framer-motion fade-ins) -----
@@ -201,4 +222,182 @@ iframe[style*="border:none" i][width="0"] {
     border: 0 !important;
     visibility: hidden !important;
     pointer-events: none !important;
+}
+
+/* ----- Product page sub-menu + gallery thumb "active" state -----
+ *
+ * The product-page template (template-parts/page-products-mechanical*.php)
+ * toggles a single `.is-active` class on the gallery thumb button and on
+ * the sub-menu pill link when the user clicks (gallery) or scrolls
+ * (sub-menu, via IntersectionObserver). Tailwind JIT does not scan JS
+ * for class names, so any class added by JS must either appear in a
+ * template (it does, on the initial render) or be declared here in
+ * raw CSS / @apply.
+ *
+ * Declared in @layer utilities (alongside Tailwind's own utilities)
+ * so a stray `.is-active` on a future page can be re-themed by
+ * re-@apply-ing a different palette without touching the templates.
+ */
+@layer utilities {
+    /* Sub-menu pill: blue when its target section is in view. */
+    .emifree-product-submenu__link.is-active {
+        @apply bg-blue-600 text-white;
+    }
+
+    /* Gallery thumb: blue ring when selected. */
+    [data-emifree-thumb].is-active {
+        @apply border-blue-500;
+    }
+
+    /* Gallery magnify-on-hover (side-panel pattern, Amazon-style).
+     *
+     * The product page gallery uses TWO copies of the same image:
+     *
+     *   - The static <img data-emifree-gallery-main> is the
+     *     default-view image (object-contain, full image
+     *     visible). It owns the semantic alt text and the
+     *     click-to-swap opacity transition the existing gallery
+     *     JS uses. The image itself NEVER moves on hover.
+     *
+     *   - The panel <div data-emifree-zoom-image> renders the
+     *     SAME image as a CSS background, sized 250% so the
+     *     panel shows a 2.5x magnified region of the photo.
+     *     `background-position` is driven by the `--emifree-mx` /
+     *     `--emifree-my` CSS variables the JS handler sets on
+     *     mousemove over the gallery, so the visible crop
+     *     follows the cursor. The static image is what the
+     *     cursor is on, not the panel.
+     *
+     * Why background-image, not an <img> with object-fit:
+     * an <img> with `object-fit: contain` letterboxes the
+     * image inside the element whenever the image's aspect
+     * doesn't match the element's aspect. That makes the
+     * cursor-percentage describe only a sub-region of the
+     * actual image, and the magnified crop drifts. A
+     * background-image fills the element exactly (no
+     * letterboxing) and `background-position` in percent
+     * maps linearly to the cursor's position in the source
+     * image at 2.5x scale (0% ↔ left edge, 50% ↔ center,
+     * 100% ↔ right edge).
+     *
+     * The panel is `pointer-events: none` so the cursor passes
+     * through to the gallery (no stuck hover). On touch devices
+     * (no hover) the panel stays at opacity 0 and the static
+     * view is the only one the user ever sees.
+     *
+     * Gating:
+     *   - `@media (hover: hover)` disables the panel on touch.
+     *   - `@media (min-width: 1024px)` (lg+) restricts the panel
+     *     to desktop viewports where the right column has room
+     *     to host it; on md the right column is too narrow to
+     *     show a useful magnified view (the photos are 4:5
+     *     portrait, so a 4:3 box at md widths would be ~180px
+     *     wide — too small to read).
+     *   - The transition is opacity-only (the `background-position`
+     *     interpolation would make the magnify feel laggy). */
+    .emifree-zoom-slot {
+        position: relative;
+    }
+    .emifree-zoom-text {
+        transition: opacity 0.2s ease-out;
+    }
+    .emifree-zoom-panel {
+        position: absolute;
+        inset: 0;
+        z-index: 5;
+        background: #f1f5f9; /* slate-100, matches gallery bg */
+        border: 1px solid rgb(226 232 240); /* slate-200 */
+        border-radius: 1rem; /* matches rounded-2xl */
+        overflow: hidden;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease-out;
+    }
+    .emifree-zoom-panel__bg {
+        /* Render the same source image at 2.5x the panel size
+         * as a background, no letterboxing. background-position
+         * is driven by the cursor's relative position over the
+         * gallery (CSS vars on the parent 2-col grid, set by
+         * the JS handler). At 2.5x scale, the linear mapping
+         * `bgPosX% = cursorX%` puts the pixel under the cursor
+         * in the main image at the same relative position in
+         * the magnified view. */
+        position: absolute;
+        inset: 0;
+        background-repeat: no-repeat;
+        background-size: 250%;
+        background-position: var(--emifree-mx, 50%) var(--emifree-my, 50%);
+    }
+    .emifree-zoom-panel__label {
+        position: absolute;
+        right: 0.75rem;
+        bottom: 0.75rem;
+        padding: 0.25rem 0.625rem;
+        border-radius: 9999px;
+        background: rgba(15, 23, 42, 0.75); /* slate-900/75 */
+        color: white;
+        font-size: 0.75rem;
+        font-weight: 500;
+        line-height: 1;
+        letter-spacing: 0.01em;
+    }
+    @media (hover: hover) and (min-width: 1024px) {
+        /* Zoom-in cursor only on the main image, not on the
+         * whole 2-col grid. The right column shows the
+         * magnified view, not a magnifiable image; showing
+         * `zoom-in` there would be misleading. */
+        .emifree-magnify-source [data-emifree-gallery-main] {
+            cursor: zoom-in;
+        }
+        /* The `emifree-magnify-source--active` class is added
+         * by the main-image mouseenter handler and removed on
+         * mouseleave (see the inline <script> at the bottom of
+         * the product template). Using the class — not
+         * `:hover` on `.emifree-magnify-source` — keeps the
+         * panel hidden while the cursor is in the right
+         * column (where the panel itself lives) or over the
+         * padding/thumbs of the gallery. `:focus-within` is
+         * kept as a keyboard parallel: tabbing to a thumbnail
+         * also reveals the panel. */
+        .emifree-magnify-source.emifree-magnify-source--active .emifree-zoom-panel,
+        .emifree-magnify-source:focus-within .emifree-zoom-panel {
+            opacity: 1;
+        }
+        .emifree-magnify-source.emifree-magnify-source--active .emifree-zoom-text,
+        .emifree-magnify-source:focus-within .emifree-zoom-text {
+            opacity: 0;
+        }
+    }
+
+    /* Specs table scrollable container.
+     *
+     * The mechanical specs table uses a 640px `min-w` so the value
+     * cells stay readable on phones, with `overflow-x-auto` on the
+     * wrapper producing a horizontal scrollbar. The wrapper itself
+     * gets a soft gradient fade on the right edge via mask-image
+     * so the user sees a visual hint that more content is offscreen
+     * even before they try to scroll. The 24px fade width matches
+     * the rough width of an arrow icon + a small "more" callout,
+     * giving the eye something to land on.
+     *
+     * `mask-mode: match-source` keeps the mask from inverting if a
+     * future style swaps the container to a dark theme. The
+     * `linear-gradient` runs `black 0% → black calc(100% - 24px) →
+     * transparent 100%` so the rightmost 24px of the inner content
+     * fades to invisible.
+     *
+     * Pinned to `lg:` breakpoint (1024px+) to disable the fade on
+     * wider viewports where the 640px table fits inside the
+     * container with no scroll; the fade would otherwise visibly
+     * trim the rightmost column header on lg screens. */
+    .emifree-specs-scroll {
+        -webkit-mask-image: linear-gradient(to right, black 0%, black calc(100% - 24px), transparent 100%);
+                mask-image: linear-gradient(to right, black 0%, black calc(100% - 24px), transparent 100%);
+    }
+    @media (min-width: 1024px) {
+        .emifree-specs-scroll {
+            -webkit-mask-image: none;
+                    mask-image: none;
+        }
+    }
 }

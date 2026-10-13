@@ -95,6 +95,9 @@ emifree_require_section_data( 'footer' );
 										class="text-zinc-400 hover:text-white transition-colors duration-200 emifree-legal-link"
 										data-href-en="<?php echo esc_attr( $emifree_link['href_en'] ); ?>"
 										data-href-de="<?php echo esc_attr( $emifree_link['href_de'] ); ?>"
+										<?php if ( ! empty( $emifree_link['onclick'] ) ) : ?>
+										onclick="<?php echo esc_attr( $emifree_link['onclick'] ); ?>"
+										<?php endif; ?>
 										>
 											<?php echo esc_html( $link_label ); ?>
 										</a>
@@ -116,8 +119,51 @@ emifree_require_section_data( 'footer' );
 
 		<!-- Bottom Section -->
 		<div class="py-8 border-t border-zinc-800 flex flex-col md:flex-row items-center justify-between gap-4">
-			<div class="text-zinc-400 text-sm">
-				© <?php echo esc_html( gmdate( 'Y' ) ); ?> Emifree GmbH · Pestalozzistraße 13 · 12557 Berlin · Germany
+			<?php
+			/* ISO 9001 trust badge in the footer bottom bar. Image +
+			   alt/aria are picked by request URI the same way the
+			   language-aware legal links pick their href, so a /de/
+			   visit sees the German certificate and an English visit
+			   sees the English one. Sits inline with the copyright
+			   line on the left, sized 2x the previous placement
+			   (80/96/112px) so it reads as a proper trust mark next
+			   to the legal text instead of a tiny corner glyph.
+			   External link to the virtualbadge.io credential
+			   verifier, opens in a new tab. */
+			$emifree_badge_is_de = ( 0 === strpos(
+				isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '',
+				'/de'
+			) );
+			$emifree_badge_url  = get_template_directory_uri() . '/assets/badges/iso9001_badge_' . ( $emifree_badge_is_de ? 'de' : 'en' ) . '.png';
+			$emifree_badge_alt  = $emifree_badge_is_de
+				? 'ISO 9001 Qualitätsmanagement zertifiziert'
+				: 'ISO 9001 Quality Management certified';
+			$emifree_badge_aria = $emifree_badge_is_de
+				? 'ISO-9001-Zertifizierung — Anmeldedaten verifizieren (öffnet in neuem Tab)'
+				: 'ISO 9001 certification — verify credential (opens in new tab)';
+			?>
+			<div class="flex items-center gap-3 text-zinc-400 text-sm">
+				<span>
+					© <?php echo esc_html( gmdate( 'Y' ) ); ?> Emifree GmbH · Pestalozzistraße 13 · 12557 Berlin · Germany
+				</span>
+				<a
+					href="https://www.virtualbadge.io/certificate-validator?credential=ca8b6217-fca6-476f-9852-2c45f7cb70c1"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="inline-block transition-transform duration-200 hover:scale-105 focus-visible:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 rounded-full"
+					aria-label="<?php echo esc_attr( $emifree_badge_aria ); ?>"
+					title="ISO 9001 — verify credential"
+				>
+					<img
+						src="<?php echo esc_url( $emifree_badge_url ); ?>"
+						alt="<?php echo esc_attr( $emifree_badge_alt ); ?>"
+						class="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full shadow-[0_4px_16px_rgba(0,0,0,0.35)]"
+						loading="lazy"
+						decoding="async"
+						width="112"
+						height="112"
+					>
+				</a>
 			</div>
 			<div class="flex items-center space-x-4 text-zinc-500 text-sm">
 				<a href="mailto:info@emifree.com" class="text-zinc-300 hover:text-white transition-colors">info@emifree.com</a>
