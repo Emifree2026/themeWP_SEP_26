@@ -171,7 +171,7 @@ $emifree_contact_url = home_url( '/en/?quote=hepa#contact' );
 			<section id="hepa-best-uses" class="mb-12 scroll-mt-20">
 				<h2 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-6">Best uses</h2>
 				<ul class="space-y-3 text-lg text-slate-700 leading-relaxed list-disc pl-6">
-					<li><strong class="text-zinc-900">CNC machining:</strong> Reduces suspended metal, plastic, wood, and composite dust.</li>
+					<li><strong class="text-zinc-900">CNC machining:</strong> Reduces suspended metal, plastic, wood, and composite dust. A HEPA filter is capable of filtering out even the smallest particles (0.12&ndash;0.25&nbsp;micrometers) from the air with 99.95% efficiency, which makes it well suited to the fine aerosols these processes produce.</li>
 					<li><strong class="text-zinc-900">Woodworking routers:</strong> Helps with fine residual dust; extract MDF, plywood, etc. at the tool.</li>
 					<li><strong class="text-zinc-900">Plastics/composites:</strong> Cleans ambient fine irritant dust; source capture is essential.</li>
 					<li><strong class="text-zinc-900">Grinding/polishing/finishing:</strong> Controls fine particles that spread beyond the work area.</li>

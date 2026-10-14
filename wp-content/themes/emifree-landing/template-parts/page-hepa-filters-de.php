@@ -152,7 +152,7 @@ $emifree_contact_url = home_url( '/de/?quote=hepa#contact' );
 			<section id="hepa-best-uses" class="mb-12 scroll-mt-20">
 				<h2 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-6">Einsatzbereiche</h2>
 				<ul class="space-y-3 text-lg text-slate-700 leading-relaxed list-disc pl-6">
-					<li><strong class="text-zinc-900">CNC-Bearbeitung:</strong> Reduziert schwebende Metall-, Kunststoff-, Holz- und Verbundwerkstoff-Stäube.</li>
+					<li><strong class="text-zinc-900">CNC-Bearbeitung:</strong> Reduziert schwebende Metall-, Kunststoff-, Holz- und Verbundwerkstoff-Stäube. Ein HEPA-Filter ist in der Lage, selbst kleinste Partikel (0,12&ndash;0,25&nbsp;Mikrometer) mit einem Wirkungsgrad von 99,95&nbsp;% aus der Luft zu filtern &ndash; ideal für die feinen Aerosole, die bei diesen Prozessen entstehen.</li>
 					<li><strong class="text-zinc-900">Holzbearbeitungs-Fräsen:</strong> Nimmt feine Reststäube auf; MDF, Sperrholz usw. möglichst direkt an der Maschine absaugen.</li>
 					<li><strong class="text-zinc-900">Kunststoffe/Verbundwerkstoffe:</strong> Reinigt feine, reizende Stäube in der Umgebungsluft; die Quellenabsaugung bleibt unverzichtbar.</li>
 					<li><strong class="text-zinc-900">Schleifen/Polieren/Oberflächenbearbeitung:</strong> Hält Feinstaub zurück, der sich über den Arbeitsbereich hinaus ausbreitet.</li>
