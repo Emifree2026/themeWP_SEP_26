@@ -19,14 +19,15 @@ if ( ! defined( 'EMIFREE_THEME_VERSION' ) ) {
 }
 
 // Virtual-route version for the per-product long-form landing pages
-// (/en/products/mechanical/, /de/produkte/mechanische-filtration/, ...).
+// (/en/products/{slug}/, /de/produkte/{slug}/, ...).
 // Bumped whenever emifree_get_product_virtual_routes() gains or changes
 // an entry; the diff triggers one flush_rewrite_rules() in
 // inc/products-page-routes.php so the new patterns land in
-// `rewrite_rules` without manual intervention. The Mechanical EN+DE
-// pair is entry '1'.
+// `rewrite_rules` without manual intervention. Mechanical EN+DE was
+// entry '1'; adding the Electrostatic EN+DE pair on 2026-10-14
+// bumped it to '2'.
 if ( ! defined( 'EMIFREE_PRODUCT_ROUTES_VERSION' ) ) {
-	define( 'EMIFREE_PRODUCT_ROUTES_VERSION', '1' );
+	define( 'EMIFREE_PRODUCT_ROUTES_VERSION', '2' );
 }
 
 // i18n.php shim, kept so the English section templates continue to

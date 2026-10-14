@@ -61,6 +61,19 @@ function emifree_get_product_virtual_routes() {
 			'language'  => 'de',
 			'templates' => array( 'page-products-mechanical.php', 'page-products-mechanical-de.php' ),
 		),
+		// Electrostatic — EARIA 1000 m³/h line.
+		array(
+			'pattern'   => '^en/products/electrostatic/?$',
+			'slug'      => 'electrostatic',
+			'language'  => 'en',
+			'templates' => array( 'page-products-electrostatic.php', 'page-products-electrostatic-de.php' ),
+		),
+		array(
+			'pattern'   => '^de/produkte/elektrostatische-filtration/?$',
+			'slug'      => 'elektrostatische-filtration',
+			'language'  => 'de',
+			'templates' => array( 'page-products-electrostatic.php', 'page-products-electrostatic-de.php' ),
+		),
 	);
 }
 

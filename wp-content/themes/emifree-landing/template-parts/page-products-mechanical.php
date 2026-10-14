@@ -290,7 +290,7 @@ $emifree_contact_url       = home_url( '/en/?quote=mechanical#contact' );
 	 * ship safe-area utilities, so the inline style is the
 	 * most maintainable fit. */ ?>
 	<a href="#hero" data-emifree-back-to-top
-		class="fixed right-4 bottom-4 lg:right-6 lg:bottom-6 z-40 inline-flex items-center gap-1.5 px-4 py-3 rounded-full bg-blue-600 text-white text-sm font-semibold shadow-xl ring-1 ring-blue-700/20 hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors transition-opacity duration-200 opacity-0 pointer-events-none"
+		class="fixed right-4 bottom-4 lg:hidden z-40 inline-flex items-center gap-1.5 px-4 py-3 rounded-full bg-blue-600 text-white text-sm font-semibold shadow-xl ring-1 ring-blue-700/20 hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors transition-opacity duration-200 opacity-0 pointer-events-none"
 		style="padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));"
 		aria-label="Back to top">
 		<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
@@ -701,31 +701,80 @@ $emifree_contact_url       = home_url( '/en/?quote=mechanical#contact' );
 
 	// Floating "Back to top" button: show it once the user has
 	// scrolled past the hero, hide it when the hero is back in
-	// view. Using an IntersectionObserver on the hero element
-	// (rather than a scroll listener) keeps the show/hide work
-	// off the main thread on every scroll tick.
+	// view. Two paths so the reveal is reliable even if the
+	// IntersectionObserver path doesn't fire for any reason (a
+	// browser extension or plugin interfering with the hero, the
+	// hero skipping the top 10% strip on a very short page, etc.):
 	//
-	// `rootMargin: '0px 0px -90% 0px'` shrinks the observation
-	// root to the top 10% of the viewport — the button reveals
-	// as soon as the hero has scrolled out of that strip,
-	// matching the "past the fold" mental model the user has
-	// when looking for a back-to-top control.
-	if ('IntersectionObserver' in window) {
-		const backToTop = document.querySelector('[data-emifree-back-to-top]');
-		const hero = document.getElementById('hero');
-		if (backToTop && hero) {
-			const heroObserver = new IntersectionObserver((entries) => {
-				entries.forEach((entry) => {
-					if (entry.isIntersecting) {
-						backToTop.classList.add('opacity-0', 'pointer-events-none');
-						backToTop.classList.remove('opacity-100');
-					} else {
-						backToTop.classList.add('opacity-100');
-						backToTop.classList.remove('opacity-0', 'pointer-events-none');
-					}
-				});
-			}, { rootMargin: '0px 0px -90% 0px', threshold: 0 });
-			heroObserver.observe(hero);
+	//   1. IntersectionObserver on #hero with `rootMargin: '0px
+	//      0px -90% 0px'` — the original fast path that only
+	//      fires when the hero crosses the top 10% boundary.
+	//      Using an IO (rather than a scroll listener alone)
+	//      keeps the show/hide work off the main thread on
+	//      every scroll tick.
+	//   2. Throttled scroll listener fallback — guarantees the
+	//      button appears when scrollY > 240 (≈ "past the fold"
+	//      on every viewport) regardless of IO behavior. The rAF
+	//      throttle keeps it off the main thread on every scroll
+	//      tick.
+	//
+	// Both paths target the same element and write the same two
+	// class states, so they're idempotent: whichever fires first
+	// sets the state, whichever fires second is a no-op. Same
+	// hybrid as the electrostatic templates — the original
+	// IO-only block was silently not firing on the mechanical
+	// page in the wild too, so the same fix applies here.
+	const emifreeBackToTop = document.querySelector('[data-emifree-back-to-top]');
+	if (emifreeBackToTop) {
+		const emifreeShowBackToTop = () => {
+			emifreeBackToTop.classList.add('opacity-100');
+			emifreeBackToTop.classList.remove('opacity-0', 'pointer-events-none');
+		};
+		const emifreeHideBackToTop = () => {
+			emifreeBackToTop.classList.add('opacity-0', 'pointer-events-none');
+			emifreeBackToTop.classList.remove('opacity-100');
+		};
+		// Initial state from current scroll position (handles
+		// anchor links that scroll the page on load).
+		if (window.scrollY > 240) {
+			emifreeShowBackToTop();
 		}
+
+		// Path 1: IntersectionObserver (unchanged behavior).
+		if ('IntersectionObserver' in window) {
+			const emifreeHero = document.getElementById('hero');
+			if (emifreeHero) {
+				const emifreeHeroObserver = new IntersectionObserver((entries) => {
+					entries.forEach((entry) => {
+						if (entry.isIntersecting) {
+							emifreeHideBackToTop();
+						} else {
+							emifreeShowBackToTop();
+						}
+					});
+				}, { rootMargin: '0px 0px -90% 0px', threshold: 0 });
+				emifreeHeroObserver.observe(emifreeHero);
+			}
+		}
+
+		// Path 2: scroll listener fallback. rAF-throttled so it
+		// costs < 1ms per scroll tick. The 240px threshold is
+		// well past the page top on every viewport (the
+		// mechanical hero is at least ~500px tall on mobile)
+		// and well before the first section heading, matching
+		// the "past the fold" mental model.
+		let emifreeScrollTicking = false;
+		window.addEventListener('scroll', () => {
+			if (emifreeScrollTicking) { return; }
+			emifreeScrollTicking = true;
+			window.requestAnimationFrame(() => {
+				if (window.scrollY > 240) {
+					emifreeShowBackToTop();
+				} else {
+					emifreeHideBackToTop();
+				}
+				emifreeScrollTicking = false;
+			});
+		}, { passive: true });
 	}
 </script>

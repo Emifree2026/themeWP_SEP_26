@@ -427,9 +427,11 @@
 				// /products/{slug}/ URLs that 404).
 				const emifreeProductSlugMap = {
 					// DE → EN
-					'mechanische-filtration': 'mechanical',
+					'mechanische-filtration':    'mechanical',
+					'elektrostatische-filtration': 'electrostatic',
 					// EN → DE
-					'mechanical': 'mechanische-filtration',
+					'mechanical':    'mechanische-filtration',
+					'electrostatic': 'elektrostatische-filtration',
 				};
 				function emifreeMapProductSlug( slug ) {
 					return Object.prototype.hasOwnProperty.call( emifreeProductSlugMap, slug )

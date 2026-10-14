@@ -356,15 +356,19 @@ iframe[style*="border:none" i][width="0"] {
          * `:hover` on `.emifree-magnify-source` — keeps the
          * panel hidden while the cursor is in the right
          * column (where the panel itself lives) or over the
-         * padding/thumbs of the gallery. `:focus-within` is
-         * kept as a keyboard parallel: tabbing to a thumbnail
-         * also reveals the panel. */
-        .emifree-magnify-source.emifree-magnify-source--active .emifree-zoom-panel,
-        .emifree-magnify-source:focus-within .emifree-zoom-panel {
+         * padding/thumbs of the gallery. The panel is
+         * strictly hover-of-the-main-image: tabbing to a
+         * thumbnail no longer reveals it (that previously
+         * fired `:focus-within` on the grid wrapper and made
+         * the panel pop in immediately on thumb click, which
+         * is the opposite of "only on hover of the main
+         * image"). Keyboard users get visual feedback on the
+         * focused thumb itself via `aria-current` + the
+         * `is-active` ring class. */
+        .emifree-magnify-source.emifree-magnify-source--active .emifree-zoom-panel {
             opacity: 1;
         }
-        .emifree-magnify-source.emifree-magnify-source--active .emifree-zoom-text,
-        .emifree-magnify-source:focus-within .emifree-zoom-text {
+        .emifree-magnify-source.emifree-magnify-source--active .emifree-zoom-text {
             opacity: 0;
         }
     }

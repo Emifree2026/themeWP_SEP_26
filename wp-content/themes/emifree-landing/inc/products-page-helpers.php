@@ -465,3 +465,414 @@ if ( ! function_exists( 'emifree_get_mechanical_quotation_intro' ) ) :
 		return 'Typical applications for the ECO AIR Cleaner line:';
 	}
 endif;
+
+// ============================================================================
+// Electrostatic (EARIA) product line — mirrors the mechanical helper shape
+// above. Same set of return signatures so the electrostatic template-parts
+// iterate over the same shapes the mechanical ones do. Slugs:
+//   EN: /en/products/electrostatic/     — emifree_products()['electrostatic']
+//   DE: /de/produkte/elektrostatische-filtration/
+// ============================================================================
+
+if ( ! function_exists( 'emifree_get_electrostatic_gallery' ) ) :
+	/**
+	 * Return the 3 EARIA product photos as [filename, alt] pairs.
+	 *
+	 * Same approach as the mechanical helper: the photos live in the
+	 * parent assets/products/ folder (shared with the home-page
+	 * product card) rather than under electrostatic/, so the home
+	 * section template can keep its single uri.
+	 *
+	 * @return array<int, array{filename:string, alt:string}>
+	 */
+	function emifree_get_electrostatic_gallery() {
+		return array(
+			array(
+				'filename' => 'fotoe1.webp',
+				'alt'      => 'EARIA electrostatic precipitator, front view',
+			),
+			array(
+				'filename' => 'fotoe2.webp',
+				'alt'      => 'EARIA electrostatic precipitator, side with hinged door open',
+			),
+			array(
+				'filename' => 'fotoe3.webp',
+				'alt'      => 'EARIA electrostatic precipitator, hinge detail',
+			),
+		);
+	}
+endif;
+
+if ( ! function_exists( 'emifree_get_electrostatic_specs_rows' ) ) :
+	/**
+	 * Return the EARIA specs table as [label, basic, premium] triples.
+	 *
+	 * Source of truth for the copy is the spec data the user
+	 * transcribed on 2026-10-14 (table with 14 rows: Designation /
+	 * Dimensions / Flow Rate / ... / Control System, columns Basic +
+	 * Premium, EN and DE). The structure mirrors the mechanical
+	 * helper's [label, advanced, premium] shape — the electrostatic
+	 * template iterates the same way, only the column keys differ
+	 * (`basic` instead of `advanced`).
+	 *
+	 * "Version" is treated as the column header for the row-label
+	 * column (the user typed it first in the source transcription,
+	 * matching the layout of the published EARIA spec sheet);
+	 * the table the template renders has a single `Version | Basic
+	 * | Premium` thead row + 14 tbody data rows.
+	 *
+	 * Differences from the mechanical helper:
+	 *  - 14 rows, not 15 (electrostatic has no "Airflow" row split
+	 *    into Advanced vs "—"; the line ships a single 1000 m³/h
+	 *    variant).
+	 *  - The Pre-filter / Cleaning System / Control System rows
+	 *    inherit the same ✓/✓/—/✓ pattern from the EARIA spec
+	 *    image the user supplied in the previous turn (those three
+	 *    rows are part of the row-label list but the user-supplied
+	 *    text didn't include cell values; the spec image is the
+	 *    only source of truth we have, so it's preserved here).
+	 *  - "Electrical" / "Elektrik" for the Premium column uses
+	 *    "3-phase 400 V 50/60 Hz" (EN) and "3-Ph. 400 V 50/60 Hz"
+	 *    (DE) — the user typed them differently per language, so
+	 *    the value is preserved as written rather than normalised.
+	 *  - The Dimensions row uses `(L x W x H)` for the Basic
+	 *    column and `[L x W x H]` for the Premium column (the
+	 *    user transcribed the spec sheet with different bracket
+	 *    styles per cell); the asymmetry is preserved as a
+	 *    transcription choice, not a typo to "fix".
+	 *  - "Flow Rate Adjustment" is lowercase ("via potentiometer"
+	 *    / "via touch panel") per the user's source text; the
+	 *    mechanical helper capitalises ("via Potentiometer") because
+	 *    that matches the ECO AIR PDF's styling.
+	 *
+	 * @param string $emifree_lang 'en' (default) or 'de'.
+	 * @return array<int, array{label:string, basic:string, premium:string}>
+	 */
+	function emifree_get_electrostatic_specs_rows( $emifree_lang = 'en' ) {
+		if ( 'de' === $emifree_lang ) {
+			return array(
+				array(
+					'label'   => 'Bezeichnung',
+					'basic'   => 'EAR-10-CS-X',
+					'premium' => 'EAR-10-CS-X',
+				),
+				array(
+					'label'   => 'Abmessungen',
+					'basic'   => '818 x 466 x 566 mm (L x W x H)',
+					'premium' => '818 x 466 x 566 mm [L x W x H]',
+				),
+				array(
+					'label'   => 'Volumenstrom',
+					'basic'   => 'einstellbar, bis 1000 m³/h',
+					'premium' => 'einstellbar, bis 1000 m³/h',
+				),
+				array(
+					'label'   => 'Einstellung Volumenstrom',
+					'basic'   => 'über Potentiometer',
+					'premium' => 'via Touch-Panel',
+				),
+				array(
+					'label'   => 'Elektrik',
+					'basic'   => '1-Ph. 230 V 50/60 Hz',
+					'premium' => '3-Ph. 400 V 50/60 Hz',
+				),
+				array(
+					'label'   => 'Leistung',
+					'basic'   => '0.4 kW',
+					'premium' => '0,5 kW',
+				),
+				array(
+					'label'   => 'Schutzklasse',
+					'basic'   => 'IP54',
+					'premium' => 'IP54',
+				),
+				array(
+					'label'   => 'Geräusch',
+					'basic'   => '68 dB',
+					'premium' => '68 dB',
+				),
+				array(
+					'label'   => 'Rohranschluss',
+					'basic'   => 'DN 200 mm',
+					'premium' => 'DN 200 mm',
+				),
+				array(
+					'label'   => 'Standardfarbe',
+					'basic'   => 'RAL 9002 (opt. andere RAL Farben)',
+					'premium' => 'RAL 9002 (opt. andere RAL Farben)',
+				),
+				array(
+					'label'   => 'Gewicht',
+					'basic'   => '120 kg',
+					'premium' => '130 kg',
+				),
+				array(
+					'label'   => 'Vorfilter',
+					'basic'   => '✓',
+					'premium' => '✓',
+				),
+				array(
+					'label'   => 'Reinigungssystem',
+					'basic'   => '✓',
+					'premium' => '✓',
+				),
+				array(
+					'label'   => 'Kontrollsystem',
+					'basic'   => '—',
+					'premium' => '✓',
+				),
+			);
+		}
+
+		return array(
+			array(
+				'label'   => 'Designation',
+				'basic'   => 'EAR-10-CS-X',
+				'premium' => 'EAR-10-CS-X',
+			),
+			array(
+				'label'   => 'Dimensions',
+				'basic'   => '818 x 466 x 566 mm (L x W x H)',
+				'premium' => '818 x 466 x 566 mm [L x W x H]',
+			),
+			array(
+				'label'   => 'Flow Rate',
+				'basic'   => 'Adjustable up to 1000 m³/h',
+				'premium' => 'Adjustable up to 1000 m³/h',
+			),
+			array(
+				'label'   => 'Flow Rate Adjustment',
+				'basic'   => 'via potentiometer',
+				'premium' => 'via touch panel',
+			),
+			array(
+				'label'   => 'Electrical',
+				'basic'   => '1-Ph. 230 V 50/60 Hz',
+				'premium' => '3-phase 400 V 50/60 Hz',
+			),
+			array(
+				'label'   => 'Power',
+				'basic'   => '0.4 kW',
+				'premium' => '0.5 kW',
+			),
+			array(
+				'label'   => 'Protection Class',
+				'basic'   => 'IP54',
+				'premium' => 'IP54',
+			),
+			array(
+				'label'   => 'Noise',
+				'basic'   => '68 dB',
+				'premium' => '68 dB',
+			),
+			array(
+				'label'   => 'Pipe Connection',
+				'basic'   => 'DN 200 mm',
+				'premium' => 'DN 200 mm',
+			),
+			array(
+				'label'   => 'Standard Color',
+				'basic'   => 'RAL 9002 (opt. other RAL colors)',
+				'premium' => 'RAL 9002 (other RAL colors available)',
+			),
+			array(
+				'label'   => 'Weight',
+				'basic'   => '120 kg',
+				'premium' => '130 kg',
+			),
+			array(
+				'label'   => 'Pre-filter',
+				'basic'   => '✓',
+				'premium' => '✓',
+			),
+			array(
+				'label'   => 'Cleaning System',
+				'basic'   => '✓',
+				'premium' => '✓',
+			),
+			array(
+				'label'   => 'Control System',
+				'basic'   => '—',
+				'premium' => '✓',
+			),
+		);
+	}
+endif;
+
+if ( ! function_exists( 'emifree_get_electrostatic_dimension_images' ) ) :
+	/**
+	 * Return the 3 electrostatic dimension drawings as [filename, alt, uri] triples.
+	 *
+	 * The 3rd drawing has two language variants (EN / DE) because
+	 * the source drawing has a callout label in each language
+	 * ("Fastener, 6 × M10" / "Befestigung, 6 × M10"). The EN
+	 * template uses 'earia-dim-3-en.jpg'; the DE template passes
+	 * $emifree_english = false to swap to 'earia-dim-3-de.jpg'.
+	 *
+	 * Views 1 and 2 are language-neutral (no embedded text). All
+	 * three live in assets/products/electrostatic/ alongside the
+	 * EARIA logo and the (no-longer-rendered) spec-sheet PNGs.
+	 *
+	 * The "3 in a 2-col grid" layout leaves the 4th cell empty on
+	 * sm+ viewports. The user has not asked for the 3rd tile to
+	 * span both columns; if that becomes a request, the template's
+	 * foreach wrapper gets a `sm:col-span-2` on the last iteration
+	 * (one-line change). Mirrors the mechanical helper's per-
+	 * language 4th-slot signature.
+	 *
+	 * @param bool $emifree_english If true, use the EN 3rd image; otherwise the DE one.
+	 * @return array<int, array{filename:string, alt:string, uri:string}>
+	 */
+	function emifree_get_electrostatic_dimension_images( $emifree_english = true ) {
+		$emifree_uri = get_template_directory_uri() . '/assets/products/electrostatic/';
+		return array(
+			array(
+				'filename' => 'earia-dim-1.jpg',
+				'alt'      => 'EARIA dimensions, view 1 — side elevation',
+				'uri'      => $emifree_uri . 'earia-dim-1.jpg',
+			),
+			array(
+				'filename' => 'earia-dim-2.jpg',
+				'alt'      => 'EARIA dimensions, view 2 — front view',
+				'uri'      => $emifree_uri . 'earia-dim-2.jpg',
+			),
+			array(
+				'filename' => $emifree_english ? 'earia-dim-3-en.jpg' : 'earia-dim-3-de.jpg',
+				'alt'      => $emifree_english
+					? 'EARIA dimensions, view 3 — mounting view, 6 × M10 fasteners'
+					: 'EARIA Maße, Ansicht 3 — Montageansicht, 6 × M10 Befestigung',
+				'uri'      => $emifree_uri . ( $emifree_english ? 'earia-dim-3-en.jpg' : 'earia-dim-3-de.jpg' ),
+			),
+		);
+	}
+endif;
+
+if ( ! function_exists( 'emifree_get_electrostatic_performance_curves' ) ) :
+	/**
+	 * Return the EARIA performance-comparison image as
+	 * [filename, alt, label, uri] quads.
+	 *
+	 * The performance section on the EARIA product page is no
+	 * longer a single-variant pressure-loss curve; it is a
+	 * side-by-side comparison graph ("Emifree System" vs.
+	 * "Conventional System" / "Emifree-System" vs.
+	 * "Konventionelles System") showing how a self-cleaning
+	 * cycle keeps filtration efficiency near 100% over time
+	 * while a conventional system decays toward 60%.
+	 *
+	 * The graph ships as a single PNG per language (the legend
+	 * text is baked into the image: "Emifree System",
+	 * "Self-cleaning system", "Conventional System" in EN, and
+	 * the German equivalents in DE). The body template renders
+	 * the section with one full-width figure; the loop is kept
+	 * for symmetry with the mechanical helper but returns a
+	 * single entry.
+	 *
+	 * The `label` key is preserved in the return shape for
+	 * backwards compatibility with the existing template, but
+	 * the EARIA body template now intentionally omits the
+	 * figcaption — the old "1000 m³/h" label was specific to
+	 * the per-variant pressure-loss curve, and the new
+	 * comparison graph has no variant number to call out.
+	 *
+	 * @param string $emifree_lang 'en' (default) or 'de'.
+	 * @return array<int, array{filename:string, alt:string, label:string, uri:string}>
+	 */
+	function emifree_get_electrostatic_performance_curves( $emifree_lang = 'en' ) {
+		$emifree_uri = get_template_directory_uri() . '/assets/products/electrostatic/';
+		if ( 'de' === $emifree_lang ) {
+			return array(
+				array(
+					'filename' => 'earia-performance-de.png',
+					'alt'      => 'Leistungsvergleich: Emifree-System mit Selbstreinigung gegen konventionelles System über die Zeit',
+					'label'    => '',
+					'uri'      => $emifree_uri . 'earia-performance-de.png',
+				),
+			);
+		}
+		return array(
+			array(
+				'filename' => 'earia-performance-en.png',
+				'alt'      => 'Performance comparison: Emifree System with self-cleaning vs. conventional system over time',
+				'label'    => '',
+				'uri'      => $emifree_uri . 'earia-performance-en.png',
+			),
+		);
+	}
+endif;
+
+if ( ! function_exists( 'emifree_get_electrostatic_spec_image' ) ) :
+	/**
+	 * Return the URL + alt text for the static spec image (PNG)
+	 * for the EARIA line.
+	 *
+	 * The user supplied a per-language spec table image rather than
+	 * a structured data array (earia_EN.png, earia_DE_final2.png).
+	 * The body template renders the image at full width on the Specs
+	 * section rather than building an HTML table. When a structured
+	 * EARIA spec sheet replaces the PNG, this helper should be
+	 * replaced by an `emifree_get_electrostatic_specs_table()` that
+	 * returns the same [rows] shape used by the mechanical helper.
+	 *
+	 * @param string $emifree_lang 'en' (default) or 'de'.
+	 * @return array{url:string, alt:string}
+	 */
+	function emifree_get_electrostatic_spec_image( $emifree_lang = 'en' ) {
+		$emifree_uri = get_template_directory_uri() . '/assets/products/electrostatic/';
+		if ( 'de' === $emifree_lang ) {
+			return array(
+				'url' => $emifree_uri . 'earia_DE_final2.png',
+				'alt' => 'EARIA 1000 m³/h — Spezifikationsübersicht (DE)',
+			);
+		}
+		return array(
+			'url' => $emifree_uri . 'earia_EN.png',
+			'alt' => 'EARIA 1000 m³/h — specifications overview (EN)',
+		);
+	}
+endif;
+
+if ( ! function_exists( 'emifree_get_electrostatic_applications' ) ) :
+	/**
+	 * Return the typical applications for the EARIA line.
+	 *
+	 * Mirrors the mechanical helper. The EN list is pulled from
+	 * `emifree_products()['electrostatic']['applications']`; the DE
+	 * list is hand-translated here.
+	 *
+	 * @param string $emifree_lang 'en' (default) or 'de'.
+	 * @return array<int, string>
+	 */
+	function emifree_get_electrostatic_applications( $emifree_lang = 'en' ) {
+		if ( 'de' === $emifree_lang ) {
+			return array(
+				'Ölnebel',
+				'Rauch',
+				'Schweißrauch',
+				'Schleifstaub',
+				'Laserdämpfe',
+			);
+		}
+		return emifree_products()['electrostatic']['applications'];
+	}
+endif;
+
+if ( ! function_exists( 'emifree_get_electrostatic_cta' ) ) :
+	/**
+	 * Return the call-to-action button label for the electrostatic
+	 * product page.
+	 *
+	 * Same pattern as the mechanical helper. EN from
+	 * `emifree_products()`, DE is a verb form to match the
+	 * mechanical DE button style.
+	 *
+	 * @param string $emifree_lang 'en' (default) or 'de'.
+	 * @return string
+	 */
+	function emifree_get_electrostatic_cta( $emifree_lang = 'en' ) {
+		if ( 'de' === $emifree_lang ) {
+			return 'Angebot anfordern';
+		}
+		return emifree_products()['electrostatic']['cta'];
+	}
+endif;

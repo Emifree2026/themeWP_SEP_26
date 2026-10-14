@@ -74,6 +74,13 @@ function emifree_get_seed_pages() {
 			'language'    => 'en',
 			'template'    => 'page-products-mechanical.php',
 		),
+		array(
+			'post_name'   => 'electrostatic',
+			'post_title'  => 'Electrostatic Air Filtration',
+			'parent_name' => 'products',
+			'language'    => 'en',
+			'template'    => 'page-products-electrostatic.php',
+		),
 
 		// --- DE: Produkte index (parent) ---
 		array(
@@ -89,6 +96,13 @@ function emifree_get_seed_pages() {
 			'parent_name' => 'produkte',
 			'language'    => 'de',
 			'template'    => 'page-products-mechanical-de.php',
+		),
+		array(
+			'post_name'   => 'elektrostatische-filtration',
+			'post_title'  => 'Elektrostatische Luftfiltration',
+			'parent_name' => 'produkte',
+			'language'    => 'de',
+			'template'    => 'page-products-electrostatic-de.php',
 		),
 	);
 }

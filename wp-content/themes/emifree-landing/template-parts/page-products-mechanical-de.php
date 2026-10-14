@@ -295,7 +295,7 @@ $emifree_contact_url       = home_url( '/de/?quote=mechanical#contact' );
 	 * keine Safe-Area-Utilities bereit, daher ist der Inline-Stil
 	 * die wartbarste Lösung. */ ?>
 	<a href="#hero" data-emifree-back-to-top
-		class="fixed right-4 bottom-4 lg:right-6 lg:bottom-6 z-40 inline-flex items-center gap-1.5 px-4 py-3 rounded-full bg-blue-600 text-white text-sm font-semibold shadow-xl ring-1 ring-blue-700/20 hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors transition-opacity duration-200 opacity-0 pointer-events-none"
+		class="fixed right-4 bottom-4 lg:hidden z-40 inline-flex items-center gap-1.5 px-4 py-3 rounded-full bg-blue-600 text-white text-sm font-semibold shadow-xl ring-1 ring-blue-700/20 hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors transition-opacity duration-200 opacity-0 pointer-events-none"
 		style="padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));"
 		aria-label="Nach oben">
 		<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
