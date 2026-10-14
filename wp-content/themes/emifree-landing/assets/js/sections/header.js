@@ -314,10 +314,13 @@
 				// generic Knowledge-hub tail-preserving remap below,
 				// because a few sub-page slugs differ across languages:
 				//
-				//   Insights  → de=insights,  en=insights  (shared)
-				//   About     → de=ueber-uns, en=about     (ASCII alias)
-				//   Downloads → de=downloads, en=downloads (shared)
-				//   Tools     → de=tools,     en=tools     (shared)
+				//   Insights   → de=insights,  en=insights                 (shared)
+				//   About      → de=ueber-uns, en=about                    (ASCII alias)
+				//   Downloads  → de=downloads, en=downloads                (shared)
+				//   Tools      → de=tools,     en=tools                    (shared)
+				//   HEPA filter → de=hepa-filter-cnc-industrielle-werkstaetten,
+				//                 en=hepa-filters-cnc-industrial-workshops (full slug
+				//                 swap, both ASCII-safe, no shared stem)
 				//
 				// The DE "ueber-uns" alias was chosen (instead of
 				// "uber-uns") for ASCII safety in analytics share
@@ -328,6 +331,15 @@
 				// /de/wissen/about/, neither of which exists (both fall
 				// through to the homepage, which the user perceives as
 				// "the language switcher is broken").
+				//
+				// The HEPA pair follows the same pattern: both slugs are
+				// full translations (not ASCII aliases) because the EN
+				// source already includes the friendly plural
+				// "filters / industrial / workshops" and the DE side
+				// is the equivalent "filter / industrielle /
+				// werkstaetten". Listed bidirectionally so the table
+				// can be consulted regardless of which language the
+				// user is toggling FROM.
 				//
 				// Map is bidirectional: the same table is consulted
 				// regardless of which language is being toggled TO; we
@@ -340,8 +352,10 @@
 					'ueber-uns': 'about',
 					'downloads': 'downloads',
 					'tools':     'tools',
+					'hepa-filter-cnc-industrielle-werkstaetten': 'hepa-filters-cnc-industrial-workshops',
 					// EN → DE equivalents
 					'about':     'ueber-uns',
+					'hepa-filters-cnc-industrial-workshops':     'hepa-filter-cnc-industrielle-werkstaetten',
 				};
 				function emifreeMapKnowledgeSlug( slug ) {
 					return Object.prototype.hasOwnProperty.call( emifreeKnowledgeSlugMap, slug )

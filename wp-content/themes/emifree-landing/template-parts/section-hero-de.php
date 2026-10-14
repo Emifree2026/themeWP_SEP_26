@@ -124,16 +124,34 @@
 		>
 			<?php foreach ( $emifree_de_chips as $emifree_de_chip ) :
 				$emifree_de_chip_icon = isset( $emifree_de_chip_icons[ $emifree_de_chip['icon'] ] ) ? $emifree_de_chip_icons[ $emifree_de_chip['icon'] ] : '';
-				// "Selbstreinigend" (icon: 'cycle') ist der einzige Chip,
-				// der navigiert. Verlinkt auf #technology, damit der
-				// Nutzer die automatische Abreinigung nachlesen kann.
-				// Die anderen beiden Chips bleiben dekorative <span>s.
+				// Zwei der drei Chips navigieren jetzt:
+				//   - 'cycle' (Selbstreinigend)   → #technology (Anker auf
+				//     derselben Seite, Smooth-Scroll in header.js)
+				//   - 'hepa'  (HEPA-Filter)       → /de/wissen/
+				//     hepa-filter-cnc-industrielle-werkstaetten/ — die
+				//     neue HEPA-Artikel-Landingpage. Cross-Page-Link,
+				//     also voller Seitenwechsel (kein Smooth-Scroll).
+				// 'energy' (Energiesparend) bleibt ein dekorativer <span>.
 				// Erkennung erfolgt über den Icon-Typ (übersetzungs-
-				// unabhängig) statt über den Label-Text.
-				$emifree_de_chip_is_link = ( 'cycle' === $emifree_de_chip['icon'] );
+				// unabhängig) statt über den Label-Text. href + aria-
+				// label-Suffix variieren pro Linkziel, damit Screenreader
+				// und Nutzer wissen, wohin der Chip führt.
+				$emifree_de_chip_href          = '';
+				$emifree_de_chip_aria_suffix   = '';
+				$emifree_de_chip_data_link_key = '';
+				if ( 'cycle' === $emifree_de_chip['icon'] ) {
+					$emifree_de_chip_href          = '#technology';
+					$emifree_de_chip_aria_suffix   = __( 'die Technologie dahinter ansehen', 'emifree-landing' );
+					$emifree_de_chip_data_link_key = 'cycle';
+				} elseif ( 'hepa' === $emifree_de_chip['icon'] ) {
+					$emifree_de_chip_href          = home_url( '/de/wissen/hepa-filter-cnc-industrielle-werkstaetten/' );
+					$emifree_de_chip_aria_suffix   = __( 'mehr über HEPA-Filter in CNC-Werkstätten erfahren', 'emifree-landing' );
+					$emifree_de_chip_data_link_key = 'hepa';
+				}
+				$emifree_de_chip_is_link = ( '' !== $emifree_de_chip_href );
 				$emifree_de_chip_tag     = $emifree_de_chip_is_link ? 'a' : 'span';
 				$emifree_de_chip_attrs   = $emifree_de_chip_is_link
-					? ' href="#technology" data-emifree-chip-link="cycle" aria-label="' . esc_attr( $emifree_de_chip['label'] ) . ' — ' . esc_attr__( 'die Technologie dahinter ansehen', 'emifree-landing' ) . '"'
+					? ' href="' . esc_url( $emifree_de_chip_href ) . '" data-emifree-chip-link="' . esc_attr( $emifree_de_chip_data_link_key ) . '" aria-label="' . esc_attr( $emifree_de_chip['label'] ) . ' — ' . esc_attr( $emifree_de_chip_aria_suffix ) . '"'
 					: '';
 				$emifree_de_chip_classes = 'inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 backdrop-blur-sm px-4 py-2 text-sm sm:text-base font-medium text-white whitespace-nowrap transition-all duration-200'
 					. ( $emifree_de_chip_is_link

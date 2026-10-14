@@ -31,6 +31,35 @@ if ( ! defined( 'EMIFREE_PRODUCT_ROUTES_VERSION' ) ) {
 	define( 'EMIFREE_PRODUCT_ROUTES_VERSION', '3' );
 }
 
+// Virtual-route version for the Knowledge hub sub-section landings
+// (/en/knowledge/{slug}/, /de/wissen/{slug}/, ...). Bumped whenever
+// emifree_register_knowledge_route() gains a new explicit rule or
+// the dispatcher whitelist ($emifree_subsection_templates) gains a
+// new entry. The diff triggers one flush_rewrite_rules() inside
+// emifree_register_knowledge_route() so the new patterns land in
+// `rewrite_rules` without manual intervention.
+//
+// Version history:
+//   '1' — initial 8 rules (insights / about / downloads / tools in
+//         EN + DE, plus 'ueber-uns' DE-side alias for 'about').
+//   '2' — adding HEPA Filters EN+DE pair on 2026-10-14 (the chip
+//         on the principal hero now routes to
+//         /en/knowledge/hepa-filters-cnc-industrial-workshops/ and
+//         /de/wissen/hepa-filter-cnc-industrielle-werkstaetten/).
+//   '3' — adding HEPA slugs to the broad ^en/knowledge/([^/]+) and
+//         ^de/wissen/([^/]+) rules' negative lookaheads so the broad
+//         "post" dispatcher doesn't preempt the explicit HEPA
+//         "subsection" rule. Without this, the broad rule's
+//         negative lookahead (which is keyed on insights|about|
+//         downloads|tools) does not match HEPA and the broad rule
+//         shadows the explicit one, dispatching HEPA as
+//         emifree_knowledge=post and falling through to the
+//         homepage since the post-dispatcher's tool whitelist
+//         doesn't list HEPA.
+if ( ! defined( 'EMIFREE_KNOWLEDGE_ROUTES_VERSION' ) ) {
+	define( 'EMIFREE_KNOWLEDGE_ROUTES_VERSION', '3' );
+}
+
 // i18n.php shim, kept so the English section templates continue to
 // work unchanged. The bilingual dispatcher (emifree_get_lang +
 // function-guard approach) was retired; the German templates inline
@@ -1424,7 +1453,7 @@ function emifree_register_knowledge_route() {
 		'top'
 	);
 	add_rewrite_rule(
-		'^en/knowledge/(?!insights$|about$|downloads$|tools$)([^/]+)/?$',
+		'^en/knowledge/(?!insights$|about$|downloads$|tools$|hepa-filters-cnc-industrial-workshops$)([^/]+)/?$',
 		'index.php?emifree_knowledge=post&emifree_knowledge_slug=$matches[1]&emifree_knowledge_lang=en',
 		'top'
 	);
@@ -1436,7 +1465,7 @@ function emifree_register_knowledge_route() {
 		'top'
 	);
 	add_rewrite_rule(
-		'^de/wissen/(?!insights$|ueber-uns$|downloads$|tools$)([^/]+)/?$',
+		'^de/wissen/(?!insights$|ueber-uns$|downloads$|tools$|hepa-filter-cnc-industrielle-werkstaetten$)([^/]+)/?$',
 		'index.php?emifree_knowledge=post&emifree_knowledge_slug=$matches[1]&emifree_knowledge_lang=de',
 		'top'
 	);
@@ -1450,7 +1479,7 @@ function emifree_register_knowledge_route() {
 		'top'
 	);
 	add_rewrite_rule(
-		'^de/knowledge/(?!insights$|ueber-uns$|downloads$|tools$)([^/]+)/?$',
+		'^de/knowledge/(?!insights$|ueber-uns$|downloads$|tools$|hepa-filter-cnc-industrielle-werkstaetten$)([^/]+)/?$',
 		'index.php?emifree_knowledge=post&emifree_knowledge_slug=$matches[1]&emifree_knowledge_lang=de',
 		'top'
 	);
@@ -1498,10 +1527,18 @@ function emifree_register_knowledge_route() {
 	// the German site (/wissen/, /luftdruckverlust-rechner/, etc.).
 	//
 	// These rules are emitted at 'top' priority, before the broad
-	// ^en/knowledge/([^/]+)/?$ tool rule at line 1232. That broad
+	// ^en/knowledge/([^/]+)/?$ tool rule above. That broad
 	// rule would otherwise match "insights" and try to dispatch
 	// it as a tool slug, hitting the 404 fallback in the
 	// dispatcher. 'top' priority + explicit patterns below win.
+	//
+	// The same pattern is used for the HEPA Filters article landing
+	// added on 2026-10-14: a top-priority explicit rule for both
+	// languages, plus a corresponding entry in
+	// $emifree_subsection_templates below so the dispatcher can
+	// resolve the slug to a template. The DE slug
+	// (hepa-filter-cnc-industrielle-werkstaetten) is ASCII-safe,
+	// mirroring /de/wissen/ueber-uns/.
 	add_rewrite_rule(
 		'^en/knowledge/insights/?$',
 		'index.php?emifree_knowledge=subsection&emifree_knowledge_slug=insights&emifree_knowledge_lang=en',
@@ -1542,8 +1579,41 @@ function emifree_register_knowledge_route() {
 		'index.php?emifree_knowledge=subsection&emifree_knowledge_slug=tools&emifree_knowledge_lang=de',
 		'top'
 	);
+	add_rewrite_rule(
+		'^en/knowledge/hepa-filters-cnc-industrial-workshops/?$',
+		'index.php?emifree_knowledge=subsection&emifree_knowledge_slug=hepa-filters-cnc-industrial-workshops&emifree_knowledge_lang=en',
+		'top'
+	);
+	add_rewrite_rule(
+		'^de/wissen/hepa-filter-cnc-industrielle-werkstaetten/?$',
+		'index.php?emifree_knowledge=subsection&emifree_knowledge_slug=hepa-filter-cnc-industrielle-werkstaetten&emifree_knowledge_lang=de',
+		'top'
+	);
 }
 add_action( 'init', 'emifree_register_knowledge_route' );
+
+/**
+ * One-shot flush trigger for the knowledge-route register.
+ *
+ * Mirrors inc/products-page-routes.php's flush pattern: when
+ * EMIFREE_KNOWLEDGE_ROUTES_VERSION changes, the next init pass
+ * registers the new rules and then schedules this flush at
+ * priority 99 (after every other init listener has registered
+ * their own rules). flush_rewrite_rules() is called with $hard
+ * = false so the .htaccess isn't rewritten — the rules live in
+ * the `rewrite_rules` DB option and that's the only place that
+ * needs a refresh. The version is updated at the same point so
+ * the flush runs exactly once per version bump.
+ */
+function emifree_flush_rewrite_rules_for_knowledge_routes() {
+	$emifree_version = (string) get_option( 'emifree_knowledge_routes_version', '' );
+	if ( $emifree_version === (string) EMIFREE_KNOWLEDGE_ROUTES_VERSION ) {
+		return;
+	}
+	update_option( 'emifree_knowledge_routes_version', (string) EMIFREE_KNOWLEDGE_ROUTES_VERSION, false );
+	flush_rewrite_rules( false );
+}
+add_action( 'init', 'emifree_flush_rewrite_rules_for_knowledge_routes', 99 );
 
 function emifree_register_knowledge_query_var( $vars ) {
 	$vars[] = 'emifree_knowledge';
@@ -1576,6 +1646,11 @@ function emifree_route_knowledge_template() {
 			// DE-side alias: 'about' is the URL the German nav uses
 			// as /de/wissen/ueber-uns/, mapped to the same template.
 			'ueber-uns' => array( 'page-knowledge-about.php',     'page-knowledge-about-de.php' ),
+			// HEPA filter article, EN + DE share the same template
+			// pair with a per-language slug. The principal hero's
+			// "HEPA filter" chip points at these URLs.
+			'hepa-filters-cnc-industrial-workshops'     => array( 'page-hepa-filters.php', 'page-hepa-filters-de.php' ),
+			'hepa-filter-cnc-industrielle-werkstaetten' => array( 'page-hepa-filters.php', 'page-hepa-filters-de.php' ),
 		);
 		$emifree_subsection_slug = get_query_var( 'emifree_knowledge_slug' );
 		if ( ! isset( $emifree_subsection_templates[ $emifree_subsection_slug ] ) ) {

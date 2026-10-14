@@ -991,3 +991,125 @@ if ( ! function_exists( 'emifree_get_dust_cta' ) ) :
 		return 'Request a quote';
 	}
 endif;
+
+// ============================================================================
+// HEPA section
+//
+// The HEPA "page" is structurally a Knowledge sub-page (long-form
+// editorial content with H2 sections, not product specs), but it
+// reuses the dust page's hero layout (3-photo gallery + title + CTA +
+// feature list) for visual consistency. Helpers below match the dust
+// pattern: a 3-photo gallery, a 4-item hero intro list, and a CTA
+// label. The body content below the hero is rendered inline in the
+// template part — it's editorial copy from HEPA_SECTIONMD.md
+// (2026-10-14) and the 5 H2 sections are short enough that a separate
+// data array would be more abstraction than benefit.
+//
+// Added 2026-10-14 in response to the user's request to make the
+// hero's "HEPA filter" chip clickable, routing to a dedicated
+// landing page that explains HEPA use cases, limitations, selection
+// criteria, and combustible-dust safety. This is the source of truth
+// for the helpers; the body content lives in the template.
+// ============================================================================
+
+if ( ! function_exists( 'emifree_get_hepa_gallery' ) ) :
+	/**
+	 * Return the 3 HEPA filter product photos as [filename, alt] pairs.
+	 *
+	 * Photos live at assets/products/hepa/hepa-{1,2,3}.webp. Alt
+	 * text describes the visible element (honeycomb media face,
+	 * finished filter housing from the side, finished filter housing
+	 * from the front) so the gallery is informative even with
+	 * images off.
+	 *
+	 * @return array<int, array{filename:string, alt:string}>
+	 */
+	function emifree_get_hepa_gallery() {
+		return array(
+			array(
+				'filename' => 'hepa-1.webp',
+				'alt'      => 'HEPA filter media close-up, hexagonal honeycomb structure with white separator beads',
+			),
+			array(
+				'filename' => 'hepa-2.webp',
+				'alt'      => 'HEPA filter cartridge, full unit angled view, white metal housing with honeycomb face',
+			),
+			array(
+				'filename' => 'hepa-3.webp',
+				'alt'      => 'HEPA filter cartridge, front view, white metal frame with exposed pleated filter media',
+			),
+		);
+	}
+endif;
+
+if ( ! function_exists( 'emifree_get_hepa_hero_intro' ) ) :
+	/**
+	 * Return the HEPA section hero intro as a list of 4 features.
+	 *
+	 * The 4 bullets summarize the article's intent and lead the user
+	 * into the H2 sections below. The English copy was supplied by
+	 * the user via HEPA_SECTIONMD.md (2026-10-14); the German copy
+	 * is machine-translated and marked in the template as needing
+	 * human review before the DE page goes public.
+	 *
+	 * @param string $emifree_lang 'en' (default) or 'de'.
+	 * @return array<int, array{label:string, body:string}>
+	 */
+	function emifree_get_hepa_hero_intro( $emifree_lang = 'en' ) {
+		if ( 'de' === $emifree_lang ) {
+			return array(
+				array(
+					'label' => 'Feinstaubkontrolle',
+					'body'  => 'Reduziert feinen, in der Luft schwebenden Staub in CNC-Werkstätten und Industrieumgebungen — als eine von mehreren Schutzschichten.',
+				),
+				array(
+					'label' => 'Eine Schicht, kein Ersatz',
+					'body'  => 'HEPA ergänzt Absaugung, Einhausung und lokale Entlüftung, ersetzt sie jedoch nicht.',
+				),
+				array(
+					'label' => 'Sicherheit zuerst',
+					'body'  => 'Bei brennbarem Staub (Holz, Aluminium, Kunststoff) sind zertifizierte, explosionsgeschützte Geräte und ein Pre-Filter unerlässlich.',
+				),
+				array(
+					'label' => 'Richtig auswählen',
+					'body'  => 'Luftstrom, Vorfilter und Druckverlustüberwachung müssen auf Raumgröße und Staublast abgestimmt sein.',
+				),
+			);
+		}
+		return array(
+			array(
+				'label' => 'Fine-dust control',
+				'body'  => 'Reduces suspended fine dust in CNC workshops and industrial environments, as one layer of protection.',
+			),
+			array(
+				'label' => 'One layer, not a replacement',
+				'body'  => 'HEPA complements source capture, enclosures, and local exhaust ventilation — it does not replace them.',
+			),
+			array(
+				'label' => 'Safety first',
+				'body'  => 'Combustible dust (wood, aluminum, plastic) demands certified, explosion-protected equipment and a pre-filter.',
+			),
+			array(
+				'label' => 'Choose the right setup',
+				'body'  => 'Match airflow, pre-filtration, and pressure-drop monitoring to the room size and dust load.',
+			),
+		);
+	}
+endif;
+
+if ( ! function_exists( 'emifree_get_hepa_cta' ) ) :
+	/**
+	 * Return the call-to-action button label for the HEPA section page.
+	 *
+	 * Same wording as the dust page so the two pages read consistently.
+	 *
+	 * @param string $emifree_lang 'en' (default) or 'de'.
+	 * @return string
+	 */
+	function emifree_get_hepa_cta( $emifree_lang = 'en' ) {
+		if ( 'de' === $emifree_lang ) {
+			return 'Angebot anfordern';
+		}
+		return 'Request a quote';
+	}
+endif;
