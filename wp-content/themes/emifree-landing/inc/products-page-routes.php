@@ -74,6 +74,19 @@ function emifree_get_product_virtual_routes() {
 			'language'  => 'de',
 			'templates' => array( 'page-products-electrostatic.php', 'page-products-electrostatic-de.php' ),
 		),
+		// Dust — wood / metal / mineral / food-grade dust collection.
+		array(
+			'pattern'   => '^en/products/dust/?$',
+			'slug'      => 'dust',
+			'language'  => 'en',
+			'templates' => array( 'page-products-dust.php', 'page-products-dust-de.php' ),
+		),
+		array(
+			'pattern'   => '^de/produkte/entstaubung/?$',
+			'slug'      => 'entstaubung',
+			'language'  => 'de',
+			'templates' => array( 'page-products-dust.php', 'page-products-dust-de.php' ),
+		),
 	);
 }
 

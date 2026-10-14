@@ -876,3 +876,118 @@ if ( ! function_exists( 'emifree_get_electrostatic_cta' ) ) :
 		return emifree_products()['electrostatic']['cta'];
 	}
 endif;
+
+// ============================================================================
+// Dust product line
+//
+// The Dust product page is being built iteratively. As of 2026-10-14
+// only the hero section is live (gallery + intro + CTA). The helper
+// module mirrors the mechanical / electrostatic layout so additional
+// sections (dimensions, performance, specs, brochure) can be added in
+// the same way as those products mature.
+// ============================================================================
+
+if ( ! function_exists( 'emifree_get_dust_gallery' ) ) :
+	/**
+	 * Return the 3 dust-filter product photos as [filename, alt] pairs.
+	 *
+	 * Unlike the mechanical and electrostatic galleries (which share
+	 * the parent assets/products/ folder with the home-page cards),
+	 * the dust photos are placed under assets/products/dust/ — the
+	 * home-page card uses a different image (dust_filter-emi.png) that
+	 * is cropped to a portrait card aspect. The 3 hero photos are
+	 * full-height studio shots of the actual unit, and they live
+	 * alongside the future per-section images in a dedicated folder.
+	 *
+	 * Files are WebP (~100 KB each) — see `emifree_get_dust_gallery_uri()`
+	 * below for the resolved URL helper.
+	 *
+	 * @return array<int, array{filename:string, alt:string}>
+	 */
+	function emifree_get_dust_gallery() {
+		return array(
+			array(
+				'filename' => 'dust-1.webp',
+				'alt'      => 'Emifree dust filtration unit, three-quarter view with control panel and extraction arm',
+			),
+			array(
+				'filename' => 'dust-2.webp',
+				'alt'      => 'Emifree dust filtration unit, full cabinet view with side ducting and collection bin',
+			),
+			array(
+				'filename' => 'dust-3.webp',
+				'alt'      => 'Emifree dust filtration unit, front view with integrated cyclone and warning beacon',
+			),
+		);
+	}
+endif;
+
+if ( ! function_exists( 'emifree_get_dust_hero_intro' ) ) :
+	/**
+	 * Return the dust product hero intro as a list of 4 features.
+	 *
+	 * Each entry is a [label, body] pair so the template can render a
+	 * <ul> with a <strong> lead-in for the label. The text was
+	 * supplied by the user (2026-10-14) and reads as a 4-bullet
+	 * feature list rather than a single paragraph, so we return
+	 * structured data instead of a string.
+	 *
+	 * @param string $emifree_lang 'en' (default) or 'de'.
+	 * @return array<int, array{label:string, body:string}>
+	 */
+	function emifree_get_dust_hero_intro( $emifree_lang = 'en' ) {
+		if ( 'de' === $emifree_lang ) {
+			return array(
+				array(
+					'label' => 'Dauerbetrieb 24/7',
+					'body'  => 'Hochleistungsturbine für den industriellen Non-Stop-Einsatz.',
+				),
+				array(
+					'label' => 'Intelligente Volumenregelung',
+					'body'  => 'Frequenzumrichter (FC) optimiert den Luftstrom und spart Energie.',
+				),
+				array(
+					'label' => 'Null-Ausfallzeit-Reinigung',
+					'body'  => 'Automatische Druckluftabreinigung verlängert die Filterlebensdauer erheblich.',
+				),
+				array(
+					'label' => 'Vielseitige Absaugung',
+					'body'  => 'Erfasst Schweißrauch, Schleifstaub und komplexe Schwebstoffe.',
+				),
+			);
+		}
+		return array(
+			array(
+				'label' => 'Continuous 24/7 Operation',
+				'body'  => 'High-performance turbine built for non-stop industrial use.',
+			),
+			array(
+				'label' => 'Smart Volume Control',
+				'body'  => 'Frequency converter (FC) technology optimizes air flow and saves energy.',
+			),
+			array(
+				'label' => 'Zero-Downtime Cleaning',
+				'body'  => 'Automatic compressed air cleaning extends filter life dramatically.',
+			),
+			array(
+				'label' => 'Versatile Extraction',
+				'body'  => 'Handles welding fumes, grinding dust, and complex suspended particles.',
+			),
+		);
+	}
+endif;
+
+if ( ! function_exists( 'emifree_get_dust_cta' ) ) :
+	/**
+	 * Return the call-to-action button label for the dust product page.
+	 *
+	 * @param string $emifree_lang 'en' (default) or 'de'.
+	 * @return string
+	 */
+	function emifree_get_dust_cta( $emifree_lang = 'en' ) {
+		if ( 'de' === $emifree_lang ) {
+			return 'Angebot anfordern';
+		}
+		return 'Request a quote';
+	}
+endif;

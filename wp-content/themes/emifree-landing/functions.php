@@ -25,9 +25,10 @@ if ( ! defined( 'EMIFREE_THEME_VERSION' ) ) {
 // inc/products-page-routes.php so the new patterns land in
 // `rewrite_rules` without manual intervention. Mechanical EN+DE was
 // entry '1'; adding the Electrostatic EN+DE pair on 2026-10-14
-// bumped it to '2'.
+// bumped it to '2'; adding the Dust EN+DE pair on 2026-10-14 bumped
+// it to '3'.
 if ( ! defined( 'EMIFREE_PRODUCT_ROUTES_VERSION' ) ) {
-	define( 'EMIFREE_PRODUCT_ROUTES_VERSION', '2' );
+	define( 'EMIFREE_PRODUCT_ROUTES_VERSION', '3' );
 }
 
 // i18n.php shim, kept so the English section templates continue to

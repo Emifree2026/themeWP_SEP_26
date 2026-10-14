@@ -429,9 +429,11 @@
 					// DE → EN
 					'mechanische-filtration':    'mechanical',
 					'elektrostatische-filtration': 'electrostatic',
+					'entstaubung':               'dust',
 					// EN → DE
 					'mechanical':    'mechanische-filtration',
 					'electrostatic': 'elektrostatische-filtration',
+					'dust':          'entstaubung',
 				};
 				function emifreeMapProductSlug( slug ) {
 					return Object.prototype.hasOwnProperty.call( emifreeProductSlugMap, slug )

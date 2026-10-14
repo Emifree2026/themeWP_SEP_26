@@ -81,6 +81,13 @@ function emifree_get_seed_pages() {
 			'language'    => 'en',
 			'template'    => 'page-products-electrostatic.php',
 		),
+		array(
+			'post_name'   => 'dust',
+			'post_title'  => 'Dust Filtration',
+			'parent_name' => 'products',
+			'language'    => 'en',
+			'template'    => 'page-products-dust.php',
+		),
 
 		// --- DE: Produkte index (parent) ---
 		array(
@@ -103,6 +110,13 @@ function emifree_get_seed_pages() {
 			'parent_name' => 'produkte',
 			'language'    => 'de',
 			'template'    => 'page-products-electrostatic-de.php',
+		),
+		array(
+			'post_name'   => 'entstaubung',
+			'post_title'  => 'Staubfiltration',
+			'parent_name' => 'produkte',
+			'language'    => 'de',
+			'template'    => 'page-products-dust-de.php',
 		),
 	);
 }

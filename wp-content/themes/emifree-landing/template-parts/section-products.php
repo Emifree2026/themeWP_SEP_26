@@ -35,7 +35,7 @@ $emifree_cards    = array(
 	),
 	'dust'          => array(
 		'title'      => 'Dust Filtration',
-		'url'        => home_url( '/products/dust/' ),
+		'url'        => home_url( '/en/products/dust/' ),
 		'image'      => 'dust_filter-emi.png',
 		'aria_label' => 'Dust Filtration — view category',
 	),
