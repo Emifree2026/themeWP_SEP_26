@@ -124,14 +124,29 @@
 		>
 			<?php foreach ( $emifree_de_chips as $emifree_de_chip ) :
 				$emifree_de_chip_icon = isset( $emifree_de_chip_icons[ $emifree_de_chip['icon'] ] ) ? $emifree_de_chip_icons[ $emifree_de_chip['icon'] ] : '';
+				// "Selbstreinigend" (icon: 'cycle') ist der einzige Chip,
+				// der navigiert. Verlinkt auf #technology, damit der
+				// Nutzer die automatische Abreinigung nachlesen kann.
+				// Die anderen beiden Chips bleiben dekorative <span>s.
+				// Erkennung erfolgt über den Icon-Typ (übersetzungs-
+				// unabhängig) statt über den Label-Text.
+				$emifree_de_chip_is_link = ( 'cycle' === $emifree_de_chip['icon'] );
+				$emifree_de_chip_tag     = $emifree_de_chip_is_link ? 'a' : 'span';
+				$emifree_de_chip_attrs   = $emifree_de_chip_is_link
+					? ' href="#technology" data-emifree-chip-link="cycle" aria-label="' . esc_attr( $emifree_de_chip['label'] ) . ' — ' . esc_attr__( 'die Technologie dahinter ansehen', 'emifree-landing' ) . '"'
+					: '';
+				$emifree_de_chip_classes = 'inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 backdrop-blur-sm px-4 py-2 text-sm sm:text-base font-medium text-white whitespace-nowrap transition-all duration-200'
+					. ( $emifree_de_chip_is_link
+						? ' hover:bg-white/20 hover:border-white/45 focus-visible:bg-white/20 focus-visible:border-white/45 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black/30 cursor-pointer no-underline'
+						: '' );
 				?>
 				<li>
-					<span class="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 backdrop-blur-sm px-4 py-2 text-sm sm:text-base font-medium text-white whitespace-nowrap">
+					<<?php echo $emifree_de_chip_tag; ?><?php echo $emifree_de_chip_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, attrs built from allowlisted icon kind, escaped values. ?> class="<?php echo esc_attr( $emifree_de_chip_classes ); ?>">
 						<?php if ( '' !== $emifree_de_chip_icon ) : ?>
 							<span class="text-blue-300 flex items-center justify-center"><?php echo $emifree_de_chip_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, closed allowlist above, no user input. ?></span>
 						<?php endif; ?>
 						<?php echo esc_html( $emifree_de_chip['label'] ); ?>
-					</span>
+					</<?php echo $emifree_de_chip_tag; ?>>
 				</li>
 			<?php endforeach; ?>
 		</ul>
